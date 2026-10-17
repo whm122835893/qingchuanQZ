@@ -1,0 +1,1271 @@
+{
+  "started_at": "2026-10-18 00:34:06",
+  "database": "sqlite",
+  "db_path": "/workspace/qingchuan-h5/data/qingchuan.db",
+  "source_mocks": 78,
+  "skipped_mocks": 13,
+  "seeded_mocks": 65,
+  "skipped_detail": [
+    {
+      "file": "afficheList.json",
+      "reason": "与 index_afficheList 内容不同（total 430 vs 431），取更新的后者（§3 E8）"
+    },
+    {
+      "file": "begList.json",
+      "reason": "与 entrustList 字节完全相同，重复跳过（§6.6）"
+    },
+    {
+      "file": "blindBoxList.json",
+      "reason": "空数组，无数据（§8 #77）"
+    },
+    {
+      "file": "blindBoxOpenRecord.json",
+      "reason": "开盒记录列表，无独立表承载；id 与 blindBoxResult 冲突（§8 未列）"
+    },
+    {
+      "file": "blindBoxResult.json",
+      "reason": "开盒结果列表，字段已由 blindBoxResultOne 覆盖 user_collections（§8 未列）"
+    },
+    {
+      "file": "box_blind_box_list.json",
+      "reason": "空数组，无数据（§8 #78）"
+    },
+    {
+      "file": "drawResult.json",
+      "reason": "开奖结果由 draw_codes 派生，不独立建表（§8 #43）"
+    },
+    {
+      "file": "https:__api.qingchuanart.vip_addons_diypage_index.json",
+      "reason": "与 diypage 内容等价，重复跳过（§3 E10）"
+    },
+    {
+      "file": "invitationInfo.json",
+      "reason": "invite_code 与 users.inviter_code 不同源（QC3827 vs E99022291），仅校验不入库（§8 #3）"
+    },
+    {
+      "file": "leaderboard.json",
+      "reason": "可由 product_market_stats ORDER BY flux 派生（§8 #63）；其字段已并入 products/F1"
+    },
+    {
+      "file": "market_market_MarketDetail_ids_240472.json",
+      "reason": "与 marketDetail 字节完全相同，重复跳过（§6.6）"
+    },
+    {
+      "file": "sms_getCapt.json",
+      "reason": "base64 滑块验证码 + secretKey + token，不入库（§9）"
+    },
+    {
+      "file": "tradeBaseInfo.json",
+      "reason": "交易页聚合值，可由 products + market_listings 派生，不入库（§8 #24 / §9）"
+    }
+  ],
+  "tables": [
+    {
+      "table": "users",
+      "rows": 2,
+      "columns_filled": 12,
+      "phase": "parent"
+    },
+    {
+      "table": "series",
+      "rows": 10,
+      "columns_filled": 12,
+      "phase": "parent"
+    },
+    {
+      "table": "products",
+      "rows": 29,
+      "columns_filled": 34,
+      "phase": "parent"
+    },
+    {
+      "table": "product_pool_items",
+      "rows": 4,
+      "columns_filled": 10,
+      "phase": "parent"
+    },
+    {
+      "table": "product_sale_rules",
+      "rows": 1,
+      "columns_filled": 10,
+      "phase": "parent"
+    },
+    {
+      "table": "user_collections",
+      "rows": 13,
+      "columns_filled": 29,
+      "phase": "parent"
+    },
+    {
+      "table": "trade_unions",
+      "rows": 1,
+      "columns_filled": 9,
+      "phase": "parent"
+    },
+    {
+      "table": "activities",
+      "rows": 4,
+      "columns_filled": 12,
+      "phase": "parent"
+    },
+    {
+      "table": "compound_schemes",
+      "rows": 3,
+      "columns_filled": 13,
+      "phase": "parent"
+    },
+    {
+      "table": "lottery_rounds",
+      "rows": 1,
+      "columns_filled": 7,
+      "phase": "parent"
+    },
+    {
+      "table": "sign_reward_rules",
+      "rows": 7,
+      "columns_filled": 6,
+      "phase": "parent"
+    },
+    {
+      "table": "shop_goods",
+      "rows": 6,
+      "columns_filled": 18,
+      "phase": "parent"
+    },
+    {
+      "table": "community_posts",
+      "rows": 1,
+      "columns_filled": 9,
+      "phase": "parent"
+    },
+    {
+      "table": "community_comments",
+      "rows": 3,
+      "columns_filled": 12,
+      "phase": "parent"
+    },
+    {
+      "table": "chat_sessions",
+      "rows": 1,
+      "columns_filled": 4,
+      "phase": "parent"
+    },
+    {
+      "table": "affiche_types",
+      "rows": 7,
+      "columns_filled": 4,
+      "phase": "parent"
+    },
+    {
+      "table": "product_market_stats",
+      "rows": 29,
+      "columns_filled": 25,
+      "phase": "parent"
+    },
+    {
+      "table": "app_configs",
+      "rows": 30,
+      "columns_filled": 6,
+      "phase": "parent"
+    },
+    {
+      "table": "activity_configs",
+      "rows": 8,
+      "columns_filled": 5,
+      "phase": "parent"
+    },
+    {
+      "table": "user_addresses",
+      "rows": 3,
+      "columns_filled": 11,
+      "phase": "child"
+    },
+    {
+      "table": "user_invitations",
+      "rows": 5,
+      "columns_filled": 8,
+      "phase": "child"
+    },
+    {
+      "table": "user_invitation_assists",
+      "rows": 2,
+      "columns_filled": 10,
+      "phase": "child"
+    },
+    {
+      "table": "collection_flow_records",
+      "rows": 6,
+      "columns_filled": 8,
+      "phase": "child"
+    },
+    {
+      "table": "collection_price_ticks",
+      "rows": 7,
+      "columns_filled": 11,
+      "phase": "child"
+    },
+    {
+      "table": "market_listings",
+      "rows": 33,
+      "columns_filled": 36,
+      "phase": "child"
+    },
+    {
+      "table": "orders",
+      "rows": 4,
+      "columns_filled": 31,
+      "phase": "child"
+    },
+    {
+      "table": "order_cards",
+      "rows": 0,
+      "columns_filled": 2,
+      "phase": "child"
+    },
+    {
+      "table": "entrust_orders",
+      "rows": 3,
+      "columns_filled": 19,
+      "phase": "child"
+    },
+    {
+      "table": "kline_snapshots",
+      "rows": 1,
+      "columns_filled": 20,
+      "phase": "child"
+    },
+    {
+      "table": "compound_scheme_items",
+      "rows": 3,
+      "columns_filled": 10,
+      "phase": "child"
+    },
+    {
+      "table": "user_compound_records",
+      "rows": 3,
+      "columns_filled": 11,
+      "phase": "child"
+    },
+    {
+      "table": "compound_results",
+      "rows": 3,
+      "columns_filled": 11,
+      "phase": "child"
+    },
+    {
+      "table": "user_lottery_records",
+      "rows": 5,
+      "columns_filled": 8,
+      "phase": "child"
+    },
+    {
+      "table": "draw_codes",
+      "rows": 4,
+      "columns_filled": 7,
+      "phase": "child"
+    },
+    {
+      "table": "user_draw_records",
+      "rows": 5,
+      "columns_filled": 7,
+      "phase": "child"
+    },
+    {
+      "table": "user_sign_status",
+      "rows": 1,
+      "columns_filled": 7,
+      "phase": "child"
+    },
+    {
+      "table": "user_shop_exchanges",
+      "rows": 4,
+      "columns_filled": 10,
+      "phase": "child"
+    },
+    {
+      "table": "user_crystal_logs",
+      "rows": 5,
+      "columns_filled": 8,
+      "phase": "child"
+    },
+    {
+      "table": "community_share_records",
+      "rows": 2,
+      "columns_filled": 5,
+      "phase": "child"
+    },
+    {
+      "table": "chat_messages",
+      "rows": 7,
+      "columns_filled": 11,
+      "phase": "child"
+    },
+    {
+      "table": "news_articles",
+      "rows": 1,
+      "columns_filled": 6,
+      "phase": "child"
+    },
+    {
+      "table": "affiches",
+      "rows": 15,
+      "columns_filled": 13,
+      "phase": "child"
+    },
+    {
+      "table": "banners",
+      "rows": 1,
+      "columns_filled": 7,
+      "phase": "child"
+    },
+    {
+      "table": "diypage_components",
+      "rows": 6,
+      "columns_filled": 8,
+      "phase": "child"
+    },
+    {
+      "table": "rank_snapshots",
+      "rows": 40,
+      "columns_filled": 15,
+      "phase": "child"
+    },
+    {
+      "table": "rebate_profiles",
+      "rows": 1,
+      "columns_filled": 9,
+      "phase": "child"
+    },
+    {
+      "table": "rebate_invites",
+      "rows": 6,
+      "columns_filled": 10,
+      "phase": "child"
+    },
+    {
+      "table": "regift_records",
+      "rows": 5,
+      "columns_filled": 14,
+      "phase": "child"
+    }
+  ],
+  "filled_columns": {
+    "users": [
+      "id",
+      "username",
+      "nickname",
+      "mobile",
+      "avatar",
+      "score",
+      "inviter_code",
+      "yao_count",
+      "huifu_service_charge",
+      "sandpay_service_charge",
+      "created_at",
+      "updated_at"
+    ],
+    "series": [
+      "id",
+      "name",
+      "is_def",
+      "flag",
+      "pattern",
+      "category_group",
+      "resale_put_start_time",
+      "resale_put_end_time",
+      "resale_buy_start_time",
+      "resale_buy_end_time",
+      "created_at",
+      "updated_at"
+    ],
+    "products": [
+      "id",
+      "series_id",
+      "series_id_raw",
+      "name",
+      "goods_type",
+      "listimg",
+      "main_image",
+      "introduce_image",
+      "introduce",
+      "total_num",
+      "flux",
+      "sale_total_num",
+      "price",
+      "batch",
+      "collection_level",
+      "issuer_id",
+      "creator_id",
+      "publisher_name",
+      "publisher_logo",
+      "compound_num",
+      "release_time",
+      "types",
+      "url_3d_type",
+      "url_3d",
+      "purchase_information",
+      "is_img_diff",
+      "is_lock",
+      "weither_regift",
+      "weither_resale",
+      "can_compose",
+      "is_like",
+      "is_sub",
+      "created_at",
+      "updated_at"
+    ],
+    "product_pool_items": [
+      "id",
+      "product_id",
+      "name",
+      "probability",
+      "show_total_num",
+      "listimg",
+      "rarity_icon",
+      "is_out",
+      "created_at",
+      "updated_at"
+    ],
+    "product_sale_rules": [
+      "id",
+      "product_id",
+      "name",
+      "price",
+      "total_num",
+      "sale_num",
+      "rule_updated",
+      "rules",
+      "created_at",
+      "updated_at"
+    ],
+    "user_collections": [
+      "id",
+      "product_id",
+      "product_id_raw",
+      "user_id",
+      "collection_code",
+      "collection_code_num",
+      "serial_num",
+      "series_total",
+      "user_hash",
+      "user_hash_text",
+      "rz_code",
+      "status",
+      "is_lock",
+      "weither_regift",
+      "weither_resale",
+      "can_compose",
+      "price",
+      "min_price",
+      "today_volume",
+      "has_sold",
+      "count",
+      "flux",
+      "total_num",
+      "zuzhao_info_id",
+      "task_id",
+      "blind_box_id",
+      "createtime",
+      "created_at",
+      "updated_at"
+    ],
+    "trade_unions": [
+      "id",
+      "unlock",
+      "member_count",
+      "rebate_holder",
+      "rebate_invited",
+      "rebate_extra",
+      "max_bind",
+      "created_at",
+      "updated_at"
+    ],
+    "activities": [
+      "id",
+      "title",
+      "listimg",
+      "type",
+      "start_time",
+      "end_time",
+      "join_num",
+      "status",
+      "qualify",
+      "route",
+      "created_at",
+      "updated_at"
+    ],
+    "compound_schemes": [
+      "id",
+      "play_id",
+      "title",
+      "listimg",
+      "target_img",
+      "start_time",
+      "end_time",
+      "join_num",
+      "qualify",
+      "rule_url",
+      "rule_text",
+      "created_at",
+      "updated_at"
+    ],
+    "lottery_rounds": [
+      "id",
+      "end_time",
+      "prizes",
+      "consume",
+      "rule",
+      "created_at",
+      "updated_at"
+    ],
+    "sign_reward_rules": [
+      "id",
+      "day",
+      "crystal",
+      "sign_rule",
+      "created_at",
+      "updated_at"
+    ],
+    "shop_goods": [
+      "id",
+      "name",
+      "list_image",
+      "crystal_price",
+      "exchange_status",
+      "total_num",
+      "exchange_num",
+      "goods_type",
+      "end_time",
+      "max_count",
+      "is_sub",
+      "count_down",
+      "shop_type",
+      "details",
+      "crystal_type",
+      "pool_items",
+      "created_at",
+      "updated_at"
+    ],
+    "community_posts": [
+      "id",
+      "user_id",
+      "nickname",
+      "avatar",
+      "content",
+      "create_time_str",
+      "images",
+      "created_at",
+      "updated_at"
+    ],
+    "community_comments": [
+      "id",
+      "post_id",
+      "parent_id",
+      "content",
+      "nickname",
+      "avatar",
+      "reply_nickname",
+      "reply_avatar",
+      "has_more",
+      "create_time_str",
+      "created_at",
+      "updated_at"
+    ],
+    "chat_sessions": [
+      "id",
+      "name",
+      "created_at",
+      "updated_at"
+    ],
+    "affiche_types": [
+      "id",
+      "name",
+      "created_at",
+      "updated_at"
+    ],
+    "product_market_stats": [
+      "id",
+      "product_id",
+      "product_id_raw",
+      "name",
+      "listimg",
+      "series_id",
+      "series_id_raw",
+      "goods_type",
+      "total_num",
+      "flux",
+      "min_price",
+      "deal_num",
+      "market_value",
+      "market_fluctuate",
+      "market_fluctuate_new",
+      "reprice_limit",
+      "is_out",
+      "flag",
+      "select_status",
+      "collection_level",
+      "openresale_time",
+      "new_time",
+      "stat_date",
+      "created_at",
+      "updated_at"
+    ],
+    "app_configs": [
+      "config_group",
+      "config_key",
+      "config_value",
+      "value_type",
+      "created_at",
+      "updated_at"
+    ],
+    "activity_configs": [
+      "config_key",
+      "config_value",
+      "config_group",
+      "created_at",
+      "updated_at"
+    ],
+    "user_addresses": [
+      "id",
+      "user_id",
+      "name",
+      "mobile",
+      "province",
+      "city",
+      "area",
+      "address",
+      "is_default",
+      "created_at",
+      "updated_at"
+    ],
+    "user_invitations": [
+      "id",
+      "user_id",
+      "invitee_mobile",
+      "invite_time",
+      "status",
+      "remark",
+      "created_at",
+      "updated_at"
+    ],
+    "user_invitation_assists": [
+      "id",
+      "code",
+      "user_id",
+      "nickname",
+      "avatar",
+      "assist_time",
+      "is_new_user",
+      "is_real",
+      "created_at",
+      "updated_at"
+    ],
+    "collection_flow_records": [
+      "id",
+      "collection_code",
+      "user_id",
+      "nickname",
+      "flow_time",
+      "source_type",
+      "created_at",
+      "updated_at"
+    ],
+    "collection_price_ticks": [
+      "id",
+      "product_id",
+      "product_id_raw",
+      "collection_code",
+      "price",
+      "num",
+      "total_num",
+      "tick_time",
+      "sale_type",
+      "created_at",
+      "updated_at"
+    ],
+    "market_listings": [
+      "id",
+      "product_id",
+      "product_id_raw",
+      "series_id",
+      "series_id_raw",
+      "collection_id",
+      "sale_user_id",
+      "sale_user_nickname",
+      "buy_user_id",
+      "buy_user_id_raw",
+      "name",
+      "cover_image",
+      "series_name",
+      "price",
+      "min_price",
+      "status",
+      "goods_type",
+      "income_type",
+      "income_type_raw",
+      "pay_way",
+      "order_sn",
+      "sale_time",
+      "listing_time",
+      "update_time",
+      "rush_status",
+      "pay_platform_service_rate",
+      "platform_service_price",
+      "creator_service_price",
+      "real_income",
+      "buy_version",
+      "is_deleted",
+      "pay_text",
+      "img",
+      "name_ext",
+      "created_at",
+      "updated_at"
+    ],
+    "orders": [
+      "id",
+      "order_sn",
+      "order_status",
+      "order_type",
+      "product_id",
+      "product_id_raw",
+      "product_name",
+      "cover_image",
+      "collection_code",
+      "collection_code_raw",
+      "user_hash_text",
+      "number",
+      "num",
+      "sale_number",
+      "price",
+      "total_price",
+      "order_amount",
+      "discount_amount",
+      "pay_price",
+      "pay_way",
+      "pay_name",
+      "income_type",
+      "income_type_raw",
+      "goods_type",
+      "remark",
+      "card",
+      "order_time",
+      "update_time",
+      "user_id",
+      "created_at",
+      "updated_at"
+    ],
+    "order_cards": [
+      "created_at",
+      "updated_at"
+    ],
+    "entrust_orders": [
+      "id",
+      "order_sn",
+      "order_status",
+      "user_id",
+      "product_id",
+      "product_id_raw",
+      "goods_name",
+      "cover_image",
+      "collection_code",
+      "number",
+      "num",
+      "sale_number",
+      "price",
+      "total_price",
+      "pay_way",
+      "beg_time",
+      "update_time",
+      "created_at",
+      "updated_at"
+    ],
+    "kline_snapshots": [
+      "id",
+      "product_id",
+      "product_id_raw",
+      "product_name",
+      "series_name",
+      "price",
+      "change",
+      "increase",
+      "flux",
+      "deal_5min",
+      "deal_1h",
+      "deal_today",
+      "high_24h",
+      "low_24h",
+      "asks",
+      "bids",
+      "deals",
+      "snapshot_time",
+      "created_at",
+      "updated_at"
+    ],
+    "compound_scheme_items": [
+      "id",
+      "scheme_id",
+      "condition_name",
+      "need_num",
+      "collection_code",
+      "collection_name",
+      "total_num",
+      "image",
+      "created_at",
+      "updated_at"
+    ],
+    "user_compound_records": [
+      "id",
+      "user_id",
+      "scheme_id",
+      "title",
+      "cover_image",
+      "materials",
+      "method",
+      "consume",
+      "record_time",
+      "created_at",
+      "updated_at"
+    ],
+    "compound_results": [
+      "id",
+      "record_id",
+      "result_type",
+      "name",
+      "user_collection_code",
+      "total_num",
+      "number",
+      "crystal_type",
+      "single_quantity",
+      "created_at",
+      "updated_at"
+    ],
+    "user_lottery_records": [
+      "id",
+      "user_id",
+      "prize_name",
+      "cover_image",
+      "prize_kind",
+      "record_time",
+      "created_at",
+      "updated_at"
+    ],
+    "draw_codes": [
+      "id",
+      "user_id",
+      "code",
+      "code_type",
+      "create_time_str",
+      "created_at",
+      "updated_at"
+    ],
+    "user_draw_records": [
+      "id",
+      "user_id",
+      "draw_sn",
+      "draw_time",
+      "status",
+      "created_at",
+      "updated_at"
+    ],
+    "user_sign_status": [
+      "user_id",
+      "continuous_days",
+      "sign_days",
+      "sign_status",
+      "crystal_number",
+      "created_at",
+      "updated_at"
+    ],
+    "user_shop_exchanges": [
+      "id",
+      "user_id",
+      "order_id",
+      "goods_name",
+      "list_image",
+      "crystal_number",
+      "crystal_type",
+      "create_time",
+      "created_at",
+      "updated_at"
+    ],
+    "user_crystal_logs": [
+      "id",
+      "user_id",
+      "model",
+      "memo",
+      "crystal",
+      "log_time",
+      "created_at",
+      "updated_at"
+    ],
+    "community_share_records": [
+      "id",
+      "community",
+      "create_time",
+      "created_at",
+      "updated_at"
+    ],
+    "chat_messages": [
+      "id",
+      "session_id",
+      "is_self",
+      "user_id",
+      "nickname",
+      "avatar",
+      "content",
+      "date_text",
+      "show_date",
+      "created_at",
+      "updated_at"
+    ],
+    "news_articles": [
+      "id",
+      "title",
+      "content",
+      "publish_time",
+      "created_at",
+      "updated_at"
+    ],
+    "affiches": [
+      "id",
+      "title",
+      "image",
+      "url",
+      "type",
+      "affiche_type",
+      "view_count",
+      "publish_time",
+      "publish_time_ts",
+      "content",
+      "related_products",
+      "created_at",
+      "updated_at"
+    ],
+    "banners": [
+      "id",
+      "image",
+      "url",
+      "url_type",
+      "is_show",
+      "created_at",
+      "updated_at"
+    ],
+    "diypage_components": [
+      "id",
+      "type",
+      "category",
+      "name",
+      "content",
+      "decorate_id",
+      "created_at",
+      "updated_at"
+    ],
+    "rank_snapshots": [
+      "id",
+      "rank_type",
+      "user_id",
+      "product_id",
+      "product_id_raw",
+      "nickname",
+      "avatar",
+      "score",
+      "secondary_score",
+      "count",
+      "event_time",
+      "payload",
+      "snapshot_time",
+      "created_at",
+      "updated_at"
+    ],
+    "rebate_profiles": [
+      "user_id",
+      "all_commision",
+      "yesterday_commision",
+      "user_transaction",
+      "mingxia_commision",
+      "yao_counts",
+      "you_yao_counts",
+      "created_at",
+      "updated_at"
+    ],
+    "rebate_invites": [
+      "id",
+      "inviter_id",
+      "invitee_id",
+      "nickname",
+      "join_time",
+      "first_transaction_time",
+      "user_transaction",
+      "month_transaction",
+      "created_at",
+      "updated_at"
+    ],
+    "regift_records": [
+      "id",
+      "collection_id",
+      "collection_code",
+      "product_name",
+      "cover_image",
+      "from_user_id",
+      "from_user_nickname",
+      "status",
+      "status_text",
+      "order_no",
+      "create_time_str",
+      "back_time",
+      "created_at",
+      "updated_at"
+    ]
+  },
+  "totals": {
+    "tables_seeded": 48,
+    "rows_inserted": 341
+  },
+  "orphan_rows": [],
+  "schema_pending": [
+    {
+      "id": "app_configs_composite_pk",
+      "severity": "resolved",
+      "location": "docs/schema.sql · app_configs",
+      "detail": "v1.2 主键已改为复合 (config_group, config_key)。实测：共 30 行 / 28 个不同 config_key；跨组同名 key 2 个（['appLogo', 'appName']）；mapper 残留 group: 前缀 0 个；重复 (group,key) 组合 0 组。",
+      "cross_group_same_key": {
+        "appLogo": {
+          "basic": "/uploads/20240118/17b679f0562f639f96344f08e59e0729.jpg",
+          "trade": "/static/icon/logo.png"
+        },
+        "appName": {
+          "basic": "青川",
+          "trade": "青川数字艺术"
+        }
+      },
+      "residual_prefixed_keys": [],
+      "duplicate_composite_keys": 0,
+      "handled_by": "mapper 已删除 `group:` 前缀拼接，config_key 直写源站字段名，分组由独立 config_group 列承载；INSERT 全程具名参数（列顺序无关）",
+      "needs": null
+    },
+    {
+      "id": "enum_column_default_0_vs_dictionary",
+      "severity": "resolved",
+      "location": "docs/schema.sql · goods_type / user_collections.status 等枚举列",
+      "detail": "v1.1 时这些枚举列是 NOT NULL DEFAULT 0，而 §4 字典不含 0，源站未给值时必然落成越界的 0。v1.2 已将 15 个枚举列改为 DEFAULT NULL并在 COMMENT 注明「0 不在本枚举取值范围内」，源站无值时写 NULL + _raw 留痕。",
+      "still_present": false,
+      "affected": [],
+      "handled_by": "mapper 未赋值时写 NULL（可空列），原始值保留在对应 *_raw 列",
+      "needs": null
+    }
+  ],
+  "fk_normalization": {
+    "strategy": "方案X（DATABASE.md §7.1.4）：有效值落 xxx_id，无效值 xxx_id=NULL + xxx_raw 留痕",
+    "constraints_enforced_during_seed": true,
+    "strong_fk_count": 17,
+    "normalized_columns": [
+      {
+        "table": "market_listings",
+        "column": "buy_user_id",
+        "parent_table": "users",
+        "is_strong_fk": false,
+        "nullified_rows": 1,
+        "has_raw_column": true
+      },
+      {
+        "table": "product_market_stats",
+        "column": "series_id",
+        "parent_table": "series",
+        "is_strong_fk": false,
+        "nullified_rows": 8,
+        "has_raw_column": true
+      },
+      {
+        "table": "products",
+        "column": "series_id",
+        "parent_table": "series",
+        "is_strong_fk": true,
+        "nullified_rows": 8,
+        "has_raw_column": true
+      },
+      {
+        "table": "user_collections",
+        "column": "product_id",
+        "parent_table": "products",
+        "is_strong_fk": true,
+        "nullified_rows": 4,
+        "has_raw_column": true
+      }
+    ],
+    "nullified": [
+      {
+        "table": "market_listings",
+        "column": "buy_user_id",
+        "source_value": 0,
+        "parent_table": "users",
+        "raw_column": "buy_user_id_raw"
+      },
+      {
+        "table": "product_market_stats",
+        "column": "series_id",
+        "source_value": 14,
+        "parent_table": "series",
+        "raw_column": "series_id_raw"
+      },
+      {
+        "table": "product_market_stats",
+        "column": "series_id",
+        "source_value": 14,
+        "parent_table": "series",
+        "raw_column": "series_id_raw"
+      },
+      {
+        "table": "product_market_stats",
+        "column": "series_id",
+        "source_value": 14,
+        "parent_table": "series",
+        "raw_column": "series_id_raw"
+      },
+      {
+        "table": "product_market_stats",
+        "column": "series_id",
+        "source_value": 14,
+        "parent_table": "series",
+        "raw_column": "series_id_raw"
+      },
+      {
+        "table": "product_market_stats",
+        "column": "series_id",
+        "source_value": 14,
+        "parent_table": "series",
+        "raw_column": "series_id_raw"
+      },
+      {
+        "table": "product_market_stats",
+        "column": "series_id",
+        "source_value": 14,
+        "parent_table": "series",
+        "raw_column": "series_id_raw"
+      },
+      {
+        "table": "product_market_stats",
+        "column": "series_id",
+        "source_value": 14,
+        "parent_table": "series",
+        "raw_column": "series_id_raw"
+      },
+      {
+        "table": "product_market_stats",
+        "column": "series_id",
+        "source_value": 14,
+        "parent_table": "series",
+        "raw_column": "series_id_raw"
+      },
+      {
+        "table": "products",
+        "column": "series_id",
+        "source_value": 14,
+        "parent_table": "series",
+        "raw_column": "series_id_raw"
+      },
+      {
+        "table": "products",
+        "column": "series_id",
+        "source_value": 14,
+        "parent_table": "series",
+        "raw_column": "series_id_raw"
+      },
+      {
+        "table": "products",
+        "column": "series_id",
+        "source_value": 14,
+        "parent_table": "series",
+        "raw_column": "series_id_raw"
+      },
+      {
+        "table": "products",
+        "column": "series_id",
+        "source_value": 14,
+        "parent_table": "series",
+        "raw_column": "series_id_raw"
+      },
+      {
+        "table": "products",
+        "column": "series_id",
+        "source_value": 14,
+        "parent_table": "series",
+        "raw_column": "series_id_raw"
+      },
+      {
+        "table": "products",
+        "column": "series_id",
+        "source_value": 14,
+        "parent_table": "series",
+        "raw_column": "series_id_raw"
+      },
+      {
+        "table": "products",
+        "column": "series_id",
+        "source_value": 14,
+        "parent_table": "series",
+        "raw_column": "series_id_raw"
+      },
+      {
+        "table": "products",
+        "column": "series_id",
+        "source_value": 14,
+        "parent_table": "series",
+        "raw_column": "series_id_raw"
+      },
+      {
+        "table": "user_collections",
+        "column": "product_id",
+        "source_value": 210,
+        "parent_table": "products",
+        "raw_column": "product_id_raw"
+      },
+      {
+        "table": "user_collections",
+        "column": "product_id",
+        "source_value": 210,
+        "parent_table": "products",
+        "raw_column": "product_id_raw"
+      },
+      {
+        "table": "user_collections",
+        "column": "product_id",
+        "source_value": 210,
+        "parent_table": "products",
+        "raw_column": "product_id_raw"
+      },
+      {
+        "table": "user_collections",
+        "column": "product_id",
+        "source_value": 102,
+        "parent_table": "products",
+        "raw_column": "product_id_raw"
+      }
+    ],
+    "kept_weak_refs": [],
+    "targets_without_parent": []
+  },
+  "validation": {
+    "foreign_keys_enforced": true,
+    "foreign_key_check": "pass",
+    "foreign_key_check_method": "SQLite PRAGMA foreign_key_check（灌库全程 PRAGMA foreign_keys=ON，约束真实生效）",
+    "foreign_key_violation_count": 0,
+    "not_null_violations": 0,
+    "enum_out_of_range": [],
+    "schema_default_fallback": []
+  },
+  "mapper_uncovered_columns": {
+    "order_cards": {
+      "columns": [
+        "amount",
+        "bank",
+        "card_no",
+        "id",
+        "order_id"
+      ],
+      "rows": 0,
+      "reason": "源站无数据（0 行），mapper 无可赋值的行"
+    }
+  },
+  "finished_at": "2026-10-18 00:34:12",
+  "duration_sec": 6.43
+}

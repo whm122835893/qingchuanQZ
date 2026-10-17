@@ -1,0 +1,311 @@
+{
+  "generated_at": "2026-10-18 00:34:26",
+  "independence": {
+    "reused_pipeline_modules": [],
+    "imports": [
+      "audit_parse（仅 DDL 解析，不含 DB 访问）"
+    ],
+    "reads": [
+      "docs/schema.sql",
+      "data/qingchuan.db"
+    ],
+    "method": "从 MySQL 原稿独立重解析 FK + 独立 LEFT JOIN 核对孤儿行"
+  },
+  "db_rows_total": 341,
+  "schema_parsed_independently": {
+    "tables": 48,
+    "strong_fks": 17,
+    "indexes": 79
+  },
+  "orphan_audit": {
+    "fk_count": 17,
+    "orphan_rows_total": 0,
+    "violated_fks": 0,
+    "per_fk": [
+      {
+        "table": "products",
+        "column": "series_id",
+        "ref_table": "series",
+        "ref_column": "id",
+        "name": "fk_products_series_id",
+        "style": "table",
+        "status": "ok",
+        "orphans": 0,
+        "samples": []
+      },
+      {
+        "table": "product_pool_items",
+        "column": "product_id",
+        "ref_table": "products",
+        "ref_column": "id",
+        "name": "fk_product_pool_items_product_id",
+        "style": "table",
+        "status": "ok",
+        "orphans": 0,
+        "samples": []
+      },
+      {
+        "table": "product_sale_rules",
+        "column": "product_id",
+        "ref_table": "products",
+        "ref_column": "id",
+        "name": "fk_product_sale_rules_product_id",
+        "style": "table",
+        "status": "ok",
+        "orphans": 0,
+        "samples": []
+      },
+      {
+        "table": "user_collections",
+        "column": "product_id",
+        "ref_table": "products",
+        "ref_column": "id",
+        "name": "fk_user_collections_product_id",
+        "style": "table",
+        "status": "ok",
+        "orphans": 0,
+        "samples": []
+      },
+      {
+        "table": "market_listings",
+        "column": "product_id",
+        "ref_table": "products",
+        "ref_column": "id",
+        "name": "fk_market_listings_product_id",
+        "style": "table",
+        "status": "ok",
+        "orphans": 0,
+        "samples": []
+      },
+      {
+        "table": "market_listings",
+        "column": "collection_id",
+        "ref_table": "user_collections",
+        "ref_column": "id",
+        "name": "fk_market_listings_collection_id",
+        "style": "table",
+        "status": "ok",
+        "orphans": 0,
+        "samples": []
+      },
+      {
+        "table": "orders",
+        "column": "product_id",
+        "ref_table": "products",
+        "ref_column": "id",
+        "name": "fk_orders_product_id",
+        "style": "table",
+        "status": "ok",
+        "orphans": 0,
+        "samples": []
+      },
+      {
+        "table": "order_cards",
+        "column": "order_id",
+        "ref_table": "orders",
+        "ref_column": "id",
+        "name": "fk_order_cards_order_id",
+        "style": "table",
+        "status": "ok",
+        "orphans": 0,
+        "samples": []
+      },
+      {
+        "table": "compound_scheme_items",
+        "column": "scheme_id",
+        "ref_table": "compound_schemes",
+        "ref_column": "id",
+        "name": "fk_compound_scheme_items_scheme_id",
+        "style": "table",
+        "status": "ok",
+        "orphans": 0,
+        "samples": []
+      },
+      {
+        "table": "user_compound_records",
+        "column": "scheme_id",
+        "ref_table": "compound_schemes",
+        "ref_column": "id",
+        "name": "fk_user_compound_records_scheme_id",
+        "style": "table",
+        "status": "ok",
+        "orphans": 0,
+        "samples": []
+      },
+      {
+        "table": "compound_results",
+        "column": "record_id",
+        "ref_table": "user_compound_records",
+        "ref_column": "id",
+        "name": "fk_compound_results_record_id",
+        "style": "table",
+        "status": "ok",
+        "orphans": 0,
+        "samples": []
+      },
+      {
+        "table": "user_shop_exchanges",
+        "column": "order_id",
+        "ref_table": "orders",
+        "ref_column": "id",
+        "name": "fk_user_shop_exchanges_order_id",
+        "style": "table",
+        "status": "ok",
+        "orphans": 0,
+        "samples": []
+      },
+      {
+        "table": "community_comments",
+        "column": "post_id",
+        "ref_table": "community_posts",
+        "ref_column": "id",
+        "name": "fk_community_comments_post_id",
+        "style": "table",
+        "status": "ok",
+        "orphans": 0,
+        "samples": []
+      },
+      {
+        "table": "community_comments",
+        "column": "parent_id",
+        "ref_table": "community_comments",
+        "ref_column": "id",
+        "name": "fk_community_comments_parent_id",
+        "style": "table",
+        "status": "ok",
+        "orphans": 0,
+        "samples": []
+      },
+      {
+        "table": "chat_messages",
+        "column": "session_id",
+        "ref_table": "chat_sessions",
+        "ref_column": "id",
+        "name": "fk_chat_messages_session_id",
+        "style": "table",
+        "status": "ok",
+        "orphans": 0,
+        "samples": []
+      },
+      {
+        "table": "product_market_stats",
+        "column": "product_id",
+        "ref_table": "products",
+        "ref_column": "id",
+        "name": "fk_product_market_stats_product_id",
+        "style": "table",
+        "status": "ok",
+        "orphans": 0,
+        "samples": []
+      },
+      {
+        "table": "regift_records",
+        "column": "collection_id",
+        "ref_table": "user_collections",
+        "ref_column": "id",
+        "name": "fk_regift_records_collection_id",
+        "style": "table",
+        "status": "ok",
+        "orphans": 0,
+        "samples": []
+      }
+    ]
+  },
+  "pragma_foreign_key_check": {
+    "count": 0,
+    "rows": []
+  },
+  "structure_audit": {
+    "schema_tables": 48,
+    "db_tables": 48,
+    "missing_tables": [],
+    "extra_tables": [],
+    "column_differences": {},
+    "column_diff_count": 0
+  },
+  "app_configs_audit": {
+    "rows": 30,
+    "distinct_keys": 28,
+    "groups": {
+      "basic": 25,
+      "trade": 5
+    },
+    "cross_group_same_key": {
+      "appLogo": {
+        "basic": "/uploads/20240118/17b679f0562f639f96344f08e59e0729.jpg",
+        "trade": "/static/icon/logo.png"
+      },
+      "appName": {
+        "basic": "青川",
+        "trade": "青川数字艺术"
+      }
+    },
+    "prefixed_keys": [],
+    "duplicate_composite": 0
+  },
+  "enum_zero_audit": {
+    "columns_checked": 15,
+    "columns_with_illegal_zero": {},
+    "illegal_zero_total": 0,
+    "null_counts": {
+      "products.goods_type": 11,
+      "market_listings.goods_type": 32,
+      "orders.goods_type": 3,
+      "product_market_stats.goods_type": 10,
+      "shop_goods.goods_type": 0,
+      "shop_goods.exchange_status": 0,
+      "user_collections.status": 4,
+      "market_listings.status": 0,
+      "regift_records.status": 0,
+      "entrust_orders.order_status": 0,
+      "activities.type": 0,
+      "user_crystal_logs.model": 0,
+      "series.category_group": 3,
+      "collection_price_ticks.sale_type": 0,
+      "user_lottery_records.prize_kind": 0
+    }
+  },
+  "samples": {
+    "user_collections_77001": [
+      77001,
+      226,
+      null,
+      1,
+      "QC88231"
+    ],
+    "market_listings_240472": [
+      240472,
+      236,
+      15,
+      1,
+      2,
+      0
+    ],
+    "community_comments_two_level": [
+      [
+        7001,
+        3301,
+        null,
+        null,
+        "半糖去冰",
+        "这运气离谱，我也去买一盒"
+      ],
+      [
+        7002,
+        3301,
+        7001,
+        7001,
+        "山川放映室",
+        "金卡版本确实少见，沾沾喜"
+      ],
+      [
+        7003,
+        3301,
+        null,
+        null,
+        "海边的卡夫卡",
+        "求问这个系列还剩多少份额"
+      ]
+    ]
+  }
+}
