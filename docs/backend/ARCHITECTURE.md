@@ -123,6 +123,12 @@ rebateLeaderboard regiftRecord     userBuyRank
 
 JWT 用 `jsonwebtoken`（^9），密码哈希用 `node:crypto` 的 `scrypt`（**标准库自带，不引 bcrypt**——省掉一个原生编译依赖，scrypt 是 Argon2 之外的 NIST 推荐方案）。
 
+**跨域不引 `cors` 包，手写 `middleware/cors.js`**：依赖刻意锁在 3 个，`cors` 的全部能力就是「设几个响应头 + 拦 OPTIONS」；且本项目需要「白名单外来源不写CORS 头、但请求照常处理」这一非标准行为。手写 75 行可控、可审计，也不必为一个中间件引入第 4 个依赖。白名单读 `CORS_ORIGINS`（逗号分隔，默认 `http://localhost:5173`）。
+
+**挂载顺序（`src/app.js`，不可调换）**：
+`express.json` → **`cors`** → `auth(attach)` → `requestLog` → routes → notFound → errorHandler。
+CORS 必须**早于 auth**：否则 OPTIONS 预检会先撞鉴权返回 401，浏览器判定预检失败，全站跨源请求被拦截（表现为页面靠 mock 兜底不报错、但后端一个接口都没接通）。
+
 **刻意不引入的东西**：pino（日志先用标准库 `console` + 结构化 JSON 格式，够用）、helmet（先手工加 3 个响应头）、swagger-ui（契约文档已由 openapi.yaml 承担）。
 
 ---
@@ -468,6 +474,7 @@ server/
 │   │   ├── sqlite.js          # SQLite adapter（better-sqlite3）
 │   │   └── mysql.js           # MySQL adapter（mysql2，按需 require）
 │   ├── middleware/
+│   │   ├── cors.js            # 跨域；白名单 + OPTIONS 预检立即结束（须最先挂载）
 │   │   ├── auth.js            # token 解析 → req.user；白名单放行
 │   │   ├── respond.js         # {code,msg,data,time} 封装 + 5 种 responder
 │   │   ├── error.js           # 异常 → 错误码映射（全项目唯一出口）

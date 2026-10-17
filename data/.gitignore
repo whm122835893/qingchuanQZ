@@ -1,0 +1,3 @@
+# SQLite WAL 边车文件：服务以WAL 模式运行时会生成，内容随进程重建
+*.db-shm
+*.db-wal

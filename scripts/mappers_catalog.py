@@ -44,6 +44,8 @@ def map_series(m) -> list[dict]:
                 "is_def": 0,
                 "flag": 0,
                 "pattern": 0,
+                # v1.3 新增：系列父子关系，NULL=顶级。依据见下方 series-10-pid 循环注释
+                "pid": None,
                 # 设计新增：1=自营 2=平台；v1.2 DEFAULT NULL，
                 # categoryManager 未覆盖到的系列写 NULL（0 不在枚举取值范围内）
                 "category_group": None,
@@ -79,6 +81,13 @@ def map_series(m) -> list[dict]:
             is_def=to_int(s.get("is_def"), 0),
             flag=to_int(s.get("flag"), 0),
             pattern=to_int(s.get("pattern"), 0),
+            # v1.3：pid 由「两份快照的差集」推断 —— 出现在 series-10 的是顶级
+            # (pid=NULL)，仅出现在 series-10-pid 的是子系列。实测 series-10-pid
+            # 即 /index/getSeries?type=10&pid=10 的响应，故其全部行挂 pid=10。
+            # 依据：type=10 返回 10「2026」/11「光」，pid=10 返回 15「赛博」，
+            # 若无父子关系则后端会拿 pid 当主键返回父系列，导致市场页取到
+            # 错误的 series_id 而列表空白。详见 DATABASE.md §3 B1。
+            pid=10,
             resale_put_start_time=str_col(s.get("resale_put_start_time"), ""),
             resale_put_end_time=str_col(s.get("resale_put_end_time"), ""),
             resale_buy_start_time=str_col(s.get("resale_buy_start_time"), ""),

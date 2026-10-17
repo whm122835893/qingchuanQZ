@@ -1,5 +1,5 @@
 {
-  "started_at": "2026-10-18 00:34:06",
+  "started_at": "2026-10-18 02:42:12",
   "database": "sqlite",
   "db_path": "/workspace/qingchuan-h5/data/qingchuan.db",
   "source_mocks": 78,
@@ -69,7 +69,7 @@
     {
       "table": "series",
       "rows": 10,
-      "columns_filled": 12,
+      "columns_filled": 13,
       "phase": "parent"
     },
     {
@@ -370,6 +370,7 @@
       "is_def",
       "flag",
       "pattern",
+      "pid",
       "category_group",
       "resale_put_start_time",
       "resale_put_end_time",
@@ -1266,6 +1267,6 @@
       "reason": "源站无数据（0 行），mapper 无可赋值的行"
     }
   },
-  "finished_at": "2026-10-18 00:34:12",
-  "duration_sec": 6.43
+  "finished_at": "2026-10-18 02:42:19",
+  "duration_sec": 6.78
 }

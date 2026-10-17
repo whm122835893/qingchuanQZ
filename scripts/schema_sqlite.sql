@@ -68,13 +68,14 @@ CREATE TABLE `user_invitation_assists` (
 );
 
 DROP TABLE IF EXISTS `series`;
--- 表 series（12 字段）
+-- 表 series（13 字段）
 CREATE TABLE `series` (
   `id` INTEGER NULL,
   `name` TEXT NULL DEFAULT '',
   `is_def` INTEGER NOT NULL DEFAULT 0,
   `flag` INTEGER NOT NULL DEFAULT 0,
   `pattern` INTEGER NOT NULL DEFAULT 0,
+  `pid` INTEGER NULL DEFAULT NULL,
   `category_group` INTEGER NULL DEFAULT NULL,
   `resale_put_start_time` TEXT NULL DEFAULT '',
   `resale_put_end_time` TEXT NULL DEFAULT '',

@@ -1,0 +1,53 @@
+{
+  "root": true,
+  "env": { "node": true, "es2022": true },
+  "parserOptions": { "ecmaVersion": 2022, "sourceType": "script" },
+  "extends": "eslint:recommended",
+  "rules": {
+    "no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
+    "no-console": "off",
+    "eqeqeq": ["error", "smart"],
+    "max-len": ["warn", { "code": 110 }]
+  },
+  "overrides": [
+    {
+      "files": ["src/repositories/**/*.js"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              { "group": ["**/services/**", "**/controllers/**", "**/routes/**"], "message": "repositories 不得依赖上层模块（依赖只向下）" }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["src/middleware/**/*.js"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              { "group": ["**/repositories/**", "**/services/**"], "message": "middleware 不得依赖数据层" }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["src/services/**/*.js"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              { "group": ["**/controllers/**", "**/routes/**"], "message": "services 不得依赖上层模块" }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}
