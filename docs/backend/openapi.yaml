@@ -1,0 +1,3004 @@
+# OpenAPI 3.0 契约 —— 由 gen_api_docs.py 从 endpoint_meta.py 生成
+# 路径唯一事实源：src/api/index.js，由 verify_paths.py 机器校验
+openapi: 3.0.3
+info:
+  title: 青川数字艺术 H5 平台 API
+  version: 1.0.0
+  description: |
+    注意：code=1 表示成功（前端 utils/api.js L24 仅认 1），非 0。
+servers:
+  - url: http://localhost:3000
+    description: 本地开发
+
+security:
+  - TokenAuth: []
+
+paths:
+  "/activeSelected/list":
+    post:
+      summary: "精选活动列表"
+      tags: ["D"]
+      security: []
+      parameters: []
+      responses:
+        "200":
+          description: "data 为裸数组（code=1 表示业务成功）"
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          description: "`{id,title,listimg,type,start_time,end_time,join_num,status,qualify,route}`；type 见 §4 E-ACTIVITY-TYPE"
+        "401":
+          description: "未登录或 token 失效（前端将清除 token）"
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Envelope" }
+  "/activity/draw/info":
+    post:
+      summary: "活动抽签信息"
+      tags: ["D"]
+      security: []
+      parameters: []
+      responses:
+        "200":
+          description: "data 为单对象（code=1 表示业务成功）"
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        description: "data 为单对象"
+                        properties:
+                          "activity":
+                            type: object
+                            description: "`{title,listimg,start_time,draw_time,open_time,end_time}`"
+                          "draw_code":
+                            type: string
+                            description: "本人抽签码"
+                          "win_code":
+                            type: string
+                            description: "中奖码"
+                          "code_list":
+                            type: array
+                            description: "全部抽签码 `[{id,code,create_time}]`"
+                            items: { type: object }
+                          "win_code_list":
+                            type: array
+                            description: "中奖码列表 `[{id,code,create_time}]`"
+                            items: { type: object }
+                          "draw_rule":
+                            type: string
+                            description: "规则"
+        "401":
+          description: "未登录或 token 失效（前端将清除 token）"
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Envelope" }
+  "/activity/draw/record":
+    post:
+      summary: "活动抽签记录"
+      tags: ["D"]
+      parameters:
+        - $ref: "#/components/parameters/Token"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                "page":
+                  type: integer
+                  description: "**待确认**"
+                "limit":
+                  type: integer
+                  description: "**待确认**"
+      responses:
+        "200":
+          description: "data 为裸数组（code=1 表示业务成功）"
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          description: "`{id,draw_sn,draw_time,status}`；status 见 §4 E-DRAW-STATUS"
+        "401":
+          description: "未登录或 token 失效（前端将清除 token）"
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Envelope" }
+  "/addons/diypage/index":
+    post:
+      summary: "装修页组件配置"
+      tags: ["E"]
+      security: []
+      parameters: []
+      responses:
+        "200":
+          description: "data 为裸数组（code=1 表示业务成功）"
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          description: "`{id,type,category,name,content,decorate_id}`；content 为前端布局 DSL，须原样存 TEXT（DATABASE.md §1）"
+        "401":
+          description: "未登录或 token 失效（前端将清除 token）"
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Envelope" }
+  "/banner/show/getBanner":
+    post:
+      summary: "首页轮播图"
+      tags: ["E"]
+      security: []
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                "type":
+                  type: integer
+                  description: "Index.vue L310 传 `{type:1}`；utils 层不传"
+      responses:
+        "200":
+          description: "data 为标准分页对象 {total,per_page,current_page,last_page,data[]}（code=1 表示业务成功）"
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        description: "data 为标准分页对象 {total,per_page,current_page,last_page,data[]}"
+                        properties:
+                          "total":
+                            type: integer
+                            description: "总数"
+                          "per_page":
+                            type: integer
+                            description: "每页数"
+                          "current_page":
+                            type: integer
+                            description: "当前页"
+                          "last_page":
+                            type: integer
+                            description: "总页数"
+                          "data":
+                            type: array
+                            description: "`{id,image,url,url_type,is_show}`；url_type 枚举待确认"
+                            items: { type: object }
+        "401":
+          description: "未登录或 token 失效（前端将清除 token）"
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Envelope" }
+  "/box/blind_box/list":
+    post:
+      summary: "盲盒发售日历"
+      tags: ["D"]
+      security: []
+      parameters: []
+      responses:
+        "200":
+          description: "data 为裸数组（code=1 表示业务成功）"
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          description: "**实测为空数组**，无字段可列举（DATABASE.md §8 第 77/78 项）"
+        "401":
+          description: "未登录或 token 失效（前端将清除 token）"
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Envelope" }
+  "/box/blind_box/myBox":
+    post:
+      summary: "我的盲盒"
+      tags: ["D"]
+      parameters:
+        - $ref: "#/components/parameters/Token"
+      responses:
+        "200":
+          description: "data 为单对象（code=1 表示业务成功）"
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        description: "data 为单对象"
+                        properties:
+                          "id":
+                            type: integer
+                            description: "id"
+                          "name":
+                            type: string
+                            description: "盲盒名"
+                          "num":
+                            type: integer
+                            description: "数量"
+                          "listimg":
+                            type: string
+                            description: "列表图"
+                          "main_image":
+                            type: string
+                            description: "主图"
+                          "rarity_icon":
+                            type: string
+                            description: "稀有度图标"
+                          "product_id":
+                            type: integer
+                            description: "商品 id"
+                          "user_collection_id":
+                            type: integer
+                            description: "用户藏品 id"
+        "401":
+          description: "未登录或 token 失效（前端将清除 token）"
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Envelope" }
+  "/box/blind_box/openlog":
+    post:
+      summary: "开盒记录"
+      tags: ["D"]
+      parameters:
+        - $ref: "#/components/parameters/Token"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                "page":
+                  type: integer
+                  description: "**待确认**"
+                "limit":
+                  type: integer
+                  description: "**待确认**"
+      responses:
+        "200":
+          description: "data 为裸数组（code=1 表示业务成功）"
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          description: "`{id,listimg,name,collection_code,rarity_icon,createtime,box_name}`；**createtime 为 integer时间戳**（源站少数时间戳字段之一，§6.5）"
+        "401":
+          description: "未登录或 token 失效（前端将清除 token）"
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Envelope" }
+  "/community/chat/messageList":
+    post:
+      summary: "聊天消息列表"
+      tags: ["E"]
+      security: []
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                "session_id":
+                  type: integer
+                  description: "**待确认**：聊天会话 id"
+      responses:
+        "200":
+          description: "data 为裸数组（code=1 表示业务成功）"
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          description: "`{id,is_self,nickname,content,avatar,show_date,date_text}`；**is_self / show_date 为 boolean**"
+        "401":
+          description: "未登录或 token 失效（前端将清除 token）"
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Envelope" }
+  "/compound/compound/list":
+    post:
+      summary: "合成玩法列表"
+      tags: ["D"]
+      security: []
+      parameters: []
+      responses:
+        "200":
+          description: "data 为裸数组（code=1 表示业务成功）"
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          description: "`{id,play_id,title,listimg,start_time,end_time,join_num,qualify,rule_url}`；start_time/end_time 为 **integer 时间戳**"
+        "401":
+          description: "未登录或 token 失效（前端将清除 token）"
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Envelope" }
+  "/compound/compound/record":
+    post:
+      summary: "我的合成记录"
+      tags: ["D"]
+      parameters:
+        - $ref: "#/components/parameters/Token"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                "page":
+                  type: integer
+                  description: "**待确认**"
+                "limit":
+                  type: integer
+                  description: "**待确认**"
+      responses:
+        "200":
+          description: "data 为裸数组（code=1 表示业务成功）"
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          description: "`{id,create_time,title,listimg,materials,method,consume[]}`；create_time 为 integer；consume 存 JSON（DATABASE.md §8 第 36 项）"
+        "401":
+          description: "未登录或 token 失效（前端将清除 token）"
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Envelope" }
+  "/compound/compound/result":
+    post:
+      summary: "合成结果"
+      tags: ["D"]
+      parameters:
+        - $ref: "#/components/parameters/Token"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                "play_id":
+                  type: integer
+                  description: "**待确认**"
+      responses:
+        "200":
+          description: "data 为单对象（code=1 表示业务成功）"
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        description: "data 为单对象"
+                        properties:
+                          "result":
+                            type: array
+                            description: "`[{type,name,user_collection_code,total_num}]`；type 见 §4 E-COMPOUND-RESULT"
+                            items: { type: object }
+        "401":
+          description: "未登录或 token 失效（前端将清除 token）"
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Envelope" }
+  "/compound/compound/scheme":
+    post:
+      summary: "合成方案详情"
+      tags: ["D"]
+      security: []
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                "play_id":
+                  type: integer
+                  description: "**待确认**：方案 id 字段名，疑似 play_id"
+                "id":
+                  type: integer
+                  description: "**待确认**"
+      responses:
+        "200":
+          description: "data 为单对象（code=1 表示业务成功）"
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        description: "data 为单对象"
+                        properties:
+                          "play_id":
+                            type: integer
+                            description: "玩法 id"
+                          "title":
+                            type: string
+                            description: "标题"
+                          "target_img":
+                            type: string
+                            description: "目标图"
+                          "rule_text":
+                            type: array
+                            description: "所需材料 `[{name,number,collectionList[]}]`"
+                            items: { type: object }
+        "401":
+          description: "未登录或 token 失效（前端将清除 token）"
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Envelope" }
+  "/crystal_goods/boxDetail":
+    post:
+      summary: "商城盲盒详情"
+      tags: ["D"]
+      parameters:
+        - $ref: "#/components/parameters/Token"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                "id":
+                  type: integer
+                  description: "**待确认**：同goodsDetail"
+      responses:
+        "200":
+          description: "data 为单对象（code=1 表示业务成功）"
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        description: "data 为单对象"
+                        properties:
+                          "info":
+                            type: object
+                            description: "同 goodsDetail 的 info"
+                          "product":
+                            type: object
+                            description: "`{id,name,listimg,main_image,goods_type,price,total_num,details,publisher,collectionlist[]}`；**实测 collectionlist 有 4 条**（概率池），与 goodsDetail 的空数组构成对比"
+        "401":
+          description: "未登录或 token 失效（前端将清除 token）"
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Envelope" }
+  "/crystal_goods/collectionDetail":
+    post:
+      summary: "商城藏品详情"
+      tags: ["D"]
+      parameters:
+        - $ref: "#/components/parameters/Token"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                "id":
+                  type: integer
+                  description: "**待确认**"
+      responses:
+        "200":
+          description: "data 为单对象（code=1 表示业务成功）"
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        description: "data 为单对象"
+                        properties:
+                          "info":
+                            type: object
+                            description: "同 goodsDetail 的 info"
+                          "product":
+                            type: object
+                            description: "`{id,name,listimg,main_image,goods_type,price,total_num,details,publisher,collectionlist[]}`；实测 collectionlist 有 2 条"
+        "401":
+          description: "未登录或 token 失效（前端将清除 token）"
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Envelope" }
+  "/crystal_goods/crystalDetail":
+    post:
+      summary: "积分明细流水"
+      tags: ["D"]
+      parameters:
+        - $ref: "#/components/parameters/Token"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                "model":
+                  type: integer
+                  description: "**待确认**：响应含 model 字段，疑似筛选参数"
+      responses:
+        "200":
+          description: "data 为裸数组（code=1 表示业务成功）"
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          description: "`{id,model,memo,crystal,createtime}`；model 枚举**无 mock 依据，待确认**"
+        "401":
+          description: "未登录或 token 失效（前端将清除 token）"
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Envelope" }
+  "/crystal_goods/crystalList":
+    post:
+      summary: "积分商城商品列表"
+      tags: ["D"]
+      parameters:
+        - $ref: "#/components/parameters/Token"
+      responses:
+        "200":
+          description: "data 为单对象（code=1 表示业务成功）"
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        description: "data 为单对象"
+                        properties:
+                          "crystal_number":
+                            type: integer
+                            description: "当前积分余额"
+                          "crystal_type":
+                            type: integer
+                            description: "积分类型"
+                          "user_info":
+                            type: object
+                            description: "`{nickname,avatar}`"
+                          "list":
+                            type: array
+                            description: "`{goods_id,goods_name,list_image,crystal_price,exchange_status,total_num,exchange_num,goods_type,end_time}`；exchange_status 见 §4 E-EXCHANGE-STATUS"
+                            items: { type: object }
+        "401":
+          description: "未登录或 token 失效（前端将清除 token）"
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Envelope" }
+  "/crystal_goods/exchangeRecord":
+    post:
+      summary: "我的兑换记录"
+      tags: ["D"]
+      parameters:
+        - $ref: "#/components/parameters/Token"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                "page":
+                  type: integer
+                  description: "**待确认**"
+                "limit":
+                  type: integer
+                  description: "**待确认**"
+      responses:
+        "200":
+          description: "data 为裸数组（code=1 表示业务成功）"
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          description: "`{id,order_id,goods_name,list_image,crystal_number,crystal_type,create_time}`"
+        "401":
+          description: "未登录或 token 失效（前端将清除 token）"
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Envelope" }
+  "/crystal_goods/goodsDetail":
+    post:
+      summary: "商城商品详情（单品）"
+      tags: ["D"]
+      parameters:
+        - $ref: "#/components/parameters/Token"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                "id":
+                  type: integer
+                  description: "**待确认**：页面传空对象，id疑似来自 route.query"
+      responses:
+        "200":
+          description: "data 为单对象（code=1 表示业务成功）"
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        description: "data 为单对象"
+                        properties:
+                          "info":
+                            type: object
+                            description: "`{id,crystal_number,crystal_type,crystal_price,exchange_status,max_count,is_sub,count_down,type,details}`"
+                          "product":
+                            type: object
+                            description: "`{id,name,listimg,main_image,goods_type,price,total_num,details,publisher{name,user},collectionlist}`；**实测 collectionlist 为空数组**（§9）"
+        "401":
+          description: "未登录或 token 失效（前端将清除 token）"
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Envelope" }
+  "/draw/InvitationFriendAssist/info":
+    post:
+      summary: "邀请好友助力"
+      tags: ["A"]
+      parameters:
+        - $ref: "#/components/parameters/Token"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                "code":
+                  type: string
+                  description: "**待确认**：助力码，响应含 code 字段，疑似回传"
+      responses:
+        "200":
+          description: "data 为单对象（code=1 表示业务成功）"
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        description: "data 为单对象"
+                        properties:
+                          "assist_num":
+                            type: integer
+                            description: "已助力人数"
+                          "need_num":
+                            type: integer
+                            description: "需要人数"
+                          "code":
+                            type: string
+                            description: "助力码"
+                          "hero_image":
+                            type: string
+                            description: "主图"
+                          "records":
+                            type: array
+                            description: "`[{id,nickname,avatar,create_time,is_new_user,is_real}]`；is_real 见 §4 E-INVITE-STATUS"
+                            items: { type: object }
+                          "assist_tip":
+                            type: string
+                            description: "助力提示"
+        "401":
+          description: "未登录或 token 失效（前端将清除 token）"
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Envelope" }
+  "/draw/Leaderboard/list":
+    post:
+      summary: "抽签排行榜"
+      tags: ["D"]
+      parameters:
+        - $ref: "#/components/parameters/Token"
+      responses:
+        "200":
+          description: "data 为单对象（code=1 表示业务成功）"
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        description: "data 为单对象"
+                        properties:
+                          "myrank":
+                            type: object
+                            description: "我的排名 `{rank_num,nums}`"
+                          "list":
+                            type: array
+                            description: "榜单 `[{id,nickname,avatar,nums}]`"
+                            items: { type: object }
+                          "rank_rule":
+                            type: string
+                            description: "榜单规则"
+        "401":
+          description: "未登录或 token 失效（前端将清除 token）"
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Envelope" }
+  "/draw/communityShare/info":
+    post:
+      summary: "抽签社区分享信息"
+      tags: ["D"]
+      parameters:
+        - $ref: "#/components/parameters/Token"
+      responses:
+        "200":
+          description: "data 为单对象（code=1 表示业务成功）"
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        description: "data 为单对象"
+                        properties:
+                          "share_images":
+                            type: array
+                            description: "分享图 URL 数组"
+                            items: { type: object }
+                          "audit_status":
+                            type: integer
+                            description: "审核状态"
+                          "audit_text":
+                            type: string
+                            description: "审核文案"
+                          "share_records":
+                            type: array
+                            description: "`[{id,community,create_time}]`"
+                            items: { type: object }
+        "401":
+          description: "未登录或 token 失效（前端将清除 token）"
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Envelope" }
+  "/draw/drawResult/result":
+    post:
+      summary: "全民抽签结果"
+      tags: ["D"]
+      parameters:
+        - $ref: "#/components/parameters/Token"
+      responses:
+        "200":
+          description: "data 为单对象（code=1 表示业务成功）"
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        description: "data 为单对象"
+                        properties:
+                          "draw_complete":
+                            type: integer
+                            description: "是否完成"
+                          "success_code":
+                            type: string
+                            description: "成功码"
+                          "success_list":
+                            type: array
+                            description: "`[{id,code}]`"
+                            items: { type: object }
+        "401":
+          description: "未登录或 token 失效（前端将清除 token）"
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Envelope" }
+  "/index/afficheDetail":
+    post:
+      summary: "公告详情（含关联藏品）"
+      tags: ["E"]
+      security: []
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                "id":
+                  type: integer
+                  description: "**待确认**：页面传空对象，实际经路由 query 传入；见 note"
+      responses:
+        "200":
+          description: "data 为单对象（code=1 表示业务成功）"
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        description: "data 为单对象"
+                        properties:
+                          "id":
+                            type: integer
+                            description: "公告 id"
+                          "title":
+                            type: string
+                            description: "标题"
+                          "affiche_type":
+                            type: string
+                            description: "类型"
+                          "publish_time":
+                            type: string
+                            description: "发布时间"
+                          "createtime":
+                            type: integer
+                            description: "时间戳"
+                          "view_count":
+                            type: integer
+                            description: "浏览量（仅详情接口有真实值）"
+                          "content":
+                            type: string
+                            description: "富文本正文"
+                          "collection":
+                            type: array
+                            description: "关联藏品 `[{id,name,listimg,price}]`"
+                            items: { type: object }
+        "401":
+          description: "未登录或 token 失效（前端将清除 token）"
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Envelope" }
+  "/index/afficheList":
+    post:
+      summary: "公告列表（分页）"
+      tags: ["E"]
+      security: []
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: ["page"]
+              properties:
+                "page":
+                  type: integer
+                  description: "页码，实参 `page:1`，从 1 起"
+                "list_rows":
+                  type: integer
+                  description: "每页条数，实参 `list_rows:30/15`；亦接受 `limit`（见 ARCHITECTURE §6.3）"
+                "type":
+                  type: string
+                  description: "公告类型，对应 affichetypelist 的 type；Search.vue 经 params 透传"
+      responses:
+        "200":
+          description: "data 为标准分页对象 {total,per_page,current_page,last_page,data[]}（code=1 表示业务成功）"
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        description: "data 为标准分页对象 {total,per_page,current_page,last_page,data[]}"
+                        properties:
+                          "total":
+                            type: integer
+                            description: "总数"
+                          "per_page":
+                            type: string
+                            description: "每页数（源站为字符串，保留）"
+                          "current_page":
+                            type: integer
+                            description: "当前页"
+                          "last_page":
+                            type: integer
+                            description: "总页数"
+                          "data":
+                            type: array
+                            description: "`{id,image,title,createtime,type,url,view_count,affiche_type}`；view_count 列表接口恒 0（DATABASE.md §9）"
+                            items: { type: object }
+        "401":
+          description: "未登录或 token 失效（前端将清除 token）"
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Envelope" }
+  "/index/affichetypelist":
+    post:
+      summary: "公告类型列表"
+      tags: ["E"]
+      security: []
+      parameters: []
+      responses:
+        "200":
+          description: "data 为裸数组（code=1 表示业务成功）"
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          description: "`{id,name}`，实测 7 条"
+        "401":
+          description: "未登录或 token 失效（前端将清除 token）"
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Envelope" }
+  "/index/getConfig":
+    post:
+      summary: "全局配置（应用名/Logo/GM工会/费率）"
+      tags: ["E"]
+      security: []
+      parameters: []
+      responses:
+        "200":
+          description: "data 为单对象（code=1 表示业务成功）"
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        description: "data 为单对象"
+                        properties:
+                          "appName":
+                            type: string
+                            description: "应用名"
+                          "appLogo":
+                            type: string
+                            description: "Logo URL"
+                          "trade_union":
+                            type: object
+                            description: "GM工会入口 `{unlock,member_count,rebate_holder,rebate_invited,rebate_extra,max_bind}`"
+                          "trade_rule":
+                            type: string
+                            description: "交易规则富文本"
+                          "consignment_sales":
+                            type: null
+                            description: "恒为 null（DATABASE.md §9）"
+                          "rate":
+                            type: string
+                            description: "费率"
+                          "share_proportion_rate":
+                            type: string
+                            description: "分成比例"
+        "401":
+          description: "未登录或 token 失效（前端将清除 token）"
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Envelope" }
+  "/index/getSeries":
+    post:
+      summary: "系列列表（支持 pid 查子系列）"
+      tags: ["B"]
+      security: []
+      parameters:
+        - name: "type"
+          in: query
+          required: true
+          schema: { type: integer }
+          description: "系列类型，实测恒 10；走 query string（api 对象用 param）"
+        - name: "pid"
+          in: query
+          required: false
+          schema: { type: integer }
+          description: "父系列 id，缺省取顶级系列"
+      responses:
+        "200":
+          description: "data 为裸数组（code=1 表示业务成功）"
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          description: "`{series_name,series_id,is_def,flag,pattern,resale_put_start_time,resale_put_end_time,resale_buy_start_time,resale_buy_end_time}`"
+        "401":
+          description: "未登录或 token 失效（前端将清除 token）"
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Envelope" }
+  "/index/newsDetail":
+    post:
+      summary: "潮玩有话说详情"
+      tags: ["E"]
+      security: []
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                "id":
+                  type: integer
+                  description: "**待确认**：同/afficheDetail"
+      responses:
+        "200":
+          description: "data 为单对象（code=1 表示业务成功）"
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        description: "data 为单对象"
+                        properties:
+                          "id":
+                            type: integer
+                            description: "id"
+                          "title":
+                            type: string
+                            description: "标题"
+                          "createtime":
+                            type: integer
+                            description: "时间戳"
+                          "content":
+                            type: string
+                            description: "正文"
+        "401":
+          description: "未登录或 token 失效（前端将清除 token）"
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Envelope" }
+  "/invitation/invitation/info":
+    post:
+      summary: "邀请信息（邀请码/邀请人数）"
+      tags: ["A"]
+      parameters:
+        - $ref: "#/components/parameters/Token"
+      responses:
+        "200":
+          description: "data 为单对象（code=1 表示业务成功）"
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        description: "data 为单对象"
+                        properties:
+                          "invite_code":
+                            type: string
+                            description: "本人邀请码"
+                          "invite_num":
+                            type: integer
+                            description: "已邀请人数"
+                          "invite_path":
+                            type: string
+                            description: "邀请路径"
+                          "app_download_path":
+                            type: string
+                            description: "下载路径"
+                          "crystal_number":
+                            type: integer
+                            description: "积分余额"
+        "401":
+          description: "未登录或 token 失效（前端将清除 token）"
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Envelope" }
+  "/invitation/invitation/record":
+    post:
+      summary: "邀请记录"
+      tags: ["A"]
+      parameters:
+        - $ref: "#/components/parameters/Token"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                "page":
+                  type: integer
+                  description: "**待确认**"
+                "limit":
+                  type: integer
+                  description: "**待确认**"
+      responses:
+        "200":
+          description: "data 为精简分页对象 {total,data[]}（code=1 表示业务成功）"
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        description: "data 为精简分页对象 {total,data[]}"
+                        properties:
+                          "total":
+                            type: integer
+                            description: "总数"
+                          "list":
+                            type: array
+                            description: "`{id,mobile,create_time,status,remark}`；status 见 §4 E-INVITE-STATUS"
+                            items: { type: object }
+        "401":
+          description: "未登录或 token 失效（前端将清除 token）"
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Envelope" }
+  "/kline/info/detail":
+    post:
+      summary: "K线详情：买卖盘 + 成交明细"
+      tags: ["C"]
+      security: []
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                "id":
+                  type: integer
+                  description: "藏品 id（**待确认**，按语义推断）"
+      responses:
+        "200":
+          description: "data 为单对象（code=1 表示业务成功）"
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        description: "data 为单对象"
+                        properties:
+                          "name":
+                            type: string
+                            description: "藏品名"
+                          "series_name":
+                            type: string
+                            description: "系列名"
+                          "price":
+                            type: string
+                            description: "当前价"
+                          "change":
+                            type: string
+                            description: "涨跌幅，**含百分号**如 `\"-0.53%\"`（DATABASE.md §9），格式化在前端做"
+                          "increase":
+                            type: boolean
+                            description: "是否上涨"
+                          "num":
+                            type: object
+                            description: "统计 `{flux,deal_5min,high_24h,deal_1h,low_24h,deal_today}`"
+                          "asks":
+                            type: array
+                            description: "卖盘 `[{price,num,total}]`"
+                            items: { type: object }
+                          "bids":
+                            type: array
+                            description: "买盘 `[{price,num,total}]`"
+                            items: { type: object }
+                          "deals":
+                            type: array
+                            description: "成交明细 `[{time,price,num,total}]`"
+                            items: { type: object }
+        "401":
+          description: "未登录或 token 失效（前端将清除 token）"
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Envelope" }
+  "/leaderboard/leaderboard/goods":
+    post:
+      summary: "藏品综合榜"
+      tags: ["F"]
+      security: []
+      parameters: []
+      responses:
+        "200":
+          description: "data 为裸数组（code=1 表示业务成功）"
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          description: "`{id,name,listimg,total_num,flux,min_price,is_like}`；flux/min_price 为**字符串金额**"
+        "401":
+          description: "未登录或 token 失效（前端将清除 token）"
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Envelope" }
+  "/leaderboard/leaderboard/user":
+    post:
+      summary: "用户榜单（含我的排名）"
+      tags: ["F"]
+      parameters:
+        - $ref: "#/components/parameters/Token"
+      responses:
+        "200":
+          description: "data 为单对象（code=1 表示业务成功）"
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        description: "data 为单对象"
+                        properties:
+                          "list":
+                            type: array
+                            description: "`{id,avatar,nickname,yao_count,buy_collection_total_price}`"
+                            items: { type: object }
+                          "my":
+                            type: object
+                            description: "`{order_num,mobile,avatar,yao_count,buy_collection_total_price}`"
+        "401":
+          description: "未登录或 token 失效（前端将清除 token）"
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Envelope" }
+  "/lottery/lottery/info":
+    post:
+      summary: "转盘活动信息"
+      tags: ["D"]
+      security: []
+      parameters: []
+      responses:
+        "200":
+          description: "data 为单对象（code=1 表示业务成功）"
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        description: "data 为单对象"
+                        properties:
+                          "prizeList":
+                            type: array
+                            description: "奖品 `[{id,name,lottery_image}]`"
+                            items: { type: object }
+                          "consume":
+                            type: array
+                            description: "消耗藏品 `[{id,name,collection_code,total_num,image,number}]`"
+                            items: { type: object }
+                          "end_time":
+                            type: integer
+                            description: "结束时间戳"
+        "401":
+          description: "未登录或 token 失效（前端将清除 token）"
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Envelope" }
+  "/lottery/lottery/record":
+    post:
+      summary: "我的抽奖记录"
+      tags: ["D"]
+      parameters:
+        - $ref: "#/components/parameters/Token"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                "page":
+                  type: integer
+                  description: "**待确认**"
+                "limit":
+                  type: integer
+                  description: "**待确认**"
+      responses:
+        "200":
+          description: "data 为裸数组（code=1 表示业务成功）"
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          description: "`{id,name,listimg,create_time}`；create_time 为 integer"
+        "401":
+          description: "未登录或 token 失效（前端将清除 token）"
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Envelope" }
+  "/lottery/lottery/rule":
+    post:
+      summary: "转盘活动规则"
+      tags: ["D"]
+      security: []
+      parameters: []
+      responses:
+        "200":
+          description: "data 为单对象（code=1 表示业务成功）"
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        description: "data 为单对象"
+                        properties:
+                          "rule":
+                            type: string
+                            description: "规则文本"
+        "401":
+          description: "未登录或 token 失效（前端将清除 token）"
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Envelope" }
+  "/market/market/MarketDetail/ids/{id}":
+    post:
+      summary: "藏品/市场详情"
+      tags: ["C"]
+      security: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+          description: "藏品 id，嵌在路径中（`/ids/{id}`）；`api.getMarketDetails(id)` 用模板字符串拼接"
+      responses:
+        "200":
+          description: "data 为单对象（code=1 表示业务成功）"
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        description: "data 为单对象"
+                        properties:
+                          "id":
+                            type: integer
+                            description: "id"
+                          "name":
+                            type: string
+                            description: "藏品名"
+                          "goods_type":
+                            type: integer
+                            description: "商品类型"
+                          "price":
+                            type: string
+                            description: "当前售价（字符串金额，DATABASE.md §6.4）"
+                          "listimg":
+                            type: string
+                            description: "列表图"
+                          "product":
+                            type: object
+                            description: "`{id,name,listimg,total_num,publisher{name,user},collectionlist[],imageinfo[],issuer}`；imageinfo/issuer 恒空（§9）"
+                          "user_collection":
+                            type: object
+                            description: "持有者信息，含 `user_hash`（可能为脱敏值，§6.3）"
+        "401":
+          description: "未登录或 token 失效（前端将清除 token）"
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Envelope" }
+  "/market/market/getMarketList":
+    post:
+      summary: "市场藏品列表"
+      tags: ["C"]
+      security: []
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: ["page"]
+              properties:
+                "page":
+                  type: integer
+                  description: "页码，从 1 起"
+                "list_rows":
+                  type: integer
+                  description: "每页条数；亦接受 `limit`"
+                "series_id":
+                  type: integer
+                  description: "按系列筛选，Market.vue 传当前选中系列"
+                "goods_type":
+                  type: integer
+                  description: "商品类型：1=盲盒 2=单品（DATABASE.md §4 E-GOODS-TYPE-COLLECTION）"
+      responses:
+        "200":
+          description: "data 为裸数组（code=1 表示业务成功）"
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          description: "`{name,series_id,id,listimg,total_num,reprice_limit,collection_level,openresale_time,flag,select_status,deal_num,flux,is_like,market_fluctuate_new,market_value,market_fluctuate,min_price,is_out,new_time,goods_type,product{id,name,listimg,total_num}}`；goods_type 为字符串形态（DATABASE.md §6.2 脏数据）"
+        "401":
+          description: "未登录或 token 失效（前端将清除 token）"
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Envelope" }
+  "/market/market/seriesGoodsList":
+    post:
+      summary: "某系列下的商品列表"
+      tags: ["B"]
+      security: []
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: ["id"]
+              properties:
+                "id":
+                  type: integer
+                  description: "系列 id（页面实参 `id` 来自路由/选中系列）"
+                "type":
+                  type: integer
+                  description: "商品类型：1=盲盒 2=单品，默认 2"
+      responses:
+        "200":
+          description: "data 为嵌套混合对象 {product:{},...分页}（code=1 表示业务成功）"
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        description: "data 为嵌套混合对象 {product:{},...分页}"
+                        properties:
+                          "product":
+                            type: object
+                            description: "`{id,name,total_num,flux,is_like,batch_pay,collection_level,listimg,issuer,introduce_image}`"
+                          "total":
+                            type: integer
+                            description: "总数"
+                          "current_page":
+                            type: integer
+                            description: "当前页"
+                          "last_page":
+                            type: integer
+                            description: "总页数"
+                          "data":
+                            type: array
+                            description: "`{id,name,collection_code,min_price,status,income_type,createtime,listimg}`；income_type 为数组形态（§6.2）"
+                            items: { type: object }
+        "401":
+          description: "未登录或 token 失效（前端将清除 token）"
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Envelope" }
+  "/market/trade/begBuyOrderInfo":
+    post:
+      summary: "委托 / 求购订单详情"
+      tags: ["C"]
+      parameters:
+        - $ref: "#/components/parameters/Token"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: ["id"]
+              properties:
+                "id":
+                  type: integer
+                  description: "**待确认**：订单 id 字段名，实参照saleMarketOrderDetail 的 `id`，但需前端确认"
+      responses:
+        "200":
+          description: "data 为单对象（code=1 表示业务成功）"
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        description: "data 为单对象"
+                        properties:
+                          "结构同":
+                            description: "`/order/order/saleMarketOrderDetail`（mock 为同一文件 orderDetail.json）"
+        "401":
+          description: "未登录或 token 失效（前端将清除 token）"
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Envelope" }
+  "/market/trade/begBuyOrderList":
+    post:
+      summary: "我的委托 / 我的求购列表"
+      tags: ["C"]
+      parameters:
+        - $ref: "#/components/parameters/Token"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                "page":
+                  type: integer
+                  description: "**待确认**：OrderFilterList.vue 实参未逐项核"
+                "limit":
+                  type: integer
+                  description: "**待确认**"
+                "type":
+                  type: integer
+                  description: "**待确认**：区分委托(1)/求购(2) 的字段名待确认"
+      responses:
+        "200":
+          description: "data 为精简分页对象 {total,data[]}（code=1 表示业务成功）"
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        description: "data 为精简分页对象 {total,data[]}"
+                        properties:
+                          "total":
+                            type: integer
+                            description: "总数"
+                          "data":
+                            type: array
+                            description: "`{id,order_sn,order_status,goods_name,listimg,collection_code,number,num,sale_number,price,total_price,pay_way,createtime,updatetime}`；order_status 见 §4 E-ENTRUST-STATUS"
+                            items: { type: object }
+        "401":
+          description: "未登录或 token 失效（前端将清除 token）"
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Envelope" }
+  "/market/trade/collectionDetail":
+    post:
+      summary: "寄售详情：今日行情 + 成交记录"
+      tags: ["C"]
+      security: []
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: ["id"]
+              properties:
+                "id":
+                  type: integer
+                  description: "藏品 id，默认 226"
+      responses:
+        "200":
+          description: "data 为单对象（code=1 表示业务成功）"
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        description: "data 为单对象"
+                        properties:
+                          "id":
+                            type: integer
+                            description: "id"
+                          "goods_type":
+                            type: integer
+                            description: "商品类型"
+                          "price":
+                            type: number
+                            description: "当前价"
+                          "name":
+                            type: string
+                            description: "名称"
+                          "series_name":
+                            type: string
+                            description: "系列名"
+                          "status":
+                            type: integer
+                            description: "§4 E-LISTING-STATUS"
+                          "today_highest_price":
+                            type: string
+                            description: "今日最高价"
+                          "today_volume":
+                            type: string
+                            description: "今日成交量"
+                          "today_lowest_price":
+                            type: string
+                            description: "今日最低价"
+                          "floor_price":
+                            type: string
+                            description: "地板价"
+                          "product":
+                            type: object
+                            description: "`{id,name,main_image,listimg,collection_code,batch,publisher}`"
+                          "list":
+                            type: array
+                            description: "成交记录 `[{collection_code,total_num,price,num,time}]`"
+                            items: { type: object }
+        "401":
+          description: "未登录或 token 失效（前端将清除 token）"
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Envelope" }
+  "/market/trade/collectionInfo":
+    post:
+      summary: "单个藏品详情"
+      tags: ["B"]
+      parameters:
+        - $ref: "#/components/parameters/Token"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: ["id"]
+              properties:
+                "id":
+                  type: integer
+                  description: "藏品 id，默认 226"
+      responses:
+        "200":
+          description: "data 为单对象（code=1 表示业务成功）"
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        description: "data 为单对象"
+                        properties:
+                          "id":
+                            type: integer
+                            description: "id"
+                          "collection_code":
+                            type: string
+                            description: "藏品编号"
+                          "serial_num":
+                            type: integer
+                            description: "总序号"
+                          "series_total":
+                            type: integer
+                            description: "系列内序号"
+                          "user_hash":
+                            type: string
+                            description: "用户哈希（可能已脱敏，§6.3）"
+                          "user_hash_text":
+                            type: string
+                            description: "脱敏哈希"
+                          "rz_code":
+                            type: string
+                            description: "认证码"
+                          "createtime":
+                            type: integer
+                            description: "创建时间"
+                          "status":
+                            type: integer
+                            description: "§4 E-COLLECTION-STATUS"
+                          "is_lock":
+                            type: integer
+                            description: "是否锁定"
+                          "weither_regift":
+                            type: integer
+                            description: "是否可转赠"
+                          "weither_resale":
+                            type: integer
+                            description: "是否可转售"
+                          "can_compose":
+                            type: integer
+                            description: "是否可合成"
+                          "price":
+                            type: string
+                            description: "售价"
+                          "min_price":
+                            type: string
+                            description: "最低价"
+                          "today_volume":
+                            type: integer
+                            description: "今日成交量"
+                          "product":
+                            type: object
+                            description: "`{id,name,goods_type,listimg,main_image,total_num,flux,sale_total_num,is_lock,weither_regift,weither_resale,can_compose,series{id,name},publisher{name,user}}`"
+        "401":
+          description: "未登录或 token 失效（前端将清除 token）"
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Envelope" }
+  "/market/trade/createBegBuyOrder":
+    post:
+      summary: "发起委托 / 发起求购"
+      tags: ["C"]
+      parameters:
+        - $ref: "#/components/parameters/Token"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                "goods_id":
+                  type: integer
+                  description: "**待确认**：提交表单字段需读 SubmitBegBuy.vue 提交逻辑"
+                "price":
+                  type: string
+                  description: "**待确认**：委托/求购价（字符串金额）"
+                "number":
+                  type: integer
+                  description: "**待确认**：数量"
+                "type":
+                  type: integer
+                  description: "**待确认**：委托/求购区分"
+      responses:
+        "200":
+          description: "data 为单对象（code=1 表示业务成功）"
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        description: "data 为单对象"
+                        properties:
+                          "待确认":
+                            description: "**TODO**：源站返回结构无 mock 快照（未登记 MOCK_MAP），需前端确认页面消费方式"
+        "401":
+          description: "未登录或 token 失效（前端将清除 token）"
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Envelope" }
+  "/market/trade/flowDoc":
+    post:
+      summary: "藏品流转记录"
+      tags: ["G"]
+      parameters:
+        - $ref: "#/components/parameters/Token"
+      responses:
+        "200":
+          description: "data 为裸数组（code=1 表示业务成功）"
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          description: "`{id,nickname,createtime,source_type,collection_name,collection_code}`；source_type 实测 1~6 且与 id 同步，疑为递增 ID 而非类型枚举（DATABASE.md §10 遗留项，**不建枚举约束**）"
+        "401":
+          description: "未登录或 token 失效（前端将清除 token）"
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Envelope" }
+  "/market/trade/getSellCollectionInfo":
+    post:
+      summary: "可出售藏品列表（待售）"
+      tags: ["C"]
+      parameters:
+        - $ref: "#/components/parameters/Token"
+      responses:
+        "200":
+          description: "data 为单对象（code=1 表示业务成功）"
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        description: "data 为单对象"
+                        properties:
+                          "user_collection_list":
+                            type: array
+                            description: "`{id,user_collection_id,name,collection_code,total_num,count,price,pay_way,main_image}`"
+                            items: { type: object }
+        "401":
+          description: "未登录或 token 失效（前端将清除 token）"
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Envelope" }
+  "/market/trade/sell":
+    post:
+      summary: "以求购价出售"
+      tags: ["C"]
+      parameters:
+        - $ref: "#/components/parameters/Token"
+      responses:
+        "200":
+          description: "data 为单对象（code=1 表示业务成功）"
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        description: "data 为单对象"
+                        properties:
+                          "待确认":
+                            description: "**TODO**：无 mock 快照依据"
+        "401":
+          description: "未登录或 token 失效（前端将清除 token）"
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Envelope" }
+  "/market/trade/userCollectionList":
+    post:
+      summary: "我的藏品列表（分页）"
+      tags: ["B"]
+      parameters:
+        - $ref: "#/components/parameters/Token"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                "page":
+                  type: integer
+                  description: "页码；**待确认**：页面传空对象，分页由滚动触发"
+                "limit":
+                  type: integer
+                  description: "**待确认**"
+                "keyword":
+                  type: string
+                  description: "搜索关键词——**utils L140 明确消费 `data.keyword`**，用于前端本地过滤"
+      responses:
+        "200":
+          description: "data 为精简分页对象 {total,data[]}（code=1 表示业务成功）"
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        description: "data 为精简分页对象 {total,data[]}"
+                        properties:
+                          "total":
+                            type: integer
+                            description: "总数"
+                          "current_page":
+                            type: integer
+                            description: "当前页"
+                          "last_page":
+                            type: integer
+                            description: "总页数"
+                          "data":
+                            type: array
+                            description: "`{id,collection_id,collection_code,name,listimg,main_image,status,has_sold,price,count,total_num,flux,createtime}`；status 见 §4 E-COLLECTION-STATUS"
+                            items: { type: object }
+        "401":
+          description: "未登录或 token 失效（前端将清除 token）"
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Envelope" }
+  "/marketCapRanking/marketCapRanking/list":
+    post:
+      summary: "市值排行榜"
+      tags: ["F"]
+      security: []
+      parameters: []
+      responses:
+        "200":
+          description: "data 为单对象（code=1 表示业务成功）"
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        description: "data 为单对象"
+                        properties:
+                          "info":
+                            type: object
+                            description: "`{update_time,market_desc}`"
+                          "list":
+                            type: array
+                            description: "`{id,name,listimg,min_price,market_value,market_fluctuate,total_num,flux}`"
+                            items: { type: object }
+        "401":
+          description: "未登录或 token 失效（前端将清除 token）"
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Envelope" }
+  "/order/order/myConsignment":
+    post:
+      summary: "我的寄售列表（也被赠送记录复用）"
+      tags: ["C"]
+      parameters:
+        - $ref: "#/components/parameters/Token"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: ["page"]
+              properties:
+                "page":
+                  type: integer
+                  description: "页码，从 1 起"
+                "limit":
+                  type: integer
+                  description: "每页条数"
+                "type":
+                  type: string
+                  description: "**复用参数**：`gift` 表示赠送记录（GiftRecord.vue 实参），缺省为寄售列表"
+                "keyword":
+                  type: string
+                  description: "**待确认**：Search.vue 传 `{page:1}`，搜索关键词字段名未实测"
+      responses:
+        "200":
+          description: "data 为精简分页对象 {total,data[]}（code=1 表示业务成功）"
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        description: "data 为精简分页对象 {total,data[]}"
+                        properties:
+                          "total":
+                            type: integer
+                            description: "总数"
+                          "data":
+                            type: array
+                            description: "`{id,goods_name,listimg,collection_code,status,price,pay_way,createtime,updatetime}`；status 枚举见 §4 E-LISTING-STATUS"
+                            items: { type: object }
+        "401":
+          description: "未登录或 token 失效（前端将清除 token）"
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Envelope" }
+  "/order/order/orderList":
+    post:
+      summary: "我的订单列表（分页）"
+      tags: ["C"]
+      parameters:
+        - $ref: "#/components/parameters/Token"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: ["page"]
+              properties:
+                "page":
+                  type: integer
+                  description: "页码，从 1 起"
+                "limit":
+                  type: integer
+                  description: "每页条数，实参 15；本接口用 `limit` 而非 `list_rows`"
+                "type":
+                  type: integer
+                  description: "订单类型：实测 1=普通买单（DATABASE.md §8第 27 项 order_type=1）"
+                "status":
+                  type: integer
+                  description: "订单状态，枚举见 §4 E-ORDER-STATUS-BUY；实参 0"
+      responses:
+        "200":
+          description: "data 为标准分页对象 {total,per_page,current_page,last_page,data[]}（code=1 表示业务成功）"
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        description: "data 为标准分页对象 {total,per_page,current_page,last_page,data[]}"
+                        properties:
+                          "total":
+                            type: integer
+                            description: "总数"
+                          "per_page":
+                            type: integer
+                            description: "每页数"
+                          "current_page":
+                            type: integer
+                            description: "当前页"
+                          "last_page":
+                            type: integer
+                            description: "总页数"
+                          "data":
+                            type: array
+                            description: "`{id,order_sn,order_status,goods_id,goods_name,listimg,number,sale_number,price,total_price,income_type,createtime,updatetime,collection_code,user_hash_text}`"
+                            items: { type: object }
+        "401":
+          description: "未登录或 token 失效（前端将清除 token）"
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Envelope" }
+  "/order/order/saleMarketOrderDetail":
+    post:
+      summary: "订单详情（常规/市场/转赠/委托/求购共用）"
+      tags: ["C"]
+      parameters:
+        - $ref: "#/components/parameters/Token"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: ["id"]
+              properties:
+                "id":
+                  type: integer
+                  description: "订单 id，默认 9001"
+      responses:
+        "200":
+          description: "data 为单对象（code=1 表示业务成功）"
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        description: "data 为单对象"
+                        properties:
+                          "id":
+                            type: integer
+                            description: "id"
+                          "order_sn":
+                            type: string
+                            description: "订单号"
+                          "order_status":
+                            type: integer
+                            description: "订单状态"
+                          "goods_id":
+                            type: integer
+                            description: "商品 id"
+                          "goods_name":
+                            type: string
+                            description: "商品名"
+                          "listimg":
+                            type: string
+                            description: "图"
+                          "collection_code":
+                            type: string
+                            description: "藏品编号（可能为数字字符串，§6.1 三套编码体系）"
+                          "user_hash_text":
+                            type: string
+                            description: "用户哈希（脱敏）"
+                          "pay_way":
+                            type: string
+                            description: "支付方式，§4 E-PAY-WAY"
+                          "pay_name":
+                            type: string
+                            description: "支付名称"
+                          "number":
+                            type: integer
+                            description: "数量"
+                          "num":
+                            type: integer
+                            description: "数量"
+                          "sale_number":
+                            type: integer
+                            description: "已售数量"
+                          "price":
+                            type: string
+                            description: "单价"
+                          "total_price":
+                            type: string
+                            description: "总价"
+                          "order_amount":
+                            type: string
+                            description: "订单金额"
+                          "discount_amount":
+                            type: string
+                            description: "优惠金额"
+                          "pay_price":
+                            type: string
+                            description: "应付金额"
+                          "remark":
+                            type: string
+                            description: "备注"
+                          "createtime":
+                            type: integer
+                            description: "创建时间"
+                          "updatetime":
+                            type: integer
+                            description: "更新时间"
+                          "card":
+                            type: array
+                            description: "**实测恒为空数组**，字段名无从得知（DATABASE.md §10 遗留项）"
+                            items: { type: object }
+                          "goods_type":
+                            type: integer
+                            description: "商品类型"
+        "401":
+          description: "未登录或 token 失效（前端将清除 token）"
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Envelope" }
+  "/product/product/detail":
+    post:
+      summary: "商品详情（盲盒/藏品通用）"
+      tags: ["B"]
+      security: []
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: ["id"]
+              properties:
+                "id":
+                  type: integer
+                  description: "商品 id，页面默认 226"
+      responses:
+        "200":
+          description: "data 为单对象（code=1 表示业务成功）"
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        description: "data 为单对象"
+                        properties:
+                          "id":
+                            type: integer
+                            description: "id"
+                          "goods_type":
+                            type: integer
+                            description: "1=盲盒 2=单品"
+                          "name":
+                            type: string
+                            description: "名称"
+                          "price":
+                            type: string
+                            description: "价格"
+                          "sale_status":
+                            type: integer
+                            description: "销售状态"
+                          "is_shengou":
+                            type: integer
+                            description: "是否申购"
+                          "is_sub":
+                            type: integer
+                            description: "是否订阅"
+                          "shengou":
+                            type: object
+                            description: "申购配置 `{num,user_num,start_time,end_time}`"
+                          "count_down":
+                            type: integer
+                            description: "倒计时"
+                          "introduce":
+                            type: string
+                            description: "介绍"
+                          "product":
+                            type: object
+                            description: "`{id,name,goods_type,listimg,main_image,total_num,sale_total_num,flux,is_like,is_sub,collectionlist[],publisher{name,user},series{id,name}}`"
+        "401":
+          description: "未登录或 token 失效（前端将清除 token）"
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Envelope" }
+  "/product/product/rule":
+    post:
+      summary: "申购/购买规则"
+      tags: ["B"]
+      security: []
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: ["id"]
+              properties:
+                "id":
+                  type: integer
+                  description: "商品 id，默认 226"
+      responses:
+        "200":
+          description: "data 为单对象（code=1 表示业务成功）"
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        description: "data 为单对象"
+                        properties:
+                          "id":
+                            type: integer
+                            description: "id"
+                          "name":
+                            type: string
+                            description: "名称"
+                          "price":
+                            type: string
+                            description: "价格"
+                          "total_num":
+                            type: integer
+                            description: "总量"
+                          "sale_num":
+                            type: integer
+                            description: "已售"
+                          "rule_updated":
+                            type: string
+                            description: "规则更新时间"
+                          "rules":
+                            type: array
+                            description: "`[{icon,title,lines[]}]`"
+                            items: { type: object }
+        "401":
+          description: "未登录或 token 失效（前端将清除 token）"
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Envelope" }
+  "/rank/masterRank/list":
+    post:
+      summary: "大师动态榜"
+      tags: ["F"]
+      security: []
+      parameters: []
+      responses:
+        "200":
+          description: "data 为裸数组（code=1 表示业务成功）"
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          description: "`{id,avatar,nickname,createtime,goods_cover_image,goods_name,num}`"
+        "401":
+          description: "未登录或 token 失效（前端将清除 token）"
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Envelope" }
+  "/rank/userBuy/list":
+    post:
+      summary: "用户购买榜"
+      tags: ["F"]
+      security: []
+      parameters: []
+      responses:
+        "200":
+          description: "data 为裸数组（code=1 表示业务成功）"
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          description: "`{id,goods_cover_image,goods_name,total_price,num,createtime,count}`"
+        "401":
+          description: "未登录或 token 失效（前端将清除 token）"
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Envelope" }
+  "/rebate/rebate/index":
+    post:
+      summary: "返利中心"
+      tags: ["F"]
+      parameters:
+        - $ref: "#/components/parameters/Token"
+      responses:
+        "200":
+          description: "data 为单对象（code=1 表示业务成功）"
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        description: "data 为单对象"
+                        properties:
+                          "c_info":
+                            type: object
+                            description: "`{avatar,nickname,inviter_code,all_commision,yesterday_commision,user_transaction,mingxia_commision,yao_counts,you_yao_counts}`；**注意字段拼写 `commision`（源站少一个 s），必须原样返回**"
+                          "h5_invite_url":
+                            type: string
+                            description: "邀请链接"
+                          "comm_desc":
+                            type: string
+                            description: "返佣说明"
+        "401":
+          description: "未登录或 token 失效（前端将清除 token）"
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Envelope" }
+  "/rebate/rebate/inviteDetail":
+    post:
+      summary: "被邀请人清单"
+      tags: ["F"]
+      parameters:
+        - $ref: "#/components/parameters/Token"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                "page":
+                  type: integer
+                  description: "**待确认**"
+                "limit":
+                  type: integer
+                  description: "**待确认**"
+      responses:
+        "200":
+          description: "data 为裸数组（code=1 表示业务成功）"
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          description: "`{id,nickname,jointime,first_transaction_time,user_transaction,month_transaction}`"
+        "401":
+          description: "未登录或 token 失效（前端将清除 token）"
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Envelope" }
+  "/rebate/rebate/leaderboard":
+    post:
+      summary: "邀请排行榜"
+      tags: ["F"]
+      parameters:
+        - $ref: "#/components/parameters/Token"
+      responses:
+        "200":
+          description: "data 为裸数组（code=1 表示业务成功）"
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          description: "`{id,nickname,com_price}`"
+        "401":
+          description: "未登录或 token 失效（前端将清除 token）"
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Envelope" }
+  "/regift/record/list":
+    post:
+      summary: "转赠记录"
+      tags: ["G"]
+      parameters:
+        - $ref: "#/components/parameters/Token"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                "page":
+                  type: integer
+                  description: "**待确认**"
+                "limit":
+                  type: integer
+                  description: "**待确认**"
+      responses:
+        "200":
+          description: "data 为裸数组（code=1 表示业务成功）"
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          description: "`{id,goods_cover_image,goods_name,collection_code,status,status_text,from_user,create_time,back_time,order_no}`；status 见 §4 E-REGIFT-STATUS；collection_code 实测链上凭证形态 `PBCE/2000000000000001`（§6.1 第三套编码）"
+        "401":
+          description: "未登录或 token 失效（前端将清除 token）"
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Envelope" }
+  "/shequ/rumor/info":
+    post:
+      summary: "社区墙动态详情（含两级评论）"
+      tags: ["E"]
+      security: []
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                "id":
+                  type: integer
+                  description: "**待确认**：页面传空对象，id 疑似来自 route.query"
+      responses:
+        "200":
+          description: "data 为单对象（code=1 表示业务成功）"
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        description: "data 为单对象"
+                        properties:
+                          "id":
+                            type: integer
+                            description: "id"
+                          "create_time":
+                            type: string
+                            description: "**缺年份**，如 `\"10-16 09:24\"`（DATABASE.md §10裁决 E：保持字符串不补全）"
+                          "content":
+                            type: string
+                            description: "正文"
+                          "profile":
+                            type: object
+                            description: "`{nickname,avatar}`"
+                          "images":
+                            type: array
+                            description: "图片 URL 数组"
+                            items: { type: object }
+                          "comment_list":
+                            type: array
+                            description: "`[{id,create_time,content,reply_id,profile,reply_profile,reply[],has_more}]`；**has_more 为 boolean**"
+                            items: { type: object }
+        "401":
+          description: "未登录或 token 失效（前端将清除 token）"
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Envelope" }
+  "/sign/index/info":
+    post:
+      summary: "签到信息"
+      tags: ["D"]
+      parameters:
+        - $ref: "#/components/parameters/Token"
+      responses:
+        "200":
+          description: "data 为单对象（code=1 表示业务成功）"
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        description: "data 为单对象"
+                        properties:
+                          "user_info":
+                            type: object
+                            description: "`{nickname,avatar,id}`"
+                          "continuous_days":
+                            type: integer
+                            description: "连续签到天数"
+                          "sign_days":
+                            type: array
+                            description: "已签到日期数组"
+                            items: { type: object }
+                          "sign_status":
+                            type: integer
+                            description: "今日签到状态"
+                          "crystal_number":
+                            type: integer
+                            description: "积分余额"
+                          "sign_rule":
+                            type: string
+                            description: "签到规则"
+                          "reward_list":
+                            type: array
+                            description: "7 日奖励 `[{day,crystal}]`"
+                            items: { type: object }
+        "401":
+          description: "未登录或 token 失效（前端将清除 token）"
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Envelope" }
+  "/user/address/lists":
+    post:
+      summary: "收货地址列表"
+      tags: ["A"]
+      parameters:
+        - $ref: "#/components/parameters/Token"
+      responses:
+        "200":
+          description: "data 为裸数组（code=1 表示业务成功）"
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          description: "`{address_id,name,mobile,province,city,area,address,is_default}`"
+        "401":
+          description: "未登录或 token 失效（前端将清除 token）"
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Envelope" }
+  "/user/getUserInfo":
+    post:
+      summary: "当前登录用户信息"
+      tags: ["A"]
+      parameters:
+        - $ref: "#/components/parameters/Token"
+      responses:
+        "200":
+          description: "data 为单对象（code=1 表示业务成功）"
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        description: "data 为单对象"
+                        properties:
+                          "userinfo":
+                            type: object
+                            description: "同 /user/login；**本接口不应返回 token**（DATABASE.md §9）"
+        "401":
+          description: "未登录或 token 失效（前端将清除 token）"
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Envelope" }
+  "/user/login":
+    post:
+      summary: "登录"
+      tags: ["A"]
+      security: []
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: ["account", "password"]
+              properties:
+                "account":
+                  type: string
+                  description: "账号（手机号或用户名），Login.vue 表单字段"
+                "password":
+                  type: string
+                  description: "密码（明文传输，须 HTTPS）"
+      responses:
+        "200":
+          description: "data 为单对象（code=1 表示业务成功）"
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        description: "data 为单对象"
+                        properties:
+                          "userinfo":
+                            type: object
+                            description: "`{id,username,nickname,mobile,avatar,score,inviter_code,yao_count,huifu_service_charge,sandpay_service_charge,token}`"
+        "401":
+          description: "未登录或 token 失效（前端将清除 token）"
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Envelope" }
+  "/user/register":
+    post:
+      summary: "注册"
+      tags: ["A"]
+      security: []
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                "mobile":
+                  type: string
+                  description: "**待确认**：Register.vue 表单字段未逐项核"
+                "password":
+                  type: string
+                  description: "**待确认**"
+                "code":
+                  type: string
+                  description: "**待确认**：短信验证码"
+      responses:
+        "200":
+          description: "data 为单对象（code=1 表示业务成功）"
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        description: "data 为单对象"
+                        properties:
+                          "userinfo":
+                            type: object
+                            description: "同 /user/login"
+        "401":
+          description: "未登录或 token 失效（前端将清除 token）"
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Envelope" }
+  "/user_collection/user_collection/openbox":
+    post:
+      summary: "开盒结果（批量）"
+      tags: ["D"]
+      parameters:
+        - $ref: "#/components/parameters/Token"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                "blind_box_id":
+                  type: integer
+                  description: "**待确认**：开盒动作参数"
+      responses:
+        "200":
+          description: "data 为裸数组（code=1 表示业务成功）"
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          description: "`{id,listimg,name,collection_code,rarity_icon}`"
+        "401":
+          description: "未登录或 token 失效（前端将清除 token）"
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Envelope" }
+  "/user_collection/user_collection/openboxone":
+    post:
+      summary: "开盒结果（单个）"
+      tags: ["D"]
+      parameters:
+        - $ref: "#/components/parameters/Token"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                "blind_box_id":
+                  type: integer
+                  description: "**待确认**"
+      responses:
+        "200":
+          description: "data 为单对象（code=1 表示业务成功）"
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        description: "data 为单对象"
+                        properties:
+                          "id":
+                            type: integer
+                            description: "id"
+                          "name":
+                            type: string
+                            description: "名称"
+                          "collection_code":
+                            type: string
+                            description: "藏品编号"
+                          "listimg":
+                            type: string
+                            description: "列表图"
+                          "main_image":
+                            type: string
+                            description: "主图"
+                          "rarity_icon":
+                            type: string
+                            description: "稀有度图标"
+        "401":
+          description: "未登录或 token 失效（前端将清除 token）"
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Envelope" }
+
+components:
+  securitySchemes:
+    TokenAuth:
+      type: apiKey
+      in: header
+      name: token
+      description: "JWT。源站用 token 头（非 Authorization: Bearer），不可更改。"
+  parameters:
+    Token:
+      name: token
+      in: header
+      required: true
+      schema: { type: string }
+      description: "登录接口返回的 JWT"
+  schemas:
+    Envelope:
+      type: object
+      required: [code, msg, data, time]
+      properties:
+        code:
+          type: integer
+          description: 1=成功；400/401/403/404/409/422/500/503=错误。**1 是成功，不是 0**
+          enum: [1, 400, 401, 403, 404, 409, 422, 500, 503]
+          example: 1
+        msg:
+          type: string
+          example: ok
+        data:
+          description: 业务数据。形状按接口而定，共 5 种封装风格
+        time:
+          type: string
+          format: date-time

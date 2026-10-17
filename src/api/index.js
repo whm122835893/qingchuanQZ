@@ -247,6 +247,21 @@ export const api = {
   communityShareInfo: (data) => request('/draw/communityShare/info', { data }),
   invitationAssistInfo: (data) => request('/draw/InvitationFriendAssist/info', { data }),
   activeSelectedList: (data) => request('/activeSelected/list', { data }),
+  // 返利 / 榜单 / 转赠 / 聊天 / 行情
+  // 说明：以下 11 个转发函数为补齐历史遗漏 —— 页面一直在调用，但本文件此前未导出，
+  // 导致远程模式下抛 TypeError 被 utils/api.js 的空 catch 静默吞掉后回落 mock，
+  // 使返利/榜单/转赠/聊天/K线 5 个域拿不到真实数据且无任何报错。转发目标见 MOCK_MAP。
+  rebateInfo: (data) => request('/rebate/rebate/index', { data }),
+  rebateLeaderboard: (data) => request('/rebate/rebate/leaderboard', { data }),
+  rebateInviteDetail: (data) => request('/rebate/rebate/inviteDetail', { data }),
+  masterRank: (data) => request('/rank/masterRank/list', { data }),
+  userBuyRank: (data) => request('/rank/userBuy/list', { data }),
+  leaderboardGoods: (data) => request('/leaderboard/leaderboard/goods', { data }),
+  leaderboardUser: (data) => request('/leaderboard/leaderboard/user', { data }),
+  marketCapRanking: (data) => request('/marketCapRanking/marketCapRanking/list', { data }),
+  regiftRecord: (data) => request('/regift/record/list', { data }),
+  chatMessages: (data) => request('/community/chat/messageList', { data }),
+  klineInfo: (data) => request('/kline/info/detail', { data }),
 }
 
 export { getToken, setToken, readMock, IS_REMOTE }
