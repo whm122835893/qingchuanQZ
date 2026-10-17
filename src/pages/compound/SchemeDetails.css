@@ -1,0 +1,228 @@
+@import '@/styles/atomic.css';
+
+.scheme-page {
+  min-height: 100vh;
+  background-color: #f3f4f6;
+  background-image: url('/static/compound/detail_bg.png');
+  background-repeat: no-repeat;
+  background-position: top;
+  background-size: 100% auto;
+  padding-bottom: calc(150rpx + env(safe-area-inset-bottom));
+  box-sizing: border-box;
+}
+.nav-right {
+  font-size: 24rpx;
+  color: #1a2438;
+}
+
+.page-body {
+  padding-bottom: 40rpx;
+}
+.target-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 24rpx;
+}
+.target-img {
+  width: 260rpx;
+  height: 260rpx;
+  border-radius: 15rpx;
+  background: #e8e8e8;
+}
+.main-card {
+  margin: 24rpx 21rpx 0;
+  padding: 30rpx 21rpx;
+  background: #fff;
+  border-radius: 18rpx;
+}
+.target {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.target-name {
+  font-size: 32rpx;
+  color: #1a2438;
+}
+.target-tip {
+  margin-top: 10rpx;
+  font-size: 22rpx;
+  color: #999;
+}
+.section {
+  margin-top: 36rpx;
+}
+.section-title {
+  font-size: 28rpx;
+  color: #1a2438;
+}
+
+.condition-block {
+  margin-bottom: 21rpx;
+  margin-top: 24rpx;
+}
+.cond-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12rpx;
+}
+.cond-name,
+.cond-progress {
+  font-size: 18rpx;
+  color: #999;
+}
+.mat-row {
+  display: flex;
+  align-items: center;
+  padding: 15rpx;
+  margin-bottom: 12rpx;
+  background: #f5f8fa;
+  border-radius: 12rpx;
+}
+.mat-thumb {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 9rpx;
+  background: #e8e8e8;
+  flex-shrink: 0;
+}
+.mat-meta {
+  margin-left: 15rpx;
+  min-width: 0;
+  flex: 1;
+}
+.mat-name {
+  font-size: 21rpx;
+  color: #1a2438;
+}
+.mat-stat {
+  margin-top: 7.5rpx;
+  font-size: 18rpx;
+  color: #fa5151;
+}
+.check {
+  width: 40rpx;
+  height: 40rpx;
+  flex-shrink: 0;
+  border: 1rpx solid #ccc;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.check.on {
+  background: #6aa27b;
+  border-color: #6aa27b;
+}
+/* 勾选标记：纯 CSS 绘制的对勾（原站 checkmark-circle-fill.png 已下线） */
+.check-mark {
+  width: 18rpx;
+  height: 34rpx;
+  border-right: 4rpx solid #fff;
+  border-bottom: 4rpx solid #fff;
+  transform: rotate(45deg) translate(-2rpx, -4rpx);
+}
+
+.footer {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 16rpx 21rpx calc(24rpx + env(safe-area-inset-bottom));
+  background: #fff;
+}
+.tip-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12rpx;
+}
+.tip-text {
+  font-size: 22rpx;
+  color: #999;
+}
+.submit-btn {
+  width: 100%;
+  height: 88rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #6aa27b;
+  border-radius: 44rpx;
+}
+.submit-btn.disabled {
+  background: #b9bcc2;
+}
+.submit-text {
+  font-size: 30rpx;
+  color: #fff;
+}
+
+/* 成功弹层 */
+.success-mask {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.success-pop {
+  width: 600rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.success-title {
+  width: 480rpx;
+}
+.success-stage {
+  position: relative;
+  width: 600rpx;
+  margin-top: -20rpx;
+}
+.pop-bg {
+  width: 600rpx;
+  height: 420rpx;
+}
+.result-box {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 120rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.result-img {
+  width: 300rpx;
+  height: 300rpx;
+  border-radius: 15rpx;
+}
+.pop-bottom-bg {
+  position: relative;
+  width: 600rpx;
+  margin-top: -8rpx;
+}
+.pop-btns {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 20rpx;
+}
+.pop-btn {
+  width: 260rpx;
+  height: 80rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.pop-btn.again {
+  margin-left: 20rpx;
+}
+.btn-label {
+  height: 56rpx;
+}

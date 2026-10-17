@@ -1,0 +1,313 @@
+/**
+ * API 层（本地数据源版）
+ *
+ * 设计原则：本项目为独立项目，运行时不依赖原站。
+ * - 全部数据从 public/mock/*.json 读取（字段与原站响应 1:1 对齐）
+ * - 不发起任何跨域请求，源站关停 / 断网 / 被墙均不影响本页
+ * - 如需接回自己的后端，把 .env 的 VITE_API_BASE 设为后端地址即可，
+ *   代码无需改动（会自动切换为远程模式）
+ */
+const TOKEN_KEY = 'token'
+
+/** 远程后端地址；为空字符串 = 本地 mock 模式（默认） */
+const REMOTE_BASE = (import.meta.env.VITE_API_BASE || '').replace(/\/$/, '')
+const IS_REMOTE = !!REMOTE_BASE
+
+/** 本地资源前缀 */
+const LOCAL_BASE = import.meta.env.BASE_URL.replace(/\/$/, '')
+
+function getToken() {
+  return localStorage.getItem(TOKEN_KEY) || ''
+}
+function setToken(t) {
+  if (t) localStorage.setItem(TOKEN_KEY, t)
+  else localStorage.removeItem(TOKEN_KEY)
+}
+
+/** 读取本地 mock */
+async function readMock(name) {
+  const res = await fetch(LOCAL_BASE + '/mock/' + name)
+  if (!res.ok) throw new Error('mock 404: ' + name)
+  return res.json()
+}
+
+/** mock 文件名映射：请求路径 -> 本地数据文件 */
+const MOCK_MAP = {
+  '/index/getConfig': 'getConfig.json',
+  '/banner/show/getBanner': 'banner_show_getBanner.json',
+  '/index/afficheList': 'afficheList.json',
+  '/index/affichetypelist': 'affichetypelist.json',
+  '/index/getSeries': 'series-10.json',
+  '/market/market/getMarketList': 'marketList.json',
+  '/box/blind_box/list': 'blindBoxList.json',
+  '/addons_diypage_index': 'diypage.json',
+  '/user/login': 'user.json',
+  '/user/register': 'user.json',
+  '/user/getUserInfo': 'user.json',
+  '/order/order/orderList': 'orderList.json',
+  '/order/order/saleMarketOrderDetail': 'orderDetail.json',
+  '/order/order/myConsignment': 'myConsignment.json',
+  '/market/trade/begBuyOrderList': 'entrustList.json',
+  '/market/trade/begBuyOrderInfo': 'orderDetail.json',
+  '/market/trade/getSellCollectionInfo': 'userCollectionList.json',
+  '/market/trade/collectionDetail': 'sellInfo.json',
+  '/addons/diypage/index': 'diypage.json',
+  // 公告模块
+  '/index/afficheDetail': 'noticeDetails.json',
+  '/index/newsDetail': 'newsDetails.json',
+  '/shequ/rumor/info': 'wallDetails.json',
+  // 我的藏品
+  '/market/trade/userCollectionList': 'myCollectionList.json',
+  '/market/trade/collectionInfo': 'myCollectionDetail.json',
+  // 商品 / 系列
+  '/market/market/seriesGoodsList': 'marketGoodsList.json',
+  '/product/product/detail': 'productDetail.json',
+  '/product/product/rule': 'productRule.json',
+  // 我的 · 地址
+  '/user/address/lists': 'addressList.json',
+  '/market/trade/flowDoc': 'flowDoc.json',
+  // 返利 / 榜单 / 转赠 / 聊天 / 行情
+  '/rebate/rebate/index': 'rebate.json',
+  '/rebate/rebate/leaderboard': 'rebateLeaderboard.json',
+  '/rebate/rebate/inviteDetail': 'rebateInviteDetail.json',
+  '/rank/masterRank/list': 'masterRank.json',
+  '/rank/userBuy/list': 'userBuyRank.json',
+  '/regift/record/list': 'regiftRecord.json',
+  '/leaderboard/leaderboard/goods': 'leaderboard.json',
+  '/leaderboard/leaderboard/user': 'leaderboardUser.json',
+  '/marketCapRanking/marketCapRanking/list': 'marketCapRanking.json',
+  '/community/chat/messageList': 'chatMessages.json',
+  '/kline/info/detail': 'klineInfo.json',
+  // 积分商城
+  '/crystal_goods/crystalList': 'shopList.json',
+  '/crystal_goods/goodsDetail': 'shopGoodsDetail.json',
+  '/crystal_goods/boxDetail': 'shopBoxDetail.json',
+  '/crystal_goods/collectionDetail': 'shopCollectionDetail.json',
+  '/crystal_goods/exchangeRecord': 'shopExchangeRecord.json',
+  '/crystal_goods/crystalDetail': 'shopCrystalDetail.json',
+  // 盲盒（我的盲盒 / 开盒记录 / 开盒结果）
+  '/box/blind_box/myBox': 'blindBoxMyBox.json',
+  '/box/blind_box/openlog': 'blindBoxOpenRecord.json',
+  '/user_collection/user_collection/openbox': 'blindBoxResult.json',
+  '/user_collection/user_collection/openboxone': 'blindBoxResultOne.json',
+  // 藏品合成
+  '/compound/compound/list': 'compoundList.json',
+  '/compound/compound/record': 'compoundRecord.json',
+  '/compound/compound/result': 'compoundResult.json',
+  '/compound/compound/scheme': 'compoundScheme.json',
+  // 抽奖转盘
+  '/lottery/lottery/info': 'lotteryInfo.json',
+  '/lottery/lottery/record': 'lotteryRecord.json',
+  '/lottery/lottery/rule': 'lotteryRule.json',
+  // 签到 / 邀请 / 活动抽签
+  '/sign/index/info': 'signInfo.json',
+  '/invitation/invitation/info': 'invitationInfo.json',
+  '/invitation/invitation/record': 'invitationRecord.json',
+  '/activity/draw/info': 'activityDraw.json',
+  '/activity/draw/record': 'activityRecord.json',
+  // 全民抽签
+  '/draw/drawResult/result': 'drawResult.json',
+  '/draw/Leaderboard/list': 'drawLeaderboard.json',
+  '/draw/communityShare/info': 'communityShare.json',
+  '/draw/InvitationFriendAssist/info': 'invitationAssist.json',
+  '/activeSelected/list': 'activeSelectedList.json',
+}
+
+/**
+ * 统一请求入口
+ * @param {string} url  路径，如 '/order/order/orderList'
+ * @param {object} opts data / param / method
+ */
+async function request(url, { method = 'POST', data = {}, param = {} } = {}) {
+  if (IS_REMOTE) {
+    return remoteRequest(url, { method, data, param })
+  }
+  return localRequest(url)
+}
+
+/** 远程模式（仅当配置了 VITE_API_BASE 时启用） */
+async function remoteRequest(url, { method, data, param }) {
+  let fullUrl = REMOTE_BASE + url
+  const keys = Object.keys(param)
+  if (keys.length) fullUrl += '?' + keys.map((k) => `${k}=${param[k]}`).join('&')
+  const headers = { 'Content-Type': 'application/json', version: '1.0.1' }
+  const token = getToken()
+  if (token) headers[TOKEN_KEY] = token
+
+  const res = await fetch(fullUrl, {
+    method,
+    headers,
+    body: method === 'GET' ? undefined : JSON.stringify(data),
+  })
+  const json = await res.json()
+  if (json.code === 401) setToken('')
+  return json
+}
+
+/** 本地模式：从 mock 读取 */
+async function localRequest(url) {
+  // 带 id 的详情接口
+  const detailMatch = url.match(/^\/market\/market\/MarketDetail\/ids\/(.+)$/)
+  if (detailMatch) {
+    const json = await readMock('marketDetail.json')
+    return json
+  }
+  const file = MOCK_MAP[url]
+  if (!file) {
+    // 未登记的接口返回空数据，避免整页报错
+    return { code: 1, msg: 'ok', data: [] }
+  }
+  return readMock(file)
+}
+
+/** 各模块 API（函数签名保持不变，页面无需改动） */
+export const api = {
+  // 首页
+  getConfig: (data) => request('/index/getConfig', { data }),
+  getBanner: () => request('/banner/show/getBanner'),
+  afficheList: (data) => request('/index/afficheList', { data }),
+  affichetypelist: () => request('/index/affichetypelist'),
+  getSeries: (param) => request('/index/getSeries', { param }),
+  diypage: () => request('/addons/diypage/index', { data: {} }),
+  // 市场
+  getMarketList: (data) => request('/market/market/getMarketList', { data }),
+  getMarketDetails: (id) => request(`/market/market/MarketDetail/ids/${id}`, {}),
+  // 盲盒
+  blindBoxList: (data) => request('/box/blind_box/list', { data }),
+  // 用户
+  login: async (data) => {
+    if (IS_REMOTE) return request('/user/login', { data })
+    const json = await readMock('user.json')
+    setToken(json.data.userinfo.token)
+    return json
+  },
+  register: (data) => request('/user/register', { data }),
+  getUserInfo: () => request('/user/getUserInfo', {}),
+  // 交易链路
+  orderList: (data) => request('/order/order/orderList', { data }),
+  orderDetail: (data) => request('/order/order/saleMarketOrderDetail', { data }),
+  consignList: (data) => request('/order/order/myConsignment', { data }),
+  myConsignment: (data) => request('/order/order/myConsignment', { data }),
+  consignSearch: (data) => request('/order/order/myConsignment', { data }),
+  userCollectionList: (data) => request('/market/trade/getSellCollectionInfo', { data }),
+  entrustList: (data) => request('/market/trade/begBuyOrderList', { data }),
+  entrustInfo: (data) => request('/market/trade/begBuyOrderInfo', { data }),
+  begList: (data) => request('/market/trade/begBuyOrderList', { data }),
+  begInfo: (data) => request('/market/trade/begBuyOrderInfo', { data }),
+  submitEntrust: (data) => request('/market/trade/createBegBuyOrder', { data }),
+  submitBegBuy: (data) => request('/market/trade/createBegBuyOrder', { data }),
+  sellBegBuy: (data) => request('/market/trade/sell', { data }),
+  cancelConsignment: (data) => request('/order/order/myConsignment', { data }),
+  marketTradeRecord: (data) => request('/market/trade/collectionDetail', { data }),
+  seriesList: (data) => request('/index/getSeries', { data }),
+  // 公告模块
+  afficheDetail: (data) => request('/index/afficheDetail', { data }),
+  newsDetail: (data) => request('/index/newsDetail', { data }),
+  rumorInfo: (data) => request('/shequ/rumor/info', { data }),
+  // 我的藏品
+  myCollectionList: (data) => request('/market/trade/userCollectionList', { data }),
+  collectionInfo: (data) => request('/market/trade/collectionInfo', { data }),
+  // 商品 / 系列
+  seriesGoodsList: (data) => request('/market/market/seriesGoodsList', { data }),
+  productDetail: (data) => request('/product/product/detail', { data }),
+  productRule: (data) => request('/product/product/rule', { data }),
+  // 我的 · 地址
+  addressList: () => request('/user/address/lists', { data: {} }),
+  flowDoc: () => request('/market/trade/flowDoc', { data: {} }),
+  // 积分商城
+  shopList: (data) => request('/crystal_goods/crystalList', { data }),
+  shopGoodsDetail: (data) => request('/crystal_goods/goodsDetail', { data }),
+  shopBoxDetail: (data) => request('/crystal_goods/boxDetail', { data }),
+  shopCollectionDetail: (data) => request('/crystal_goods/collectionDetail', { data }),
+  shopExchangeRecord: (data) => request('/crystal_goods/exchangeRecord', { data }),
+  shopCrystalDetail: (data) => request('/crystal_goods/crystalDetail', { data }),
+  // 盲盒
+  blindBoxMyBox: (data) => request('/box/blind_box/myBox', { data }),
+  blindBoxOpenRecord: (data) => request('/box/blind_box/openlog', { data }),
+  blindBoxOpenResult: (data) => request('/user_collection/user_collection/openbox', { data }),
+  blindBoxOpenResultOne: (data) => request('/user_collection/user_collection/openboxone', { data }),
+  // 合成
+  compoundList: (data) => request('/compound/compound/list', { data }),
+  compoundRecord: (data) => request('/compound/compound/record', { data }),
+  compoundResult: (data) => request('/compound/compound/result', { data }),
+  compoundScheme: (data) => request('/compound/compound/scheme', { data }),
+  // 转盘
+  lotteryInfo: (data) => request('/lottery/lottery/info', { data }),
+  lotteryRecord: (data) => request('/lottery/lottery/record', { data }),
+  lotteryRule: (data) => request('/lottery/lottery/rule', { data }),
+  // 签到 / 邀请 / 活动抽签
+  signInfo: (data) => request('/sign/index/info', { data }),
+  invitationInfo: (data) => request('/invitation/invitation/info', { data }),
+  invitationRecord: (data) => request('/invitation/invitation/record', { data }),
+  activityDrawInfo: (data) => request('/activity/draw/info', { data }),
+  activityDrawRecord: (data) => request('/activity/draw/record', { data }),
+  // 全民抽签
+  drawResult: (data) => request('/draw/drawResult/result', { data }),
+  drawLeaderboard: (data) => request('/draw/Leaderboard/list', { data }),
+  communityShareInfo: (data) => request('/draw/communityShare/info', { data }),
+  invitationAssistInfo: (data) => request('/draw/InvitationFriendAssist/info', { data }),
+  activeSelectedList: (data) => request('/activeSelected/list', { data }),
+}
+
+export { getToken, setToken, readMock, IS_REMOTE }
+
+/* ============ 图片处理：全部本地化，不依赖源站 ============ */
+
+/** 已下载到 public/static/uploads 的原站藏品图 */
+const LOCAL_UPLOADS = [
+  '/uploads/20260923/bcc1d99e1f84f820ab90b13824691086.jpg',
+  '/uploads/20261003/cf898a87337ccc59b005b05ebaa32d1b.jpg',
+  '/uploads/20261004/a8baf1aa410c4dae7b62cc269ba98f8f.jpg',
+  '/uploads/20261007/88fefb48724be865bf2d4fec12e89c4d.jpg',
+  '/uploads/20261008/a72fad0b03a98ca892c592e299b9ed47.jpg',
+  '/uploads/20261010/032c2e9a8d70d4b60dc05126354d6676.jpg',
+  '/uploads/20261012/2bf53a1d6e5ada30bc88d8e88e424a6b.jpg',
+  '/uploads/20261012/6bc830cb1b1ab8bc87b46cf1f9b61779.jpg',
+  '/uploads/20261013/2d46cca956612f79f3df0ab527fecb7b.jpg',
+  '/uploads/20261013/2f31fa297ffe32131904ee666c6a3728.jpg',
+  '/uploads/20261013/7379274089052cc6e3228027936b0e83.jpg',
+  '/uploads/20261013/ea4dc2e4402607854ffa25599ee1ffa1.jpg',
+  '/uploads/20261014/14445f260c3d2923e8db81267030e806.jpg',
+  '/uploads/20261014/803cdb4d235463160e98862bb77cf630.jpg',
+  '/uploads/20261014/863cd0a4f37a0c23f746fdff01bd6bc7.jpg',
+  '/uploads/20261014/ea65d8aff9b71747498819acc2c28e74.jpg',
+  '/uploads/20261015/8ddb3381accb0c438fc6a97fd706aad8.jpg',
+  '/uploads/20261015/a6271cd4e2445223e3f3be195c32e82e.jpg',
+  '/uploads/20261015/d594694a777c2ef7fc745cc0c7603fa7.jpg',
+  '/uploads/20261015/ee04d7f83208f39915a9c0feed06d1b8.jpg',
+]
+const LOCAL_IMG = new Set(LOCAL_UPLOADS)
+
+/** 本地兜底占位图（避免任何图片 404） */
+const PLACEHOLDER = LOCAL_BASE + '/static/collection/top_bg.png'
+
+/** 从文件名反查本地副本（兼容 mock 中同一图带不同 query 的情况） */
+const BY_BASENAME = new Map(
+  LOCAL_UPLOADS.map((p) => [p.split('/').pop(), LOCAL_BASE + '/static' + p])
+)
+
+/**
+ * 图片地址解析：命中本地清单返回本地，否则返回占位图。
+ * 完全不访问外部域名。
+ */
+export function ossImg(path) {
+  if (!path) return PLACEHOLDER
+  if (path.startsWith('data:')) return path
+  // 已是本项目绝对地址（http(s) 或协议相对）
+  if (/^(https?:)?\/\//.test(path)) return path
+  // 本项目静态目录
+  if (path.startsWith('/static/') || path.startsWith('static/')) {
+    return LOCAL_BASE + '/' + path.replace(/^\//, '')
+  }
+
+  const clean = path.split('?')[0]
+  if (LOCAL_IMG.has(clean)) return LOCAL_BASE + '/static' + clean
+
+  const base = clean.split('/').pop()
+  if (base && BY_BASENAME.has(base)) return BY_BASENAME.get(base)
+
+  // 本地无副本 -> 占位图（不回落外网）
+  return PLACEHOLDER
+}
+
+export default request

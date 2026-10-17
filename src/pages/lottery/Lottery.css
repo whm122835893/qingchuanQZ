@@ -1,0 +1,243 @@
+@import '@/styles/atomic.css';
+
+.lottery-page {
+  min-height: 100vh;
+  background: #f6f2ec;
+  padding-bottom: 60rpx;
+  box-sizing: border-box;
+}
+.record-entry {
+  width: 147rpx;
+  height: 54rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.52);
+  border-radius: 27rpx;
+}
+.record-text {
+  font-size: 24rpx;
+  color: #fff;
+}
+
+/* 转盘 */
+.wheel-area {
+  position: relative;
+  width: 560rpx;
+  height: 560rpx;
+  margin: 60rpx auto 0;
+}
+.wheel-pointer {
+  position: absolute;
+  left: 50%;
+  top: -18rpx;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 26rpx solid transparent;
+  border-right: 26rpx solid transparent;
+  border-top: 44rpx solid #e26f1b;
+  z-index: 4;
+}
+.wheel {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 560rpx;
+  height: 560rpx;
+  border-radius: 50%;
+  border: 8rpx solid #e8c48a;
+  overflow: hidden;
+  transition: transform 3.2s cubic-bezier(0.15, 0.85, 0.25, 1);
+}
+.slice {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 0;
+  height: 0;
+  border-left: 280rpx solid transparent;
+  border-right: 280rpx solid transparent;
+  border-bottom: 560rpx solid rgba(255, 255, 255, 0.06);
+  transform-origin: 50% 100%;
+}
+.slice-inner {
+  position: absolute;
+  left: 50%;
+  top: 560rpx;
+  width: 280rpx;
+  height: 280rpx;
+  margin-left: -140rpx;
+  transform-origin: 50% 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 60rpx;
+  box-sizing: border-box;
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+}
+.slice-inner.dark {
+  background: rgba(226, 111, 27, 0.14);
+}
+.slice-text {
+  width: 200rpx;
+  font-size: 22rpx;
+  color: #7a4a12;
+  text-align: center;
+  line-height: 1.3;
+}
+.wheel-center {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f0a13a, #e26f1b);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3;
+  box-shadow: 0 6rpx 20rpx rgba(226, 111, 27, 0.35);
+}
+.center-text {
+  font-size: 30rpx;
+  color: #fff;
+}
+
+.consume-bar {
+  margin-top: 32rpx;
+  display: flex;
+  justify-content: center;
+}
+.consume-text {
+  font-size: 24rpx;
+  color: #8a7355;
+}
+
+/* 奖品 */
+.box-info {
+  margin: 40rpx 15rpx 0;
+  padding: 30rpx 15rpx;
+  background: #fff;
+  border-radius: 14rpx;
+}
+.box-title {
+  display: block;
+  text-align: center;
+  font-size: 32rpx;
+  color: #1a2438;
+}
+.prize-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-top: 24rpx;
+}
+.prize-item {
+  width: 310rpx;
+  margin-bottom: 20rpx;
+  background: #fff;
+  border-radius: 20rpx;
+  overflow: hidden;
+  padding-bottom: 12rpx;
+  box-sizing: border-box;
+  border: 1rpx solid #f2ece4;
+}
+.prize-img {
+  width: 310rpx;
+  height: 220rpx;
+}
+.prize-name {
+  display: block;
+  margin: 10rpx 8rpx 8rpx;
+  font-size: 21rpx;
+  color: #1a2438;
+}
+
+/* 结果弹层 */
+.mask {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.model-content {
+  position: relative;
+  width: 396rpx;
+  padding: 22.5rpx 0;
+  background: #fff;
+  border-radius: 22.5rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.model-title {
+  font-size: 24rpx;
+  font-weight: 700;
+  color: #333;
+}
+.tips-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 90%;
+  margin-top: 39rpx;
+  margin-bottom: 40rpx;
+  line-height: 43.5rpx;
+  font-size: 21rpx;
+  color: #333;
+}
+.tips-title {
+  font-size: 28rpx;
+  color: #1a2438;
+  margin-bottom: 12rpx;
+}
+.tips-text {
+  font-size: 21rpx;
+  color: #666;
+  text-align: center;
+}
+.surebtn-view {
+  display: flex;
+  align-items: center;
+}
+.cancel-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 151.5rpx;
+  height: 48rpx;
+  margin-right: 16rpx;
+  border: 0.75rpx solid #333;
+  border-radius: 30rpx;
+  box-sizing: border-box;
+}
+.cancel-text {
+  font-size: 21rpx;
+  color: #333;
+}
+.sure-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 151.5rpx;
+  height: 48rpx;
+  background: #333;
+  border-radius: 30rpx;
+}
+.sure-text {
+  font-size: 21rpx;
+  color: #fff;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wheel {
+    transition: none;
+  }
+}

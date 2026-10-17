@@ -1,0 +1,190 @@
+@import '@/styles/atomic.css';
+
+.box-detail-page {
+  min-height: 100vh;
+  background: #f4f5f8;
+  padding-bottom: 160rpx;
+  box-sizing: border-box;
+}
+
+.media-card {
+  position: relative;
+  background: #fff;
+}
+.main-img {
+  width: 100%;
+  display: block;
+}
+.media-limit {
+  position: absolute;
+  left: 24rpx;
+  top: 24rpx;
+  padding: 0 16rpx;
+  height: 44rpx;
+  line-height: 44rpx;
+  background: rgba(0, 0, 0, 0.45);
+  border-radius: 8rpx;
+}
+.limit-text {
+  font-size: 22rpx;
+  color: #fff;
+}
+
+.info-card {
+  display: flex;
+  flex-direction: column;
+  margin: 24rpx;
+  padding: 24rpx;
+  background: #fff;
+  border-radius: 16rpx;
+}
+.goods-name {
+  font-size: 32rpx;
+  color: #1a2438;
+}
+.price-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 20rpx;
+}
+.crystal {
+  display: flex;
+  align-items: baseline;
+}
+.crystal-price {
+  font-size: 40rpx;
+  color: #e26f1b;
+}
+.crystal-label {
+  margin-left: 8rpx;
+  font-size: 22rpx;
+  color: #e26f1b;
+}
+.status-text {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.section-card {
+  padding: 24rpx;
+  background: #fff;
+  border-radius: 12rpx;
+}
+.section-title {
+  font-size: 30rpx;
+  color: #1a2438;
+}
+
+.pool-item {
+  display: flex;
+  align-items: center;
+  margin-top: 24rpx;
+}
+.pool-thumb {
+  width: 118rpx;
+  height: 118rpx;
+  border-radius: 10rpx;
+  background: #f0f1f4;
+  flex-shrink: 0;
+}
+.pool-meta {
+  flex: 1;
+  min-width: 0;
+  margin: 0 20rpx;
+}
+.pool-name {
+  font-size: 28rpx;
+  color: #1a2438;
+}
+.pool-tags {
+  display: flex;
+  align-items: center;
+  margin-top: 12rpx;
+}
+.pool-tag {
+  margin-right: 20rpx;
+  font-size: 22rpx;
+  color: #999;
+}
+.rarity-icon {
+  width: 110rpx;
+  height: 110rpx;
+  flex-shrink: 0;
+}
+
+.kv {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 24rpx;
+}
+.kv-k {
+  font-size: 26rpx;
+  color: #999;
+}
+.kv-v {
+  font-size: 26rpx;
+  color: #1a2438;
+  max-width: 440rpx;
+  text-align: right;
+}
+
+.rich {
+  font-size: 26rpx;
+  line-height: 44rpx;
+  color: #505050;
+}
+
+.copyright {
+  padding: 48rpx 0 24rpx;
+  display: flex;
+  justify-content: center;
+}
+.copyright-img {
+  width: 240rpx;
+  opacity: 0.5;
+}
+
+.action-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16rpx 24rpx calc(24rpx + env(safe-area-inset-bottom));
+  background: #fff;
+  box-shadow: 0 -4rpx 16rpx rgba(0, 0, 0, 0.04);
+}
+.action-left {
+  display: flex;
+  align-items: baseline;
+}
+.balance-label {
+  font-size: 24rpx;
+  color: #999;
+}
+.balance-num {
+  margin-left: 10rpx;
+  font-size: 32rpx;
+  color: #1a2438;
+}
+.action-btn {
+  min-width: 260rpx;
+  height: 88rpx;
+  padding: 0 40rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #e26f1b;
+  border-radius: 44rpx;
+}
+.action-btn.off {
+  background: #ccc;
+}
+.btn-text {
+  font-size: 30rpx;
+  color: #fff;
+}

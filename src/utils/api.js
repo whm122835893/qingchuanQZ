@@ -1,0 +1,301 @@
+/**
+ * 数据读取层（纯本地）
+ *
+ * 本项目为独立项目，所有数据来自 public/mock/*.json，
+ * 字段与原站 API 响应 1:1 对齐。运行时不访问任何外部域名。
+ *
+ * 如需接回自己的后端：设置 .env 的 VITE_API_BASE，
+ * 上层 api/index.js 会自动切换为远程模式，这里也会随之走远程。
+ */
+import { api, readMock, IS_REMOTE } from '@/api'
+
+const asset = (p) => import.meta.env.BASE_URL + p.replace(/^\//, '')
+
+/**
+ * 读取数据：远程模式下打接口，本地模式下读 mock
+ * @param {Function} call   api.xxx 调用
+ * @param {string} mockName 本地 mock 文件名
+ * @param {Function} pick   从响应中提取数据
+ */
+async function load(call, mockName, pick) {
+  if (IS_REMOTE) {
+    try {
+      const res = await call()
+      if (res && res.code === 1) return pick ? pick(res) : res
+    } catch (e) {
+      /* 远程失败回落本地 */
+    }
+  }
+  const json = await readMock(mockName)
+  return pick ? pick(json) : json
+}
+
+/** 列表类提取：兼容 data 直接是数组 或 data.data 是数组 */
+const listOf = (j) => {
+  const d = j && j.data
+  if (Array.isArray(d)) return d
+  if (d && Array.isArray(d.data)) return d.data
+  return []
+}
+
+/* ===== 首页 ===== */
+
+export const fetchAfficheList = (params = {}) =>
+  load(() => api.afficheList(params), 'afficheList.json', listOf)
+
+export const fetchAfficheTypeList = () =>
+  load(() => api.affichetypelist(), 'affichetypelist.json', (j) => j.data || [])
+
+export const fetchMarketList = (data = {}) =>
+  load(() => api.getMarketList(data), 'marketList.json', listOf)
+
+export const fetchSeries = (param = {}) =>
+  load(() => api.getSeries(param), 'series-10.json', (j) => j.data || [])
+
+export const fetchSeriesPid = (param = {}) =>
+  load(() => api.getSeries(param), 'series-10-pid.json', (j) => j.data || [])
+
+export const fetchConfig = () => load(() => api.getConfig({}), 'getConfig.json', (j) => j.data || {})
+
+export const fetchBanner = () =>
+  load(() => api.getBanner(), 'banner_show_getBanner.json', (j) => j.data || [])
+
+/* ===== 交易链路 ===== */
+
+/** 藏品详情 */
+export const fetchMarketDetail = (id) =>
+  load(() => api.getMarketDetails(id), 'marketDetail.json', (j) => j.data || null)
+
+/** 我的订单列表 */
+export const fetchOrderList = (data = {}) =>
+  load(() => api.orderList(data), 'orderList.json', listOf)
+
+/** 订单详情（常规/市场/转赠/委托/求购 共用） */
+export const fetchOrderDetail = (data = {}) =>
+  load(() => api.orderDetail(data), 'orderDetail.json', (j) => j.data || {})
+
+/** 寄售列表（原站 /order/order/myConsignment） */
+export const fetchConsignList = (data = {}) =>
+  load(() => api.consignList(data), 'myConsignment.json', listOf)
+
+/** 我的寄售（含搜索） */
+export const fetchMyConsignment = (data = {}) =>
+  load(() => api.myConsignment(data), 'myConsignment.json', listOf)
+
+/** 我的委托 / 我的求购 */
+export const fetchEntrustList = (data = {}) =>
+  load(() => api.entrustList(data), 'entrustList.json', listOf)
+
+export const fetchBegList = (data = {}) =>
+  load(() => api.begList(data), 'begList.json', listOf)
+
+/** 我的藏品（待售藏品列表） */
+export const fetchUserCollectionList = () =>
+  load(() => api.userCollectionList({}), 'userCollectionList.json', (j) => j.data || { user_collection_list: [] })
+
+/** 寄售/委托/求购 页面基础信息（藏品名、参考价、地板价等） */
+export const fetchTradeBaseInfo = (data = {}) =>
+  load(() => api.getMarketDetails(data.id || 226), 'tradeBaseInfo.json', (j) => j.data || {})
+
+/** 寄售详情：今日行情 + 成交记录 */
+export const fetchSellInfo = (data = {}) =>
+  load(() => api.marketTradeRecord(data), 'sellInfo.json', (j) => j.data || {})
+
+/** 分类管理（我的分类 / 其他分类） */
+export const fetchCategoryManager = () =>
+  load(() => api.seriesList({ type: 10 }), 'categoryManager.json', (j) => j.data || { self_series: [], platform_series: [] })
+
+/** 赠送记录 */
+export const fetchGiftRecord = () =>
+  load(() => api.consignList({ type: 'gift' }), 'giftRecord.json', listOf)
+
+/** GM 工会 */
+export const fetchTradeUnion = () =>
+  load(() => api.getConfig({}), 'getConfig.json', (j) => (j.data && j.data.trade_union) || {})
+
+/** 用户信息 */
+export const fetchUserInfo = () => load(() => api.getUserInfo(), 'user.json', (j) => (j.data && j.data.userinfo) || {})
+
+/* ===== 公告模块 ===== */
+
+/** 官方公告详情（含富文本正文 + 关联藏品） */
+export const fetchAfficheDetail = (data = {}) =>
+  load(() => api.afficheDetail(data), 'noticeDetails.json', (j) => j.data || {})
+
+/** 潮玩有话说详情 */
+export const fetchNewsDetail = (data = {}) =>
+  load(() => api.newsDetail(data), 'newsDetails.json', (j) => j.data || {})
+
+/** 社区/墙 动态详情（含评论列表） */
+export const fetchRumorInfo = (data = {}) =>
+  load(() => api.rumorInfo(data), 'wallDetails.json', (j) => j.data || {})
+
+/* ===== 我的藏品 ===== */
+
+/** 我的藏品列表（支持关键词过滤） */
+export const fetchMyCollectionList = async (data = {}) => {
+  const all = await load(() => api.myCollectionList(data), 'myCollectionList.json', listOf)
+  const kw = (data.keyword || '').trim()
+  if (!kw) return all
+  return all.filter(
+    (x) =>
+      (x.name || '').includes(kw) ||
+      (x.collection_code || '').toUpperCase().includes(kw.toUpperCase())
+  )
+}
+
+/** 单个藏品详情（编号 / 总序号 / 当前售价 / 链上凭证） */
+export const fetchCollectionInfo = (data = {}) =>
+  load(() => api.collectionInfo(data), 'myCollectionDetail.json', (j) => j.data || {})
+
+/* ===== 商品 / 系列 ===== */
+
+/** 某系列下的商品列表（含系列信息与成交统计） */
+export const fetchSeriesGoodsList = (data = {}) =>
+  load(() => api.seriesGoodsList(data), 'marketGoodsList.json', (j) => j.data || {})
+
+/** 商品详情（盲盒 / 藏品通用） */
+export const fetchProductDetail = (data = {}) =>
+  load(() => api.productDetail(data), 'productDetail.json', (j) => j.data || {})
+
+/** 申购 / 购买规则 */
+export const fetchProductRule = (data = {}) =>
+  load(() => api.productRule(data), 'productRule.json', (j) => j.data || {})
+
+/* ===== 我的 · 地址 ===== */
+
+/** 收货地址列表（原站 /user/addressList） */
+export const fetchAddressList = () => load(() => api.addressList(), 'addressList.json', listOf)
+
+/** 藏品流转记录（原站 my/flowDoc） */
+export const fetchFlowDoc = () => load(() => api.flowDoc(), 'flowDoc.json', listOf)
+
+/* ===== 返利 / 榜单 / 转赠 / 聊天 / 行情 ===== */
+
+/** 返利中心（邀请码 + 返佣数据 + 说明） */
+export const fetchRebateInfo = () => load(() => api.rebateInfo(), 'rebate.json', (j) => j.data || {})
+
+/** 邀请排行榜 */
+export const fetchRebateLeaderboard = () =>
+  load(() => api.rebateLeaderboard(), 'rebateLeaderboard.json', listOf)
+
+/** 被邀请人清单 */
+export const fetchRebateInviteDetail = () =>
+  load(() => api.rebateInviteDetail(), 'rebateInviteDetail.json', listOf)
+
+/** 大师动态 */
+export const fetchMasterRank = () => load(() => api.masterRank(), 'masterRank.json', listOf)
+
+/** 用户购买榜 */
+export const fetchUserBuyRank = () => load(() => api.userBuyRank(), 'userBuyRank.json', listOf)
+
+/** 转赠记录 */
+export const fetchRegiftRecord = () => load(() => api.regiftRecord(), 'regiftRecord.json', listOf)
+
+/** 藏品综合榜 */
+export const fetchLeaderboardGoods = () =>
+  load(() => api.leaderboardGoods(), 'leaderboard.json', listOf)
+
+/** 用户榜单（含我的排名） */
+export const fetchLeaderboardUser = () =>
+  load(() => api.leaderboardUser(), 'leaderboardUser.json', (j) => j.data || { list: [], my: {} })
+
+/** 市值排行榜（榜单 + 排行说明） */
+export const fetchMarketCapRanking = () =>
+  load(() => api.marketCapRanking(), 'marketCapRanking.json', (j) => j.data || { info: {}, list: [] })
+
+/** 聊天消息列表（原站为长连接，本项目读本地 mock） */
+export const fetchChatMessages = () =>
+  load(() => api.chatMessages(), 'chatMessages.json', listOf)
+
+/** K线详情（买卖盘 + 成交明细） */
+export const fetchKlineInfo = () => load(() => api.klineInfo(), 'klineInfo.json', (j) => j.data || {})
+
+export { asset }
+
+/* ===== 活动类页面（积分商城 / 盲盒 / 合成 / 转盘 / 签到 / 邀请 / 抽签） ===== */
+
+/** 取 data 对象（详情类） */
+const objOf = (j) => (j && j.data) || {}
+
+/** 取 data 列表（列表类） */
+export const fetchShopList = (data = {}) =>
+  load(() => api.shopList(data), 'shopList.json', objOf)
+
+export const fetchShopGoodsDetail = (data = {}) =>
+  load(() => api.shopGoodsDetail(data), 'shopGoodsDetail.json', objOf)
+
+export const fetchShopBoxDetail = (data = {}) =>
+  load(() => api.shopBoxDetail(data), 'shopBoxDetail.json', objOf)
+
+export const fetchShopCollectionDetail = (data = {}) =>
+  load(() => api.shopCollectionDetail(data), 'shopCollectionDetail.json', objOf)
+
+export const fetchShopExchangeRecord = (data = {}) =>
+  load(() => api.shopExchangeRecord(data), 'shopExchangeRecord.json', listOf)
+
+export const fetchShopCrystalDetail = (data = {}) =>
+  load(() => api.shopCrystalDetail(data), 'shopCrystalDetail.json', listOf)
+
+export const fetchBlindBoxMyBox = () =>
+  load(() => api.blindBoxMyBox({}), 'blindBoxMyBox.json', objOf)
+
+export const fetchBlindBoxOpenRecord = (data = {}) =>
+  load(() => api.blindBoxOpenRecord(data), 'blindBoxOpenRecord.json', listOf)
+
+export const fetchBlindBoxResult = (data = {}) =>
+  load(() => api.blindBoxOpenResult(data), 'blindBoxResult.json', listOf)
+
+export const fetchBlindBoxResultOne = (data = {}) =>
+  load(() => api.blindBoxOpenResultOne(data), 'blindBoxResultOne.json', objOf)
+
+export const fetchCompoundList = (data = {}) =>
+  load(() => api.compoundList(data), 'compoundList.json', listOf)
+
+export const fetchCompoundRecord = (data = {}) =>
+  load(() => api.compoundRecord(data), 'compoundRecord.json', listOf)
+
+export const fetchCompoundResult = (data = {}) =>
+  load(() => api.compoundResult(data), 'compoundResult.json', objOf)
+
+export const fetchCompoundScheme = (data = {}) =>
+  load(() => api.compoundScheme(data), 'compoundScheme.json', objOf)
+
+export const fetchLotteryInfo = (data = {}) =>
+  load(() => api.lotteryInfo(data), 'lotteryInfo.json', objOf)
+
+export const fetchLotteryRecord = (data = {}) =>
+  load(() => api.lotteryRecord(data), 'lotteryRecord.json', listOf)
+
+export const fetchLotteryRule = (data = {}) =>
+  load(() => api.lotteryRule(data), 'lotteryRule.json', objOf)
+
+export const fetchSignInfo = (data = {}) =>
+  load(() => api.signInfo(data), 'signInfo.json', objOf)
+
+export const fetchInvitationInfo = (data = {}) =>
+  load(() => api.invitationInfo(data), 'invitationInfo.json', objOf)
+
+export const fetchInvitationRecord = (data = {}) =>
+  load(() => api.invitationRecord(data), 'invitationRecord.json', objOf)
+
+export const fetchActivityDraw = (data = {}) =>
+  load(() => api.activityDrawInfo(data), 'activityDraw.json', objOf)
+
+export const fetchActivityRecord = (data = {}) =>
+  load(() => api.activityDrawRecord(data), 'activityRecord.json', listOf)
+
+export const fetchDrawResult = (data = {}) =>
+  load(() => api.drawResult(data), 'drawResult.json', objOf)
+
+export const fetchDrawLeaderboard = (data = {}) =>
+  load(() => api.drawLeaderboard(data), 'drawLeaderboard.json', objOf)
+
+export const fetchCommunityShare = (data = {}) =>
+  load(() => api.communityShareInfo(data), 'communityShare.json', objOf)
+
+export const fetchInvitationAssist = (data = {}) =>
+  load(() => api.invitationAssistInfo(data), 'invitationAssist.json', objOf)
+
+export const fetchActiveSelectedList = (data = {}) =>
+  load(() => api.activeSelectedList(data), 'activeSelectedList.json', listOf)

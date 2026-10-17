@@ -1,0 +1,233 @@
+@import '@/styles/atomic.css';
+
+.invite-page {
+  position: relative;
+  min-height: 100vh;
+  background-color: #f4f2eb;
+  background-image: url('/static/invite/invite_bg.png');
+  background-repeat: no-repeat;
+  background-position: top;
+  background-size: 100% 1218rpx;
+  padding-bottom: 30rpx;
+  box-sizing: border-box;
+}
+
+.info-block {
+  position: absolute;
+  top: 383rpx;
+  left: 29rpx;
+  width: 503rpx;
+  height: 176rpx;
+  z-index: 2;
+}
+.info-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+}
+.info-left {
+  flex: 1;
+  min-width: 0;
+  padding: 28rpx 0 24rpx 28rpx;
+  display: flex;
+  flex-direction: column;
+}
+.count {
+  font-size: 64rpx;
+  color: #fff;
+  line-height: 1;
+}
+.count-label {
+  display: block;
+  margin-top: 8rpx;
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.85);
+}
+.code-row {
+  display: flex;
+  align-items: center;
+  margin-top: 24rpx;
+}
+.code-text {
+  font-size: 22rpx;
+  color: #fff;
+}
+.code-copy {
+  width: 28rpx;
+  height: 28rpx;
+  margin-left: 10rpx;
+}
+.info-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  padding-right: 28rpx;
+}
+.invite-now {
+  min-width: 135rpx;
+  height: 48rpx;
+  padding: 0 18rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f4efe4;
+  border-radius: 24rpx;
+}
+.invite-now-text {
+  font-size: 26rpx;
+  color: #2f4a3c;
+}
+.copy-link {
+  margin-top: 12rpx;
+  font-size: 16.5rpx;
+  color: #fff;
+  text-decoration: underline;
+}
+
+.below {
+  padding: 572rpx 29rpx 0;
+}
+.link-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.link-btn {
+  width: 240rpx;
+  height: 66rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-image: url('/static/invite/btn_bg.png');
+  background-repeat: no-repeat;
+  background-position: 50%;
+  background-size: 100% 100%;
+}
+.link-btn-text {
+  font-size: 26rpx;
+  color: #2f4a3c;
+}
+
+.record-box {
+  margin-top: 24rpx;
+  padding: 24rpx 21rpx 12rpx;
+  background: linear-gradient(180deg, #f4f2eb, #f6f3ec);
+  border-radius: 23rpx;
+}
+.record-title {
+  display: block;
+  font-size: 32rpx;
+  color: #1a2438;
+}
+.record-item {
+  display: flex;
+  align-items: center;
+  padding: 18rpx 0;
+  border-bottom: 1rpx solid rgba(0, 0, 0, 0.04);
+}
+.avatar {
+  width: 54rpx;
+  height: 54rpx;
+  border-radius: 50%;
+  background: #ddd;
+  flex-shrink: 0;
+}
+.record-meta {
+  flex: 1;
+  min-width: 0;
+  margin-left: 16rpx;
+  display: flex;
+  flex-direction: column;
+}
+.record-name {
+  font-size: 28rpx;
+  color: #1a2438;
+}
+.record-time {
+  margin-top: 8rpx;
+  font-size: 22rpx;
+  color: #999;
+}
+.record-status {
+  font-size: 24rpx;
+  color: #999;
+}
+.no-more {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 28rpx 0 8rpx;
+}
+.no-more-text {
+  font-size: 24rpx;
+  color: #bbb;
+}
+
+/* 海报弹层 */
+.mask {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.poster-wrap {
+  width: 452rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.poster {
+  position: relative;
+  width: 452rpx;
+  height: 526rpx;
+}
+.poster-bg {
+  width: 452rpx;
+  height: 526rpx;
+  border-radius: 12rpx;
+}
+.poster-qr {
+  position: absolute;
+  left: 50%;
+  top: 164rpx;
+  width: 165rpx;
+  height: 165rpx;
+  padding: 8rpx;
+  background: #fff;
+  border-radius: 24rpx;
+  transform: translateX(-50%);
+  box-sizing: border-box;
+}
+.qr {
+  width: 100%;
+  height: 100%;
+}
+.qr-row {
+  display: flex;
+  height: 14.8rpx;
+}
+.qr-cell {
+  flex: 1;
+}
+.qr-cell.on {
+  background: #2f4a3c;
+}
+.save-btn {
+  margin-top: 21rpx;
+  width: 315rpx;
+  height: 66rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f4efe4;
+  border-radius: 33rpx;
+}
+.save-btn-text {
+  font-size: 28rpx;
+  color: #2f4a3c;
+}

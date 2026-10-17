@@ -1,0 +1,209 @@
+@import '@/styles/atomic.css';
+
+.share-page {
+  min-height: 100vh;
+  background: #f4f5f8;
+  box-sizing: border-box;
+}
+
+.top-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24rpx 40rpx;
+  background: #fff;
+  border-radius: 12rpx;
+}
+.top-left {
+  display: flex;
+  align-items: baseline;
+}
+.top-label {
+  font-size: 28rpx;
+  color: #666;
+}
+.top-num {
+  margin: 0 12rpx;
+  font-size: 34rpx;
+  color: #e26f1b;
+}
+.share-entry {
+  padding: 12rpx 24rpx;
+  border: 1rpx solid #e26f1b;
+  border-radius: 8rpx;
+}
+.share-entry-text {
+  font-size: 28rpx;
+  color: #e26f1b;
+}
+
+.upload-title {
+  display: block;
+  margin: 32rpx 0 16rpx;
+  font-size: 30rpx;
+  color: #1a2438;
+}
+.upload-row {
+  display: flex;
+  align-items: center;
+}
+.upload-item,
+.upload-add {
+  width: 180rpx;
+  height: 180rpx;
+  margin-right: 16rpx;
+  border-radius: 8rpx;
+  overflow: hidden;
+}
+.upload-img {
+  width: 100%;
+  height: 100%;
+}
+.upload-add {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  border: 1rpx dashed #c9ccd1;
+  box-sizing: border-box;
+}
+.upload-add-text {
+  font-size: 56rpx;
+  color: #c9ccd1;
+}
+.upload-tip {
+  display: block;
+  margin-top: 16rpx;
+  font-size: 28rpx;
+  color: #999;
+}
+
+.table-wrap {
+  margin-top: 32rpx;
+  padding: 24rpx 0;
+  background: #fff;
+  border-radius: 12rpx;
+}
+.row {
+  display: flex;
+  align-items: center;
+  height: 88rpx;
+}
+.row.head {
+  height: 72rpx;
+}
+.row.stripe {
+  background: linear-gradient(90deg, #91edf3, rgba(145, 243, 243, 0));
+}
+.head-cell {
+  text-align: center;
+  color: #979997;
+  font-size: 24rpx;
+}
+.cell {
+  text-align: center;
+  font-size: 26rpx;
+  color: #1a2438;
+}
+.col-date {
+  width: 35%;
+}
+.col-num {
+  width: 35%;
+}
+.col-status {
+  width: 30%;
+}
+.cell.ok {
+  color: #e26f1b;
+}
+.cell.bad {
+  color: #999;
+}
+
+.empty-box {
+  padding: 60rpx 0 20rpx;
+  display: flex;
+  justify-content: center;
+}
+.empty-text {
+  font-size: 26rpx;
+  color: #999;
+}
+
+.record-box {
+  margin-top: 20rpx;
+  padding: 24rpx;
+  background: #fff;
+  border-radius: 12rpx;
+}
+.record-title {
+  display: block;
+  margin-bottom: 12rpx;
+  font-size: 30rpx;
+  color: #1a2438;
+}
+.record-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18rpx 0;
+  border-bottom: 1rpx solid #f2f2f2;
+}
+.record-item:last-child {
+  border-bottom: none;
+}
+.record-meta {
+  flex: 1;
+  min-width: 0;
+}
+.record-name {
+  display: block;
+  font-size: 26rpx;
+  color: #1a2438;
+}
+.record-time {
+  display: block;
+  margin-top: 8rpx;
+  font-size: 20rpx;
+  color: #999;
+}
+.record-status {
+  flex-shrink: 0;
+  margin-left: 20rpx;
+  font-size: 24rpx;
+  color: #999;
+}
+.record-status.ok {
+  color: #e26f1b;
+}
+.record-empty {
+  padding: 40rpx 0;
+  display: flex;
+  justify-content: center;
+}
+.record-empty-text {
+  font-size: 26rpx;
+  color: #999;
+}
+
+.mask {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 40rpx;
+}
+.preview-box {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.preview-img {
+  width: 100%;
+  height: 300rpx;
+  margin-bottom: 16rpx;
+}

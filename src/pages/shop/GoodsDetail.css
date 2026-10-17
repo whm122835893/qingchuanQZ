@@ -1,0 +1,203 @@
+@import '@/styles/atomic.css';
+
+.goods-detail-page {
+  min-height: 100vh;
+  background: #f4f5f8;
+  padding-bottom: 160rpx;
+  box-sizing: border-box;
+}
+
+.media-card {
+  position: relative;
+  background: #fff;
+}
+.main-img {
+  width: 100%;
+  display: block;
+}
+.media-limit {
+  position: absolute;
+  left: 24rpx;
+  top: 24rpx;
+  padding: 0 16rpx;
+  height: 44rpx;
+  line-height: 44rpx;
+  background: rgba(0, 0, 0, 0.45);
+  border-radius: 8rpx;
+}
+.limit-text {
+  font-size: 22rpx;
+  color: #fff;
+}
+
+.info-card {
+  display: flex;
+  flex-direction: column;
+  margin: 24rpx;
+  padding: 24rpx;
+  background: #fff;
+  border-radius: 16rpx;
+}
+.price-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.crystal {
+  display: flex;
+  align-items: baseline;
+}
+.crystal-price {
+  font-size: 44rpx;
+  color: #e26f1b;
+}
+.crystal-label {
+  margin-left: 8rpx;
+  font-size: 22rpx;
+  color: #e26f1b;
+}
+.status-text {
+  font-size: 24rpx;
+  color: #505050;
+}
+.goods-name {
+  margin-top: 20rpx;
+  font-size: 32rpx;
+  color: #1a2438;
+}
+.sold-text {
+  margin-top: 12rpx;
+  font-size: 24rpx;
+  color: #999;
+}
+
+.detail-card {
+  padding: 24rpx;
+  background: #fff;
+  border-radius: 12rpx;
+}
+.card-title {
+  font-size: 30rpx;
+  color: #1a2438;
+}
+.rich {
+  font-size: 26rpx;
+  line-height: 44rpx;
+  color: #505050;
+}
+
+.copyright {
+  padding: 48rpx 0 24rpx;
+  display: flex;
+  justify-content: center;
+}
+.copyright-img {
+  width: 240rpx;
+  opacity: 0.5;
+}
+
+/* 底部操作栏 */
+.action-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16rpx 24rpx calc(24rpx + env(safe-area-inset-bottom));
+  background: #fff;
+  box-shadow: 0 -4rpx 16rpx rgba(0, 0, 0, 0.04);
+}
+.action-left {
+  display: flex;
+  align-items: baseline;
+}
+.balance-label {
+  font-size: 24rpx;
+  color: #999;
+}
+.balance-num {
+  margin-left: 10rpx;
+  font-size: 32rpx;
+  color: #1a2438;
+}
+.action-btn {
+  min-width: 260rpx;
+  height: 88rpx;
+  padding: 0 40rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #e26f1b;
+  border-radius: 44rpx;
+}
+.action-btn.off {
+  background: #ccc;
+}
+.btn-text {
+  font-size: 30rpx;
+  color: #fff;
+}
+
+/* 数量弹层 */
+.mask {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: flex-end;
+}
+.sheet {
+  width: 100%;
+  padding: 40rpx 32rpx calc(40rpx + env(safe-area-inset-bottom));
+  background: #fff;
+  border-radius: 24rpx 24rpx 0 0;
+}
+.sheet-title {
+  font-size: 32rpx;
+  color: #1a2438;
+}
+.stepper {
+  display: flex;
+  align-items: center;
+  margin: 32rpx 0 20rpx;
+}
+.step-btn {
+  width: 72rpx;
+  height: 72rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f4f5f8;
+  border-radius: 50%;
+}
+.step-text {
+  font-size: 36rpx;
+  color: #1a2438;
+}
+.step-num {
+  min-width: 160rpx;
+  text-align: center;
+  font-size: 36rpx;
+  color: #1a2438;
+}
+.tip {
+  display: block;
+  font-size: 24rpx;
+  color: #999;
+}
+.sheet-btn {
+  margin-top: 32rpx;
+  height: 88rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #e26f1b;
+  border-radius: 44rpx;
+}
+.sheet-btn-text {
+  font-size: 30rpx;
+  color: #fff;
+}

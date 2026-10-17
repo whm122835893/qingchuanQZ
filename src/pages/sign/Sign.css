@@ -1,0 +1,178 @@
+@import '@/styles/atomic.css';
+
+.sign-page {
+  min-height: 100vh;
+  background: #f7f7f7;
+  padding-bottom: 200rpx;
+  box-sizing: border-box;
+}
+
+.sign-date {
+  width: 521rpx;
+  margin: 46rpx auto 50rpx;
+}
+.user-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.user-info {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+.avatar {
+  width: 90rpx;
+  height: 90rpx;
+  border-radius: 50%;
+  background: #b5b5b5;
+  flex-shrink: 0;
+}
+.user-meta {
+  display: flex;
+  flex-direction: column;
+  margin-left: 20rpx;
+  min-width: 0;
+}
+.username {
+  max-width: 300rpx;
+  font-size: 30rpx;
+  color: #0d0d0d;
+}
+.uid {
+  margin-top: 12rpx;
+  font-size: 24rpx;
+  color: #0d0d0d;
+}
+.sign-day {
+  display: flex;
+  align-items: baseline;
+  flex-shrink: 0;
+}
+.day-label {
+  font-size: 24rpx;
+  color: #0d0d0d;
+}
+.day-num {
+  margin: 0 10rpx;
+  font-size: 54rpx;
+  color: #6aa27b;
+  line-height: 86rpx;
+}
+
+.list-view {
+  width: 100%;
+  padding: 20rpx 32rpx 32rpx;
+  background: #fff;
+  border-radius: 20px;
+  box-sizing: border-box;
+}
+.view-title {
+  display: block;
+  font-size: 22.5rpx;
+  color: #333;
+  margin-bottom: 16rpx;
+}
+.weeks {
+  display: flex;
+  align-items: center;
+}
+.week-text {
+  flex: 1;
+  text-align: center;
+  font-size: 22rpx;
+  color: #999;
+}
+.days {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 12rpx;
+}
+.day-cell {
+  width: 14.28%;
+  padding: 4rpx 0;
+  display: flex;
+  justify-content: center;
+}
+.day-box {
+  width: 75rpx;
+  height: 75rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10rpx;
+}
+.day-box.signed {
+  background: #6aa27b;
+}
+.day-box.today {
+  border: 1rpx solid #6aa27b;
+}
+.day-text {
+  font-size: 26rpx;
+  color: #333;
+}
+.day-text.on {
+  color: #fff;
+}
+.day-flag {
+  margin-top: 2rpx;
+  font-size: 16rpx;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.reward-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 32rpx;
+  padding-top: 24rpx;
+  border-top: 1rpx solid #f0f0f0;
+}
+.reward-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10rpx 0;
+  border-radius: 8rpx;
+}
+.reward-item.got {
+  background: #eff7f2;
+}
+.reward-day {
+  font-size: 20rpx;
+  color: #999;
+}
+.reward-num {
+  margin-top: 6rpx;
+  font-size: 26rpx;
+  color: #6aa27b;
+}
+
+.sign-btn-wrap {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 18rpx 55rpx calc(36rpx + env(safe-area-inset-bottom));
+  background: #fff;
+  box-shadow: 0 -4rpx 16rpx rgba(0, 0, 0, 0.04);
+}
+.sign-btn {
+  width: 100%;
+  height: 75rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #010101;
+  border-radius: 37.5rpx;
+}
+.sign-btn.done {
+  background: #b9bcc2;
+}
+.sign-btn-text {
+  font-size: 27rpx;
+  color: #fff;
+}
