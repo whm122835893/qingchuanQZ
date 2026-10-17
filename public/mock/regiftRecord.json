@@ -1,0 +1,66 @@
+{
+ "code": 1,
+ "msg": "ok",
+ "data": [
+  {
+   "id": 1,
+   "goods_cover_image": "/uploads/20261013/7379274089052cc6e3228027936b0e83.jpg",
+   "goods_name": "数字敦煌",
+   "collection_code": "PBCE/2000000000000001",
+   "status": 1,
+   "status_text": "待接收",
+   "from_user": "数藏爱好者",
+   "create_time": "2026-10-16 09:09",
+   "back_time": "1812061059386431",
+   "order_no": "5871545254154715741"
+  },
+  {
+   "id": 2,
+   "goods_cover_image": "/uploads/20261013/ea4dc2e4402607854ffa25599ee1ffa1.jpg",
+   "goods_name": "良渚玉琮",
+   "collection_code": "PBCE/2000000000000002",
+   "status": 2,
+   "status_text": "已接收",
+   "from_user": "链上摊主",
+   "create_time": "2026-10-12 15:36",
+   "back_time": "",
+   "order_no": "5871545254154715742"
+  },
+  {
+   "id": 3,
+   "goods_cover_image": "/uploads/20261012/2bf53a1d6e5ada30bc88d8e88e424a6b.jpg",
+   "goods_name": "唐三彩仕女",
+   "collection_code": "PBCE/2000000000000003",
+   "status": 3,
+   "status_text": "已退回",
+   "from_user": "锦鲤本鲤",
+   "create_time": "2026-10-08 11:02",
+   "back_time": "1811984017558123",
+   "order_no": "5871545254154715743"
+  },
+  {
+   "id": 4,
+   "goods_cover_image": "/uploads/20261012/6bc830cb1b1ab8bc87b46cf1f9b61779.jpg",
+   "goods_name": "三星堆面具",
+   "collection_code": "PBCE/2000000000000004",
+   "status": 2,
+   "status_text": "已接收",
+   "from_user": "良渚玉迷",
+   "create_time": "2026-10-02 19:48",
+   "back_time": "",
+   "order_no": "5871545254154715744"
+  },
+  {
+   "id": 5,
+   "goods_cover_image": "/uploads/20261010/032c2e9a8d70d4b60dc05126354d6676.jpg",
+   "goods_name": "织金红楼梦",
+   "collection_code": "PBCE/2000000000000005",
+   "status": 1,
+   "status_text": "待接收",
+   "from_user": "敦煌守夜人",
+   "create_time": "2026-09-28 08:20",
+   "back_time": "1811422881023847",
+   "order_no": "5871545254154715745"
+  }
+ ]
+}

@@ -1,0 +1,41 @@
+{
+  "code": 1,
+  "msg": "ok",
+  "data": [
+    {
+      "id": 1,
+      "model": 1,
+      "memo": "兑换青川·青绿山水盲盒 ×1",
+      "crystal": 880,
+      "createtime": 1766500000
+    },
+    {
+      "id": 2,
+      "model": 2,
+      "memo": "兑换青川·千里江山数字藏品 ×1",
+      "crystal": 1200,
+      "createtime": 1766400000
+    },
+    {
+      "id": 3,
+      "model": 1,
+      "memo": "兑换青川·宋画风华合集 ×2",
+      "crystal": 4800,
+      "createtime": 1766300000
+    },
+    {
+      "id": 4,
+      "model": 2,
+      "memo": "兑换青川·敦煌飞天限量版 ×1",
+      "crystal": 3600,
+      "createtime": 1766200000
+    },
+    {
+      "id": 5,
+      "model": 1,
+      "memo": "兑换青川·溪山行旅图数字长卷 ×1",
+      "crystal": 1680,
+      "createtime": 1766100000
+    }
+  ]
+}

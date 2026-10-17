@@ -1,0 +1,68 @@
+{
+ "code": 1,
+ "msg": "操作成功",
+ "time": "1792081000",
+ "data": {
+  "id": 3301,
+  "create_time": "10-16 09:24",
+  "content": "刚拆开《赛博铁牛》的盲盒，出了金卡版本的赛博铁牛，编号 #QC88231，分享一下喜悦。下一位接好运。",
+  "profile": {
+   "nickname": "山川放映室",
+   "avatar": "/uploads/20261007/88fefb48724be865bf2d4fec12e89c4d.jpg"
+  },
+  "images": [
+   "/uploads/20261014/ea65d8aff9b71747498819acc2c28e74.jpg",
+   "/uploads/20261014/14445f260c3d2923e8db81267030e806.jpg",
+   "/uploads/20261014/803cdb4d235463160e98862bb77cf630.jpg"
+  ],
+  "comment_list": [
+   {
+    "id": 7001,
+    "create_time": "10-16 09:41",
+    "content": "这运气离谱，我也去买一盒",
+    "reply_id": 0,
+    "profile": {
+     "nickname": "半糖去冰",
+     "avatar": "/uploads/20261013/7379274089052cc6e3228027936b0e83.jpg"
+    },
+    "reply_profile": {
+     "nickname": "半糖去冰",
+     "avatar": "/uploads/20261013/7379274089052cc6e3228027936b0e83.jpg"
+    },
+    "reply": [
+     {
+      "id": 7002,
+      "create_time": "10-16 09:50",
+      "content": "金卡版本确实少见，沾沾喜气",
+      "reply_id": 7001,
+      "profile": {
+       "nickname": "山川放映室",
+       "avatar": "/uploads/20261007/88fefb48724be865bf2d4fec12e89c4d.jpg"
+      },
+      "reply_profile": {
+       "nickname": "山川放映室",
+       "avatar": "/uploads/20261007/88fefb48724be865bf2d4fec12e89c4d.jpg"
+      }
+     }
+    ],
+    "has_more": false
+   },
+   {
+    "id": 7003,
+    "create_time": "10-16 10:02",
+    "content": "求问这个系列还剩多少份额？",
+    "reply_id": 0,
+    "profile": {
+     "nickname": "海边的卡夫卡",
+     "avatar": "/uploads/20261003/cf898a87337ccc59b005b05ebaa32d1b.jpg"
+    },
+    "reply_profile": {
+     "nickname": "海边的卡夫卡",
+     "avatar": "/uploads/20261003/cf898a87337ccc59b005b05ebaa32d1b.jpg"
+    },
+    "reply": [],
+    "has_more": false
+   }
+  ]
+ }
+}

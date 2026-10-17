@@ -1,0 +1,39 @@
+{
+  "code": 1,
+  "msg": "ok",
+  "data": [
+    {
+      "id": 1,
+      "play_id": 201,
+      "title": "青川·宋画四绝合成",
+      "listimg": "/uploads/20261007/88fefb48724be865bf2d4fec12e89c4d.jpg",
+      "start_time": 1766000000,
+      "end_time": 1769900000,
+      "join_num": 1284,
+      "qualify": "持有指定藏品即可参与",
+      "rule_url": "/pages/rules/rules"
+    },
+    {
+      "id": 2,
+      "play_id": 202,
+      "title": "青川·青绿山水合成",
+      "listimg": "/uploads/20261012/2bf53a1d6e5ada30bc88d8e88e424a6b.jpg",
+      "start_time": 1766100000,
+      "end_time": 1770000000,
+      "join_num": 862,
+      "qualify": "持有 2 件及以上藏品",
+      "rule_url": "/pages/rules/rules"
+    },
+    {
+      "id": 3,
+      "play_id": 203,
+      "title": "青川·千里江山合成",
+      "listimg": "/uploads/20261013/2d46cca956612f79f3df0ab527fecb7b.jpg",
+      "start_time": 1766200000,
+      "end_time": 1770100000,
+      "join_num": 317,
+      "qualify": "持有 3 件及以上藏品",
+      "rule_url": "/pages/rules/rules"
+    }
+  ]
+}

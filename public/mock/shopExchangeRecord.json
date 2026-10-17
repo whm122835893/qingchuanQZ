@@ -1,0 +1,42 @@
+{
+  "code": 1,
+  "msg": "ok",
+  "data": [
+    {
+      "id": 1,
+      "order_id": 9001,
+      "goods_name": "青川·青绿山水盲盒",
+      "list_image": "/uploads/20261012/2bf53a1d6e5ada30bc88d8e88e424a6b.jpg",
+      "crystal_number": 880,
+      "crystal_type": 1,
+      "create_time": 1766500000
+    },
+    {
+      "id": 2,
+      "order_id": 9002,
+      "goods_name": "青川·千里江山数字藏品",
+      "list_image": "/uploads/20261013/2d46cca956612f79f3df0ab527fecb7b.jpg",
+      "crystal_number": 1200,
+      "crystal_type": 1,
+      "create_time": 1766400000
+    },
+    {
+      "id": 3,
+      "order_id": 9003,
+      "goods_name": "青川·宋画风华合集",
+      "list_image": "/uploads/20261007/88fefb48724be865bf2d4fec12e89c4d.jpg",
+      "crystal_number": 2400,
+      "crystal_type": 2,
+      "create_time": 1766300000
+    },
+    {
+      "id": 4,
+      "order_id": 9004,
+      "goods_name": "青川·敦煌飞天限量版",
+      "list_image": "/uploads/20261010/032c2e9a8d70d4b60dc05126354d6676.jpg",
+      "crystal_number": 3600,
+      "crystal_type": 1,
+      "create_time": 1766200000
+    }
+  ]
+}

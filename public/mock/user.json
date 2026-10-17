@@ -1,0 +1,19 @@
+{
+ "code": 1,
+ "msg": "登录成功",
+ "data": {
+  "userinfo": {
+   "id": 22291,
+   "username": "17587881293",
+   "nickname": "川QvHY78u6",
+   "mobile": "17587881293",
+   "avatar": "/uploads/20261014/ea65d8aff9b71747498819acc2c28e74.jpg",
+   "score": 0,
+   "inviter_code": "E99022291",
+   "yao_count": 0,
+   "huifu_service_charge": 0,
+   "sandpay_service_charge": 0,
+   "token": "3394fd33-22d0-46"
+  }
+ }
+}

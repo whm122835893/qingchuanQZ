@@ -1,0 +1,163 @@
+{
+ "code": 1,
+ "msg": "公告列表",
+ "time": "1792035167",
+ "data": {
+  "total": 431,
+  "per_page": 15,
+  "current_page": 1,
+  "last_page": 29,
+  "data": [
+   {
+    "id": 445,
+    "image": "",
+    "title": " 【青川活动公告】《绅士小猫》《哪吒闹海》提升寄售限价",
+    "createtime": 1792034065,
+    "type": "1",
+    "url": "",
+    "view_count": 0,
+    "affiche_type": "限价公告"
+   },
+   {
+    "id": 443,
+    "image": "",
+    "title": "【青川活动公告】藏品《赛博铁牛》开启寄售",
+    "createtime": 1791983496,
+    "type": "1",
+    "url": "",
+    "view_count": 0,
+    "affiche_type": "寄售公告"
+   },
+   {
+    "id": 442,
+    "image": "",
+    "title": "【青川活动公告】《梦中繁星》提升寄售限价",
+    "createtime": 1791982200,
+    "type": "1",
+    "url": "",
+    "view_count": 0,
+    "affiche_type": "限价公告"
+   },
+   {
+    "id": 441,
+    "image": "",
+    "title": "【青川活动公告】 全新藏品《赛博铁牛》合成来袭！",
+    "createtime": 1791980461,
+    "type": "1",
+    "url": "",
+    "view_count": 0,
+    "affiche_type": "活动公告"
+   },
+   {
+    "id": 440,
+    "image": "",
+    "title": "【青川活动公告】藏品《赛博黑猫》开启寄售",
+    "createtime": 1791977078,
+    "type": "1",
+    "url": "",
+    "view_count": 0,
+    "affiche_type": "寄售公告"
+   },
+   {
+    "id": 439,
+    "image": "",
+    "title": "【青川活动公告】《摘星星的人》提升寄售限价",
+    "createtime": 1791974479,
+    "type": "1",
+    "url": "",
+    "view_count": 0,
+    "affiche_type": "限价公告"
+   },
+   {
+    "id": 438,
+    "image": "",
+    "title": "【青川活动公告】 全新藏品《赛博黑猫》合成来袭！",
+    "createtime": 1791970272,
+    "type": "1",
+    "url": "",
+    "view_count": 0,
+    "affiche_type": "活动公告"
+   },
+   {
+    "id": 437,
+    "image": "",
+    "title": "【青川活动公告】藏品《赛博之神》开启寄售",
+    "createtime": 1791968847,
+    "type": "1",
+    "url": "",
+    "view_count": 0,
+    "affiche_type": "寄售公告"
+   },
+   {
+    "id": 436,
+    "image": "",
+    "title": "【青川活动公告】 全新藏品《天狗》合成来袭！",
+    "createtime": 1791966909,
+    "type": "1",
+    "url": "",
+    "view_count": 0,
+    "affiche_type": "活动公告"
+   },
+   {
+    "id": 435,
+    "image": "",
+    "title": "【青川活动公告】 勇者无畏！藏品《摘星星的人》开启寄售",
+    "createtime": 1791966087,
+    "type": "1",
+    "url": "",
+    "view_count": 0,
+    "affiche_type": "官方公告"
+   },
+   {
+    "id": 434,
+    "image": "",
+    "title": "【青川活动公告】藏品《赛博之神》发行来袭！",
+    "createtime": 1791963502,
+    "type": "1",
+    "url": "",
+    "view_count": 0,
+    "affiche_type": "官方公告"
+   },
+   {
+    "id": 433,
+    "image": "",
+    "title": "【青川活动公告】 全新藏品《谦》合成来袭！",
+    "createtime": 1791959776,
+    "type": "1",
+    "url": "",
+    "view_count": 0,
+    "affiche_type": "活动公告"
+   },
+   {
+    "id": 431,
+    "image": "",
+    "title": "【青川活动公告】藏品《赛博猫》开启寄售",
+    "createtime": 1791959480,
+    "type": "1",
+    "url": "",
+    "view_count": 0,
+    "affiche_type": "寄售公告"
+   },
+   {
+    "id": 430,
+    "image": "",
+    "title": "【青川活动公告】 《太空鼠》合成补充公告！",
+    "createtime": 1791958628,
+    "type": "1",
+    "url": "",
+    "view_count": 0,
+    "affiche_type": "活动公告"
+   },
+   {
+    "id": 429,
+    "image": "",
+    "title": "【青川活动公告】 全新藏品《太空鼠》合成来袭！",
+    "createtime": 1791955452,
+    "type": "1",
+    "url": "",
+    "view_count": 0,
+    "affiche_type": "活动公告"
+   }
+  ]
+ }
+}

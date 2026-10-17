@@ -1,0 +1,36 @@
+{
+ "code": 1,
+ "msg": "ok",
+ "data": [
+  {
+   "address_id": 10021,
+   "name": "林砚清",
+   "mobile": "138****4027",
+   "province": "浙江省",
+   "city": "杭州市",
+   "area": "西湖区",
+   "address": "文三路 478 号华星时代广场 A 座 2201",
+   "is_default": 1
+  },
+  {
+   "address_id": 10022,
+   "name": "周叙白",
+   "mobile": "159****8813",
+   "province": "广东省",
+   "city": "广州市",
+   "area": "天河区",
+   "address": "天河北路 233 号中信广场 3805",
+   "is_default": 0
+  },
+  {
+   "address_id": 10023,
+   "name": "沈亦之",
+   "mobile": "186****0352",
+   "province": "四川省",
+   "city": "成都市",
+   "area": "锦江区",
+   "address": "红星路三段 1 号国际金融中心 2 座 1704",
+   "is_default": 0
+  }
+ ]
+}

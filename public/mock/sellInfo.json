@@ -1,0 +1,55 @@
+{
+ "code": 1,
+ "msg": "操作成功",
+ "data": {
+  "id": 226,
+  "goods_type": 1,
+  "price": 120.0,
+  "name": "赛博铁牛",
+  "series_name": "青川数字藏品",
+  "status": 1,
+  "today_highest_price": "135.00",
+  "today_volume": "12",
+  "today_lowest_price": "110.00",
+  "floor_price": "118.00",
+  "product": {
+   "id": 226,
+   "name": "赛博铁牛",
+   "main_image": "/uploads/20261014/ea65d8aff9b71747498819acc2c28e74.jpg",
+   "listimg": "/uploads/20261014/ea65d8aff9b71747498819acc2c28e74.jpg",
+   "collection_code": "QC88231",
+   "batch": "2024",
+   "publisher": "青川数字艺术"
+  },
+  "list": [
+   {
+    "collection_code": "QC88231",
+    "total_num": 100,
+    "price": "128.00",
+    "num": 3,
+    "time": "2026-10-15 14:22:10"
+   },
+   {
+    "collection_code": "QC88232",
+    "total_num": 100,
+    "price": "125.00",
+    "num": 2,
+    "time": "2026-10-15 11:08:41"
+   },
+   {
+    "collection_code": "QC88233",
+    "total_num": 100,
+    "price": "122.50",
+    "num": 1,
+    "time": "2026-10-14 19:35:02"
+   },
+   {
+    "collection_code": "QC88234",
+    "total_num": 100,
+    "price": "120.00",
+    "num": 5,
+    "time": "2026-10-14 10:02:57"
+   }
+  ]
+ }
+}

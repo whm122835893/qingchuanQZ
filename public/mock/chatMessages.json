@@ -1,0 +1,69 @@
+{
+ "code": 1,
+ "msg": "ok",
+ "data": [
+  {
+   "id": 1,
+   "is_self": false,
+   "nickname": "敦煌守夜人",
+   "content": "这条 机械锦鲤 现在入手合适吗？",
+   "avatar": "/uploads/20261014/ea65d8aff9b71747498819acc2c28e74.jpg",
+   "show_date": true,
+   "date_text": "2026-10-16 14:22"
+  },
+  {
+   "id": 2,
+   "is_self": true,
+   "nickname": "我",
+   "content": "还在高位，建议等回踩。",
+   "avatar": "/uploads/20261014/14445f260c3d2923e8db81267030e806.jpg",
+   "show_date": false,
+   "date_text": "2026-10-16 14:22"
+  },
+  {
+   "id": 3,
+   "is_self": false,
+   "nickname": "敦煌守夜人",
+   "content": "可是稀有度已经到顶了。",
+   "avatar": "/uploads/20261014/803cdb4d235463160e98862bb77cf630.jpg",
+   "show_date": false,
+   "date_text": "2026-10-16 14:22"
+  },
+  {
+   "id": 4,
+   "is_self": false,
+   "nickname": "良渚玉迷",
+   "content": "+1，我上周在 88 出的",
+   "avatar": "/uploads/20261014/863cd0a4f37a0c23f746fdff01bd6bc7.jpg",
+   "show_date": false,
+   "date_text": "2026-10-16 14:22"
+  },
+  {
+   "id": 5,
+   "is_self": true,
+   "nickname": "我",
+   "content": "88 那波是回调低点。",
+   "avatar": "/uploads/20261013/2d46cca956612f79f3df0ab527fecb7b.jpg",
+   "show_date": false,
+   "date_text": "2026-10-16 14:22"
+  },
+  {
+   "id": 6,
+   "is_self": false,
+   "nickname": "山海经读者",
+   "content": "求带，新人一枚",
+   "avatar": "/uploads/20261013/2f31fa297ffe32131904ee666c6a3728.jpg",
+   "show_date": false,
+   "date_text": "2026-10-16 14:22"
+  },
+  {
+   "id": 7,
+   "is_self": false,
+   "nickname": "敦煌守夜人",
+   "content": "楼上一起蹲个机会",
+   "avatar": "/uploads/20261013/7379274089052cc6e3228027936b0e83.jpg",
+   "show_date": false,
+   "date_text": "2026-10-16 14:22"
+  }
+ ]
+}

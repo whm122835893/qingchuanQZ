@@ -1,0 +1,15 @@
+{
+  "code": 1,
+  "msg": "ok",
+  "data": {
+    "assist_num": 2,
+    "need_num": 3,
+    "code": "QC-DRAW-3827-A1",
+    "hero_image": "/uploads/20261008/a72fad0b03a98ca892c592e299b9ed47.jpg",
+    "records": [
+      { "id": 1, "nickname": "山水间的鹿", "avatar": "/uploads/20261014/863cd0a4f37a0c23f746fdff01bd6bc7.jpg", "create_time": "2026-12-01 11:20:03", "is_new_user": true, "is_real": true },
+      { "id": 2, "nickname": "云岫", "avatar": "/uploads/20261008/a72fad0b03a98ca892c592e299b9ed47.jpg", "create_time": "2026-12-01 12:04:41", "is_new_user": false, "is_real": true }
+    ],
+    "assist_tip": "邀请好友为你助力，每助力 1 次可提升抽签码权重，满 3 位好友助力即可获得额外抽签机会。"
+  }
+}

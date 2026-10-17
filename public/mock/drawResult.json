@@ -1,0 +1,12 @@
+{
+  "code": 1,
+  "msg": "ok",
+  "data": {
+    "draw_complete": 1,
+    "success_code": "QC-WIN-2026-00871",
+    "success_list": [
+      { "id": 1, "code": "QC-WIN-2026-00871" },
+      { "id": 2, "code": "QC-WIN-2026-00872" }
+    ]
+  }
+}

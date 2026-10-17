@@ -1,0 +1,19 @@
+{
+ "code": 1,
+ "msg": "ok",
+ "data": {
+  "c_info": {
+   "avatar": "/uploads/20261014/ea65d8aff9b71747498819acc2c28e74.jpg",
+   "nickname": "青川藏家886",
+   "inviter_code": "QC88231",
+   "all_commision": "1286.40",
+   "yesterday_commision": "86.40",
+   "user_transaction": "86420.00",
+   "mingxia_commision": "6420.00",
+   "yao_counts": "36",
+   "you_yao_counts": "28"
+  },
+  "h5_invite_url": "https://qingchuan.art/invite/QC88231",
+  "comm_desc": "本期返佣金额指前一天的返金额；名下用户总佣金为已结算返佣累计。有效邀请人数指有交易记录的邀请人数。"
+ }
+}

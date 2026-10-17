@@ -1,0 +1,12 @@
+{
+ "code": 1,
+ "msg": "操作成功",
+ "data": {
+  "unlock": false,
+  "member_count": 0,
+  "rebate_holder": "1.88",
+  "rebate_invited": "1",
+  "rebate_extra": "0.88",
+  "max_bind": 30
+ }
+}

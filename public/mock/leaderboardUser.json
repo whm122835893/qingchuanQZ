@@ -1,0 +1,99 @@
+{
+ "code": 1,
+ "msg": "ok",
+ "data": {
+  "list": [
+   {
+    "id": 1,
+    "avatar": "/uploads/20261014/ea65d8aff9b71747498819acc2c28e74.jpg",
+    "nickname": "藏品猎人老张",
+    "yao_count": "386",
+    "buy_collection_total_price": "128620"
+   },
+   {
+    "id": 2,
+    "avatar": "/uploads/20261014/14445f260c3d2923e8db81267030e806.jpg",
+    "nickname": "青川藏家886",
+    "yao_count": "358",
+    "buy_collection_total_price": "120000"
+   },
+   {
+    "id": 3,
+    "avatar": "/uploads/20261014/803cdb4d235463160e98862bb77cf630.jpg",
+    "nickname": "数字艺术爱好者",
+    "yao_count": "330",
+    "buy_collection_total_price": "111380"
+   },
+   {
+    "id": 4,
+    "avatar": "/uploads/20261014/863cd0a4f37a0c23f746fdff01bd6bc7.jpg",
+    "nickname": "链上摊主",
+    "yao_count": "302",
+    "buy_collection_total_price": "102760"
+   },
+   {
+    "id": 5,
+    "avatar": "/uploads/20261013/2d46cca956612f79f3df0ab527fecb7b.jpg",
+    "nickname": "锦鲤本鲤",
+    "yao_count": "274",
+    "buy_collection_total_price": "94140"
+   },
+   {
+    "id": 6,
+    "avatar": "/uploads/20261013/2f31fa297ffe32131904ee666c6a3728.jpg",
+    "nickname": "良渚玉迷",
+    "yao_count": "246",
+    "buy_collection_total_price": "85520"
+   },
+   {
+    "id": 7,
+    "avatar": "/uploads/20261013/7379274089052cc6e3228027936b0e83.jpg",
+    "nickname": "敦煌守夜人",
+    "yao_count": "218",
+    "buy_collection_total_price": "76900"
+   },
+   {
+    "id": 8,
+    "avatar": "/uploads/20261013/ea4dc2e4402607854ffa25599ee1ffa1.jpg",
+    "nickname": "山海经读者",
+    "yao_count": "190",
+    "buy_collection_total_price": "68280"
+   },
+   {
+    "id": 9,
+    "avatar": "/uploads/20261012/2bf53a1d6e5ada30bc88d8e88e424a6b.jpg",
+    "nickname": "三星堆实习生",
+    "yao_count": "162",
+    "buy_collection_total_price": "59660"
+   },
+   {
+    "id": 10,
+    "avatar": "/uploads/20261012/6bc830cb1b1ab8bc87b46cf1f9b61779.jpg",
+    "nickname": "唐三彩修复师",
+    "yao_count": "134",
+    "buy_collection_total_price": "51040"
+   },
+   {
+    "id": 11,
+    "avatar": "/uploads/20261010/032c2e9a8d70d4b60dc05126354d6676.jpg",
+    "nickname": "织金红楼迷",
+    "yao_count": "106",
+    "buy_collection_total_price": "42420"
+   },
+   {
+    "id": 12,
+    "avatar": "/uploads/20261008/a72fad0b03a98ca892c592e299b9ed47.jpg",
+    "nickname": "大熊猫饲养员",
+    "yao_count": "78",
+    "buy_collection_total_price": "33800"
+   }
+  ],
+  "my": {
+   "order_num": 27,
+   "mobile": "138****6281",
+   "avatar": "/uploads/20261014/ea65d8aff9b71747498819acc2c28e74.jpg",
+   "yao_count": "42",
+   "buy_collection_total_price": "8642.00"
+  }
+ }
+}

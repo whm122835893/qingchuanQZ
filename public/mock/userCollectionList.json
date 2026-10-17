@@ -1,0 +1,41 @@
+{
+ "code": 1,
+ "msg": "操作成功",
+ "data": {
+  "user_collection_list": [
+   {
+    "id": 5001,
+    "user_collection_id": 77001,
+    "name": "赛博铁牛",
+    "collection_code": "QC88231",
+    "total_num": 100,
+    "count": 3,
+    "price": "120.00",
+    "pay_way": "huifu",
+    "main_image": "/uploads/20261014/ea65d8aff9b71747498819acc2c28e74.jpg"
+   },
+   {
+    "id": 5002,
+    "user_collection_id": 77002,
+    "name": "赛博铁牛",
+    "collection_code": "QC88232",
+    "total_num": 50,
+    "count": 1,
+    "price": "118.00",
+    "pay_way": "huifu",
+    "main_image": "/uploads/20261014/ea65d8aff9b71747498819acc2c28e74.jpg"
+   },
+   {
+    "id": 5003,
+    "user_collection_id": 77003,
+    "name": "青川山水",
+    "collection_code": "QC77120",
+    "total_num": 200,
+    "count": 8,
+    "price": "68.00",
+    "pay_way": "yibao",
+    "main_image": "/uploads/20261007/88fefb48724be865bf2d4fec12e89c4d.jpg"
+   }
+  ]
+ }
+}

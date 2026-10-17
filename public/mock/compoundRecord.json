@@ -1,0 +1,60 @@
+{
+  "code": 1,
+  "msg": "ok",
+  "data": [
+    {
+      "id": 1,
+      "create_time": 1766500000,
+      "title": "青川·宋画四绝合成",
+      "listimg": "/uploads/20261007/88fefb48724be865bf2d4fec12e89c4d.jpg",
+      "materials": "青川·宋画风华 ×2",
+      "method": 1,
+      "consume": [
+        {
+          "name": "青川·宋画风华",
+          "collection_code": "QC20261013000137",
+          "total_num": 300,
+          "image": "/uploads/20261007/88fefb48724be865bf2d4fec12e89c4d.jpg"
+        },
+        {
+          "name": "青川·宋画风华",
+          "collection_code": "QC20261013000218",
+          "total_num": 300,
+          "image": "/uploads/20261007/88fefb48724be865bf2d4fec12e89c4d.jpg"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "create_time": 1766400000,
+      "title": "青川·青绿山水合成",
+      "listimg": "/uploads/20261012/2bf53a1d6e5ada30bc88d8e88e424a6b.jpg",
+      "materials": "青川·青绿山水 ×3",
+      "method": 1,
+      "consume": [
+        {
+          "name": "青川·青绿山水",
+          "collection_code": "QC20261012000942",
+          "total_num": 500,
+          "image": "/uploads/20261012/2bf53a1d6e5ada30bc88d8e88e424a6b.jpg"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "create_time": 1766300000,
+      "title": "青川·千里江山合成",
+      "listimg": "/uploads/20261013/2d46cca956612f79f3df0ab527fecb7b.jpg",
+      "materials": "青川·千里江山 ×4",
+      "method": 1,
+      "consume": [
+        {
+          "name": "青川·千里江山",
+          "collection_code": "QC20261013000139",
+          "total_num": 800,
+          "image": "/uploads/20261013/2d46cca956612f79f3df0ab527fecb7b.jpg"
+        }
+      ]
+    }
+  ]
+}

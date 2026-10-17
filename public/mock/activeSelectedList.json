@@ -1,0 +1,54 @@
+{
+  "code": 1,
+  "msg": "ok",
+  "data": [
+    {
+      "id": 1,
+      "title": "青川·宋画四绝合成",
+      "listimg": "/uploads/20261007/88fefb48724be865bf2d4fec12e89c4d.jpg",
+      "type": 1,
+      "start_time": "2026-12-01 10:00:00",
+      "end_time": "2026-12-20 23:59:59",
+      "join_num": 1284,
+      "status": 1,
+      "qualify": "持有指定藏品即可参与",
+      "route": "/pages/compound/compound"
+    },
+    {
+      "id": 2,
+      "title": "青川·窑变天青釉抽奖",
+      "listimg": "/uploads/20261012/2bf53a1d6e5ada30bc88d8e88e424a6b.jpg",
+      "type": 2,
+      "start_time": "2026-12-03 10:00:00",
+      "end_time": "2026-12-25 23:59:59",
+      "join_num": 3216,
+      "status": 1,
+      "qualify": "持有 1 件藏品即可参与",
+      "route": "/pages/lottery/lottery"
+    },
+    {
+      "id": 3,
+      "title": "青川·敦煌飞天盲盒",
+      "listimg": "/uploads/20261010/032c2e9a8d70d4b60dc05126354d6676.jpg",
+      "type": 3,
+      "start_time": "2026-12-05 10:00:00",
+      "end_time": "2027-01-05 23:59:59",
+      "join_num": 8620,
+      "status": 1,
+      "qualify": "使用龙晶兑换",
+      "route": "/pages/blindBox/index"
+    },
+    {
+      "id": 4,
+      "title": "青川·每日签到有礼",
+      "listimg": "/uploads/20261014/14445f260c3d2923e8db81267030e806.jpg",
+      "type": 4,
+      "start_time": "2026-12-01 00:00:00",
+      "end_time": "2026-12-31 23:59:59",
+      "join_num": 24718,
+      "status": 1,
+      "qualify": "实名用户即可参与",
+      "route": "/pages/sign/index"
+    }
+  ]
+}

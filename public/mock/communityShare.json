@@ -1,0 +1,17 @@
+{
+  "code": 1,
+  "msg": "ok",
+  "data": {
+    "share_images": [
+      "/uploads/20261013/2d46cca956612f79f3df0ab527fecb7b.jpg",
+      "/uploads/20261014/14445f260c3d2923e8db81267030e806.jpg",
+      "/uploads/20261007/88fefb48724be865bf2d4fec12e89c4d.jpg"
+    ],
+    "audit_status": 0,
+    "audit_text": "待审核",
+    "share_records": [
+      { "id": 1, "community": "青川数字藏品交流群", "create_time": "2026-12-02 14:20:11" },
+      { "id": 2, "community": "敦煌飞天主创社区", "create_time": "2026-12-01 20:03:55" }
+    ]
+  }
+}

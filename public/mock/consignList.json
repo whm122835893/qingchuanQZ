@@ -1,0 +1,35 @@
+{
+ "code": 1,
+ "msg": "操作成功",
+ "time": "1792081000",
+ "data": {
+  "total": 2,
+  "per_page": 15,
+  "current_page": 1,
+  "last_page": 1,
+  "data": [
+   {
+    "id": 7001,
+    "goods_id": 226,
+    "goods_name": "赛博铁牛",
+    "listimg": "/uploads/20261014/ea65d8aff9b71747498819acc2c28e74.jpg",
+    "status": 1,
+    "price": "120.00",
+    "createtime": 1792078000,
+    "collection_code": "226",
+    "user_hash_text": "0x7a3f...e0f1"
+   },
+   {
+    "id": 7002,
+    "goods_id": 225,
+    "goods_name": "赛博黑猫",
+    "listimg": "/uploads/20261014/14445f260c3d2923e8db81267030e806.jpg",
+    "status": 2,
+    "price": "95.00",
+    "createtime": 1792073000,
+    "collection_code": "225",
+    "user_hash_text": "0x51c2...9ab4"
+   }
+  ]
+ }
+}

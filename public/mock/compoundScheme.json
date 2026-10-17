@@ -1,0 +1,44 @@
+{
+  "code": 1,
+  "msg": "ok",
+  "data": {
+    "play_id": 201,
+    "title": "青川·宋画四绝合成",
+    "target_img": "/uploads/20261007/88fefb48724be865bf2d4fec12e89c4d.jpg",
+    "rule_text": [
+      {
+        "name": "条件1",
+        "number": 2,
+        "collectionList": [
+          {
+            "id": 501,
+            "name": "青川·宋画风华",
+            "collection_code": "QC20261013000137",
+            "total_num": 300,
+            "image": "/uploads/20261007/88fefb48724be865bf2d4fec12e89c4d.jpg"
+          },
+          {
+            "id": 502,
+            "name": "青川·宋画风华",
+            "collection_code": "QC20261013000218",
+            "total_num": 300,
+            "image": "/uploads/20261007/88fefb48724be865bf2d4fec12e89c4d.jpg"
+          }
+        ]
+      },
+      {
+        "name": "条件2",
+        "number": 1,
+        "collectionList": [
+          {
+            "id": 503,
+            "name": "青川·青绿山水",
+            "collection_code": "QC20261012000942",
+            "total_num": 500,
+            "image": "/uploads/20261012/2bf53a1d6e5ada30bc88d8e88e424a6b.jpg"
+          }
+        ]
+      }
+    ]
+  }
+}

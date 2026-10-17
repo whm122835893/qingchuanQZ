@@ -1,0 +1,54 @@
+{
+ "code": 1,
+ "msg": "ok",
+ "data": [
+  {
+   "id": 3001,
+   "nickname": "林砚清",
+   "createtime": "1758788129",
+   "source_type": 1,
+   "collection_name": "青川 · 溪山行旅",
+   "collection_code": "QC-2024-0031"
+  },
+  {
+   "id": 3002,
+   "nickname": "周叙白",
+   "createtime": "1758701425",
+   "source_type": 2,
+   "collection_name": "青川 · 溪山行旅",
+   "collection_code": "QC-2024-0031"
+  },
+  {
+   "id": 3003,
+   "nickname": "沈亦之",
+   "createtime": "1758614720",
+   "source_type": 3,
+   "collection_name": "青川 · 春山夜行",
+   "collection_code": "QC-2024-0088"
+  },
+  {
+   "id": 3004,
+   "nickname": "林砚清",
+   "createtime": "1758528014",
+   "source_type": 4,
+   "collection_name": "青川 · 春山夜行",
+   "collection_code": "QC-2024-0088"
+  },
+  {
+   "id": 3005,
+   "nickname": "周叙白",
+   "createtime": "1758441318",
+   "source_type": 5,
+   "collection_name": "青川 · 秋山晚照",
+   "collection_code": "QC-2024-0126"
+  },
+  {
+   "id": 3006,
+   "nickname": "沈亦之",
+   "createtime": "1758354622",
+   "source_type": 6,
+   "collection_name": "青川 · 秋山晚照",
+   "collection_code": "QC-2024-0126"
+  }
+ ]
+}

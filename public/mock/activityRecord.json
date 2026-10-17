@@ -1,0 +1,11 @@
+{
+  "code": 1,
+  "msg": "ok",
+  "data": [
+    { "id": 1, "draw_sn": "QC-WIN-2026-00871", "draw_time": "2026-12-06 10:05:12", "status": 1 },
+    { "id": 2, "draw_sn": "QC-DRAW-3826-C7", "draw_time": "2026-12-06 10:05:12", "status": 2 },
+    { "id": 3, "draw_sn": "QC-DRAW-3826-C8", "draw_time": "2026-12-06 10:05:12", "status": 2 },
+    { "id": 4, "draw_sn": "QC-DRAW-3826-C9", "draw_time": "2026-12-06 10:05:12", "status": 0 },
+    { "id": 5, "draw_sn": "QC-DRAW-3826-D1", "draw_time": "2026-12-06 10:05:12", "status": 2 }
+  ]
+}

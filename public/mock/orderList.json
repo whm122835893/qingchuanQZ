@@ -1,0 +1,81 @@
+{
+ "code": 1,
+ "msg": "订单列表",
+ "time": "1792081000",
+ "data": {
+  "total": 4,
+  "per_page": 15,
+  "current_page": 1,
+  "last_page": 1,
+  "data": [
+   {
+    "id": 9001,
+    "order_sn": "QC202600009001",
+    "order_status": 1,
+    "goods_id": 226,
+    "goods_name": "赛博铁牛",
+    "listimg": "/uploads/20261014/ea65d8aff9b71747498819acc2c28e74.jpg",
+    "number": 1,
+    "sale_number": 0,
+    "price": "100.00",
+    "total_price": "100.00",
+    "income_type": "huifu",
+    "createtime": 1792079000,
+    "updatetime": 1792079000,
+    "collection_code": "226",
+    "user_hash_text": "0x7a3f...e0f1"
+   },
+   {
+    "id": 9002,
+    "order_sn": "QC202600009002",
+    "order_status": 2,
+    "goods_id": 226,
+    "goods_name": "赛博黑猫",
+    "listimg": "/uploads/20261014/ea65d8aff9b71747498819acc2c28e74.jpg",
+    "number": 3,
+    "sale_number": 0,
+    "price": "88.00",
+    "total_price": "264.00",
+    "income_type": "huifu",
+    "createtime": 1792075000,
+    "updatetime": 1792075000,
+    "collection_code": "226",
+    "user_hash_text": "0x7a3f...e0f1"
+   },
+   {
+    "id": 9003,
+    "order_sn": "QC202600009003",
+    "order_status": 0,
+    "goods_id": 226,
+    "goods_name": "赛博之神",
+    "listimg": "/uploads/20261014/ea65d8aff9b71747498819acc2c28e74.jpg",
+    "number": 1,
+    "sale_number": 0,
+    "price": "66.00",
+    "total_price": "66.00",
+    "income_type": "huifu",
+    "createtime": 1792070000,
+    "updatetime": 1792070000,
+    "collection_code": "226",
+    "user_hash_text": "0x7a3f...e0f1"
+   },
+   {
+    "id": 9004,
+    "order_sn": "QC202600009004",
+    "order_status": 3,
+    "goods_id": 226,
+    "goods_name": "赛博猫",
+    "listimg": "/uploads/20261014/ea65d8aff9b71747498819acc2c28e74.jpg",
+    "number": 2,
+    "sale_number": 0,
+    "price": "55.00",
+    "total_price": "110.00",
+    "income_type": "huifu",
+    "createtime": 1792060000,
+    "updatetime": 1792060000,
+    "collection_code": "226",
+    "user_hash_text": "0x7a3f...e0f1"
+   }
+  ]
+ }
+}

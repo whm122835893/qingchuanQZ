@@ -1,0 +1,96 @@
+{
+ "code": 1,
+ "msg": "ok",
+ "data": [
+  {
+   "id": 226,
+   "name": "赛博铁牛",
+   "listimg": "/uploads/20261014/ea65d8aff9b71747498819acc2c28e74.jpg",
+   "total_num": 500,
+   "flux": "500",
+   "min_price": "100.00",
+   "is_like": 1
+  },
+  {
+   "id": 225,
+   "name": "赛博黑猫",
+   "listimg": "/uploads/20261014/14445f260c3d2923e8db81267030e806.jpg",
+   "total_num": 2096,
+   "flux": "1686",
+   "min_price": "66.00",
+   "is_like": 0
+  },
+  {
+   "id": 222,
+   "name": "赛博之神",
+   "listimg": "/uploads/20261014/803cdb4d235463160e98862bb77cf630.jpg",
+   "total_num": 4284,
+   "flux": "1506",
+   "min_price": "45.00",
+   "is_like": 0
+  },
+  {
+   "id": 218,
+   "name": "机械锦鲤",
+   "listimg": "/uploads/20261014/863cd0a4f37a0c23f746fdff01bd6bc7.jpg",
+   "total_num": 1200,
+   "flux": "642",
+   "min_price": "128.00",
+   "is_like": 0
+  },
+  {
+   "id": 215,
+   "name": "山海异兽·鲲",
+   "listimg": "/uploads/20261013/2d46cca956612f79f3df0ab527fecb7b.jpg",
+   "total_num": 800,
+   "flux": "386",
+   "min_price": "88.00",
+   "is_like": 0
+  },
+  {
+   "id": 209,
+   "name": "青川十二时辰",
+   "listimg": "/uploads/20261013/2f31fa297ffe32131904ee666c6a3728.jpg",
+   "total_num": 3600,
+   "flux": "2286",
+   "min_price": "36.00",
+   "is_like": 0
+  },
+  {
+   "id": 203,
+   "name": "数字敦煌",
+   "listimg": "/uploads/20261013/7379274089052cc6e3228027936b0e83.jpg",
+   "total_num": 1500,
+   "flux": "986",
+   "min_price": "52.00",
+   "is_like": 0
+  },
+  {
+   "id": 198,
+   "name": "良渚玉琮",
+   "listimg": "/uploads/20261013/ea4dc2e4402607854ffa25599ee1ffa1.jpg",
+   "total_num": 600,
+   "flux": "242",
+   "min_price": "186.00",
+   "is_like": 0
+  },
+  {
+   "id": 192,
+   "name": "唐三彩仕女",
+   "listimg": "/uploads/20261012/2bf53a1d6e5ada30bc88d8e88e424a6b.jpg",
+   "total_num": 900,
+   "flux": "428",
+   "min_price": "72.00",
+   "is_like": 0
+  },
+  {
+   "id": 186,
+   "name": "三星堆面具",
+   "listimg": "/uploads/20261012/6bc830cb1b1ab8bc87b46cf1f9b61779.jpg",
+   "total_num": 480,
+   "flux": "186",
+   "min_price": "240.00",
+   "is_like": 0
+  }
+ ]
+}

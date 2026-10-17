@@ -1,0 +1,112 @@
+{
+ "code": 1,
+ "msg": "ok",
+ "data": {
+  "info": {
+   "update_time": "2026-10-16",
+   "market_desc": "市值排行榜按藏品当前市值（最新成交价 × 流通量）降序排列，每日 00:00 更新一次，数据以平台结算价为准。"
+  },
+  "list": [
+   {
+    "id": 226,
+    "name": "赛博铁牛",
+    "listimg": "/uploads/20261014/ea65d8aff9b71747498819acc2c28e74.jpg",
+    "min_price": "100",
+    "market_value": 50000,
+    "market_fluctuate": 12.4,
+    "total_num": 500,
+    "flux": "500"
+   },
+   {
+    "id": 227,
+    "name": "赛博黑猫",
+    "listimg": "/uploads/20261014/14445f260c3d2923e8db81267030e806.jpg",
+    "min_price": "93",
+    "market_value": 58420,
+    "market_fluctuate": -3.2,
+    "total_num": 860,
+    "flux": "620"
+   },
+   {
+    "id": 228,
+    "name": "赛博之神",
+    "listimg": "/uploads/20261014/803cdb4d235463160e98862bb77cf630.jpg",
+    "min_price": "86",
+    "market_value": 66840,
+    "market_fluctuate": 46.7,
+    "total_num": 1220,
+    "flux": "740"
+   },
+   {
+    "id": 229,
+    "name": "机械锦鲤",
+    "listimg": "/uploads/20261014/863cd0a4f37a0c23f746fdff01bd6bc7.jpg",
+    "min_price": "79",
+    "market_value": 75260,
+    "market_fluctuate": 0.8,
+    "total_num": 1580,
+    "flux": "860"
+   },
+   {
+    "id": 230,
+    "name": "山海异兽·鲲",
+    "listimg": "/uploads/20261013/2d46cca956612f79f3df0ab527fecb7b.jpg",
+    "min_price": "72",
+    "market_value": 83680,
+    "market_fluctuate": -18.6,
+    "total_num": 1940,
+    "flux": "980"
+   },
+   {
+    "id": 231,
+    "name": "青川十二时辰",
+    "listimg": "/uploads/20261013/2f31fa297ffe32131904ee666c6a3728.jpg",
+    "min_price": "65",
+    "market_value": 92100,
+    "market_fluctuate": 12.4,
+    "total_num": 2300,
+    "flux": "1100"
+   },
+   {
+    "id": 232,
+    "name": "数字敦煌",
+    "listimg": "/uploads/20261013/7379274089052cc6e3228027936b0e83.jpg",
+    "min_price": "58",
+    "market_value": 100520,
+    "market_fluctuate": -3.2,
+    "total_num": 2660,
+    "flux": "1220"
+   },
+   {
+    "id": 233,
+    "name": "良渚玉琮",
+    "listimg": "/uploads/20261013/ea4dc2e4402607854ffa25599ee1ffa1.jpg",
+    "min_price": "51",
+    "market_value": 108940,
+    "market_fluctuate": 46.7,
+    "total_num": 3020,
+    "flux": "1340"
+   },
+   {
+    "id": 234,
+    "name": "唐三彩仕女",
+    "listimg": "/uploads/20261012/2bf53a1d6e5ada30bc88d8e88e424a6b.jpg",
+    "min_price": "44",
+    "market_value": 117360,
+    "market_fluctuate": 0.8,
+    "total_num": 3380,
+    "flux": "1460"
+   },
+   {
+    "id": 235,
+    "name": "三星堆面具",
+    "listimg": "/uploads/20261012/6bc830cb1b1ab8bc87b46cf1f9b61779.jpg",
+    "min_price": "37",
+    "market_value": 125780,
+    "market_fluctuate": -18.6,
+    "total_num": 3740,
+    "flux": "1580"
+   }
+  ]
+ }
+}

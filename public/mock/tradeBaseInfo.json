@@ -1,0 +1,27 @@
+{
+ "code": 1,
+ "msg": "操作成功",
+ "data": {
+  "id": 226,
+  "name": "赛博铁牛",
+  "main_image": "/uploads/20261014/ea65d8aff9b71747498819acc2c28e74.jpg",
+  "collection_code": "QC88231",
+  "price": "120.00",
+  "max_price": "150.00",
+  "floor_price": "118.00",
+  "low_price": "95.00",
+  "low_price_text": "玖拾伍元整",
+  "rate": "2",
+  "lowest_price": "95.00",
+  "platform_service_rate": "2",
+  "share_proportion_rate": "1",
+  "income_type": 1,
+  "goods_type": 1,
+  "product": {
+   "id": 226,
+   "name": "赛博铁牛",
+   "main_image": "/uploads/20261014/ea65d8aff9b71747498819acc2c28e74.jpg",
+   "collection_code": "QC88231"
+  }
+ }
+}

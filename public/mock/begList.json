@@ -1,0 +1,57 @@
+{
+ "code": 1,
+ "msg": "订单列表",
+ "data": {
+  "total": 3,
+  "data": [
+   {
+    "id": 9101,
+    "order_sn": "QC20261012000045",
+    "order_status": 2,
+    "goods_name": "赛博铁牛",
+    "listimg": "/uploads/20261014/ea65d8aff9b71747498819acc2c28e74.jpg",
+    "collection_code": "QC88231",
+    "number": 5,
+    "num": 5,
+    "sale_number": 2,
+    "price": "88.00",
+    "total_price": "440.00",
+    "pay_way": "huifu",
+    "createtime": 1757600000,
+    "updatetime": 1757900000
+   },
+   {
+    "id": 9102,
+    "order_sn": "QC20261008000031",
+    "order_status": 3,
+    "goods_name": "赛博铁牛",
+    "listimg": "/uploads/20261014/ea65d8aff9b71747498819acc2c28e74.jpg",
+    "collection_code": "QC88232",
+    "number": 3,
+    "num": 3,
+    "sale_number": 3,
+    "price": "92.00",
+    "total_price": "276.00",
+    "pay_way": "huifu",
+    "createtime": 1757200000,
+    "updatetime": 1757500000
+   },
+   {
+    "id": 9103,
+    "order_sn": "QC20261028000012",
+    "order_status": 4,
+    "goods_name": "赛博铁牛",
+    "listimg": "/uploads/20261014/ea65d8aff9b71747498819acc2c28e74.jpg",
+    "collection_code": "QC88233",
+    "number": 2,
+    "num": 2,
+    "sale_number": 0,
+    "price": "95.00",
+    "total_price": "190.00",
+    "pay_way": "huifu",
+    "createtime": 1756900000,
+    "updatetime": 1756900000
+   }
+  ]
+ }
+}

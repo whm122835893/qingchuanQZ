@@ -1,0 +1,25 @@
+{
+  "code": 1,
+  "msg": "ok",
+  "data": {
+    "result": [
+      {
+        "type": "C",
+        "name": "青川·宋画四绝·合集",
+        "user_collection_code": "QC20261013000999",
+        "total_num": 888
+      },
+      {
+        "type": "M",
+        "name": "青川·青绿山水",
+        "number": 3
+      },
+      {
+        "type": "S",
+        "name": "龙晶",
+        "crystal_type": 1,
+        "single_quantity": 1200
+      }
+    ]
+  }
+}

@@ -1,0 +1,60 @@
+{
+ "code": 1,
+ "msg": "ok",
+ "data": [
+  {
+   "id": 1,
+   "avatar": "/uploads/20261014/14445f260c3d2923e8db81267030e806.jpg",
+   "nickname": "链上摊主",
+   "createtime": "2026-10-16 14:22:10",
+   "goods_cover_image": "/uploads/20261014/14445f260c3d2923e8db81267030e806.jpg",
+   "goods_name": "赛博黑猫",
+   "num": 12
+  },
+  {
+   "id": 2,
+   "avatar": "/uploads/20261014/803cdb4d235463160e98862bb77cf630.jpg",
+   "nickname": "锦鲤本鲤",
+   "createtime": "2026-10-16 13:08:41",
+   "goods_cover_image": "/uploads/20261014/803cdb4d235463160e98862bb77cf630.jpg",
+   "goods_name": "赛博之神",
+   "num": 5
+  },
+  {
+   "id": 3,
+   "avatar": "/uploads/20261014/863cd0a4f37a0c23f746fdff01bd6bc7.jpg",
+   "nickname": "良渚玉迷",
+   "createtime": "2026-10-16 11:41:15",
+   "goods_cover_image": "/uploads/20261014/863cd0a4f37a0c23f746fdff01bd6bc7.jpg",
+   "goods_name": "机械锦鲤",
+   "num": 3
+  },
+  {
+   "id": 4,
+   "avatar": "/uploads/20261013/2d46cca956612f79f3df0ab527fecb7b.jpg",
+   "nickname": "敦煌守夜人",
+   "createtime": "2026-10-16 10:02:33",
+   "goods_cover_image": "/uploads/20261013/2d46cca956612f79f3df0ab527fecb7b.jpg",
+   "goods_name": "山海异兽·鲲",
+   "num": 8
+  },
+  {
+   "id": 5,
+   "avatar": "/uploads/20261013/2f31fa297ffe32131904ee666c6a3728.jpg",
+   "nickname": "山海经读者",
+   "createtime": "2026-10-15 22:19:07",
+   "goods_cover_image": "/uploads/20261013/2f31fa297ffe32131904ee666c6a3728.jpg",
+   "goods_name": "青川十二时辰",
+   "num": 1
+  },
+  {
+   "id": 6,
+   "avatar": "/uploads/20261013/7379274089052cc6e3228027936b0e83.jpg",
+   "nickname": "唐三彩修复师",
+   "createtime": "2026-10-15 20:55:12",
+   "goods_cover_image": "/uploads/20261013/7379274089052cc6e3228027936b0e83.jpg",
+   "goods_name": "数字敦煌",
+   "num": 20
+  }
+ ]
+}

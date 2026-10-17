@@ -1,0 +1,54 @@
+{
+ "code": 1,
+ "data": [
+  {
+   "id": 3037,
+   "type": "menu",
+   "category": "home",
+   "name": "菜单组",
+   "content": "{\"name\":\"\",\"style\":4,\"list\":[{\"image\":\"\\/uploads\\/20241209\\/a265b5f1becc0a42a954a6e7926d6056.png\",\"path\":\"\\/pages\\/compound\\/compound?thm=1\",\"name\":\"活动入口\",\"path_name\":\"\",\"path_type\":2},{\"image\":\"\\/uploads\\/20241209\\/98ca7ad4d7a5534e557ab6e3955c7870.png\",\"path\":\"\\/pages\\/lottery\\/lottery?id=1\",\"name\":\"抽奖转盘\",\"path_name\":\"\",\"path_type\":2},{\"name\":\"邀请好友\",\"image\":\"\\/uploads\\/20241209\\/fba5392caf9f2e71fe10040d00c8209e.png\",\"path\":\"\\/pages\\/invitation\\/invitation\",\"path_name\":\"\",\"path_type\":2},{\"image\":\"\\/uploads\\/20241209\\/43b49443c192b7dea137be49386a8380.png\",\"path\":\"\\/pages\\/activity\\/draw?thm=3\",\"name\":\"抽签\",\"path_name\":\"\",\"path_type\":2},{\"image\":\"\",\"path\":\"\",\"name\":\"在线商城\",\"path_name\":\"\",\"path_type\":1}]}",
+   "decorate_id": 2
+  },
+  {
+   "id": 3038,
+   "type": "centre",
+   "category": "home",
+   "name": "中部合成",
+   "content": "{\"name\":\"\",\"style\":5,\"list\":[{\"image\":\"\\/uploads\\/20231102\\/17b799dbd69086716817191f0acfdd55.png\",\"path\":\"\\/pages\\/compound\\/compound\",\"name\":\"中部合成\",\"path_name\":\"合成藏品\",\"path_type\":1}]}",
+   "decorate_id": 2
+  },
+  {
+   "id": 3039,
+   "type": "popup",
+   "category": "popup",
+   "name": "弹窗提醒",
+   "content": "{\"list\":[{\"name\":\"\",\"style\":1,\"image\":\"\\/uploads\\/20220927\\/672a4e72821f81e274ce4bb6f532265c.jpg\",\"btnimage\":\"\",\"path\":\"\",\"path_name\":\"\",\"path_type\":1}]}",
+   "decorate_id": 2
+  },
+  {
+   "id": 3040,
+   "type": "tabbar",
+   "category": "tabbar",
+   "name": "底部导航",
+   "content": "{\"style\":1,\"color\":\"#6D727B\",\"activeColor\":\"\",\"bgcolor\":\"#1F221D\",\"list\":[{\"name\":\"首页\",\"image\":\"\\/uploads\\/20221027\\/7387d6b689ca6beeaab94f143d6df967.png\",\"activeImage\":\"\\/uploads\\/20221027\\/8c78e0c5bd0c1b609b91ac0223e4782a.png\",\"path\":\"\\/pages\\/index\\/index\",\"path_name\":\"首页\",\"path_type\":1},{\"name\":\"我的\",\"image\":\"\\/uploads\\/20221014\\/e928d31da4aff335fc1fe653bd5634d0.png\",\"activeImage\":\"\\/uploads\\/20221027\\/9bec9e30f9f0470fffef25eb5a7b3a26.png\",\"path\":\"\\/pages\\/my\\/my\",\"path_name\":\"我的\",\"path_type\":1}]}",
+   "decorate_id": 2
+  },
+  {
+   "id": 3041,
+   "type": "user",
+   "category": "user",
+   "name": "用户卡片",
+   "content": "{\"name\":\"用户卡片\",\"image\":\"\\/uploads\\/20221028\\/e1e4db73ebb27785895e638d7bd1136e.png\",\"style\":2,\"color\":\"#151714\"}",
+   "decorate_id": 2
+  },
+  {
+   "id": 3042,
+   "type": "float-button",
+   "category": "float-button",
+   "name": "悬浮按钮",
+   "content": "{\"image\":\"\",\"list\":[]}",
+   "decorate_id": 2
+  }
+ ],
+ "msg": "获取成功"
+}

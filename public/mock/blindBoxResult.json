@@ -1,0 +1,27 @@
+{
+  "code": 1,
+  "msg": "ok",
+  "data": [
+    {
+      "id": 1,
+      "listimg": "/uploads/20261013/2d46cca956612f79f3df0ab527fecb7b.jpg",
+      "name": "青川·千里江山",
+      "collection_code": "QC20261013000137",
+      "rarity_icon": "/uploads/20261013/2d46cca956612f79f3df0ab527fecb7b.jpg"
+    },
+    {
+      "id": 2,
+      "listimg": "/uploads/20261007/88fefb48724be865bf2d4fec12e89c4d.jpg",
+      "name": "青川·宋画风华",
+      "collection_code": "QC20261013000138",
+      "rarity_icon": "/uploads/20261007/88fefb48724be865bf2d4fec12e89c4d.jpg"
+    },
+    {
+      "id": 3,
+      "listimg": "/uploads/20261014/14445f260c3d2923e8db81267030e806.jpg",
+      "name": "青川·溪山行旅",
+      "collection_code": "QC20261013000139",
+      "rarity_icon": "/uploads/20261014/14445f260c3d2923e8db81267030e806.jpg"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "code": 1,
+  "msg": "ok",
+  "data": {
+    "myrank": { "rank_num": 18, "nums": 3 },
+    "list": [
+      { "id": 1, "nickname": "青川藏家 0012", "avatar": "/uploads/20261013/7379274089052cc6e3228027936b0e83.jpg", "nums": 46 },
+      { "id": 2, "nickname": "山水间的鹿", "avatar": "/uploads/20261014/863cd0a4f37a0c23f746fdff01bd6bc7.jpg", "nums": 38 },
+      { "id": 3, "nickname": "云岫", "avatar": "/uploads/20261008/a72fad0b03a98ca892c592e299b9ed47.jpg", "nums": 31 },
+      { "id": 4, "nickname": "青川用户 3827", "avatar": "/uploads/20261014/14445f260c3d2923e8db81267030e806.jpg", "nums": 27 },
+      { "id": 5, "nickname": "半山听雨", "avatar": "/uploads/20261003/cf898a87337ccc59b005b05ebaa32d1b.jpg", "nums": 19 },
+      { "id": 6, "nickname": "长安有狐", "avatar": "/uploads/20261012/6bc830cb1b1ab8bc87b46cf1f9b61779.jpg", "nums": 12 }
+    ],
+    "rank_rule": "<p>1. 排行榜按用户当前持有的有效抽签码数量降序排列，数量相同按最早持有时间升序排列。</p><p>2. 抽签码数量以系统开奖时刻的快照为准，开奖后新增的抽签码计入下一期。</p><p>3. 如发现刷榜等作弊行为，平台有权取消其排行榜名次。</p>"
+  }
+}

@@ -1,0 +1,56 @@
+{
+ "code": 1,
+ "msg": "ok",
+ "data": [
+  {
+   "id": 1,
+   "nickname": "藏品猎人老张",
+   "com_price": "3286.40"
+  },
+  {
+   "id": 2,
+   "nickname": "青川藏家886",
+   "com_price": "1286.40"
+  },
+  {
+   "id": 3,
+   "nickname": "数字艺术爱好者",
+   "com_price": "986.40"
+  },
+  {
+   "id": 4,
+   "nickname": "链上摊主",
+   "com_price": "642.00"
+  },
+  {
+   "id": 5,
+   "nickname": "锦鲤本鲤",
+   "com_price": "428.60"
+  },
+  {
+   "id": 6,
+   "nickname": "良渚玉迷",
+   "com_price": "286.00"
+  },
+  {
+   "id": 7,
+   "nickname": "敦煌守夜人",
+   "com_price": "186.40"
+  },
+  {
+   "id": 8,
+   "nickname": "山海经读者",
+   "com_price": "142.00"
+  },
+  {
+   "id": 9,
+   "nickname": "三星堆实习生",
+   "com_price": "86.40"
+  },
+  {
+   "id": 10,
+   "nickname": "唐三彩修复师",
+   "com_price": "42.00"
+  }
+ ]
+}

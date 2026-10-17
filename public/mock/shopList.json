@@ -1,0 +1,80 @@
+{
+  "code": 1,
+  "msg": "ok",
+  "data": {
+    "crystal_number": 2860,
+    "crystal_type": 1,
+    "user_info": {
+      "nickname": "青川用户 3827",
+      "avatar": "/uploads/20261014/14445f260c3d2923e8db81267030e806.jpg"
+    },
+    "list": [
+      {
+        "goods_id": 101,
+        "goods_name": "青川·千里江山数字藏品",
+        "list_image": "/uploads/20261013/2d46cca956612f79f3df0ab527fecb7b.jpg",
+        "crystal_price": 1200,
+        "exchange_status": 2,
+        "total_num": 3000,
+        "exchange_num": 1286,
+        "goods_type": 1,
+        "end_time": 1767225600
+      },
+      {
+        "goods_id": 102,
+        "goods_name": "青川·青绿山水盲盒",
+        "list_image": "/uploads/20261012/2bf53a1d6e5ada30bc88d8e88e424a6b.jpg",
+        "crystal_price": 880,
+        "exchange_status": 2,
+        "total_num": 2000,
+        "exchange_num": 1942,
+        "goods_type": 2,
+        "end_time": 1767225600
+      },
+      {
+        "goods_id": 103,
+        "goods_name": "青川·宋画风华合集",
+        "list_image": "/uploads/20261007/88fefb48724be865bf2d4fec12e89c4d.jpg",
+        "crystal_price": 2400,
+        "exchange_status": 4,
+        "total_num": 888,
+        "exchange_num": 888,
+        "goods_type": 3,
+        "end_time": 1767225600
+      },
+      {
+        "goods_id": 104,
+        "goods_name": "青川·敦煌飞天限量版",
+        "list_image": "/uploads/20261010/032c2e9a8d70d4b60dc05126354d6676.jpg",
+        "crystal_price": 3600,
+        "exchange_status": 5,
+        "total_num": 500,
+        "exchange_num": 61,
+        "goods_type": 1,
+        "end_time": 1767225600
+      },
+      {
+        "goods_id": 105,
+        "goods_name": "青川·溪山行旅图数字长卷",
+        "list_image": "/uploads/20261014/14445f260c3d2923e8db81267030e806.jpg",
+        "crystal_price": 1680,
+        "exchange_status": 2,
+        "total_num": 1500,
+        "exchange_num": 733,
+        "goods_type": 1,
+        "end_time": 1767225600
+      },
+      {
+        "goods_id": 106,
+        "goods_name": "青川·窑变天青釉盲盒",
+        "list_image": "/uploads/20261012/2bf53a1d6e5ada30bc88d8e88e424a6b.jpg",
+        "crystal_price": 980,
+        "exchange_status": 2,
+        "total_num": 2500,
+        "exchange_num": 1104,
+        "goods_type": 2,
+        "end_time": 1767225600
+      }
+    ]
+  }
+}

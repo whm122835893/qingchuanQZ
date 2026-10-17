@@ -1,0 +1,25 @@
+{
+  "code": 1,
+  "msg": "ok",
+  "data": {
+    "user_info": {
+      "nickname": "青川用户 3827",
+      "avatar": "/uploads/20261014/14445f260c3d2923e8db81267030e806.jpg",
+      "id": 3827
+    },
+    "continuous_days": 3,
+    "sign_days": [1, 2, 3],
+    "sign_status": 0,
+    "crystal_number": 2860,
+    "sign_rule": "每日签到可获得龙晶奖励，连续签到 7 天可额外获得限定数字藏品。断签后连续天数归零。",
+    "reward_list": [
+      { "day": 1, "crystal": 10 },
+      { "day": 2, "crystal": 20 },
+      { "day": 3, "crystal": 30 },
+      { "day": 4, "crystal": 40 },
+      { "day": 5, "crystal": 50 },
+      { "day": 6, "crystal": 60 },
+      { "day": 7, "crystal": 100 }
+    ]
+  }
+}

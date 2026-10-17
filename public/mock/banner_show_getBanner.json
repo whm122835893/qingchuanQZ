@@ -1,0 +1,20 @@
+{
+ "code": 1,
+ "msg": "banner列表",
+ "time": "1792035167",
+ "data": {
+  "total": 1,
+  "per_page": 15,
+  "current_page": 1,
+  "last_page": 1,
+  "data": [
+   {
+    "id": 1,
+    "image": "/uploads/20260923/bcc1d99e1f84f820ab90b13824691086.jpg",
+    "url": "",
+    "url_type": 1,
+    "is_show": 1
+   }
+  ]
+ }
+}

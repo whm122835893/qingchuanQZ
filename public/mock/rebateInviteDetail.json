@@ -1,0 +1,54 @@
+{
+ "code": 1,
+ "msg": "ok",
+ "data": [
+  {
+   "id": 1,
+   "nickname": "藏品猎人老张",
+   "jointime": "2026-09-12",
+   "first_transaction_time": "2026-09-15",
+   "user_transaction": "128620.00",
+   "month_transaction": "28640.00"
+  },
+  {
+   "id": 2,
+   "nickname": "数字艺术爱好者",
+   "jointime": "2026-09-18",
+   "first_transaction_time": "2026-09-20",
+   "user_transaction": "86420.00",
+   "month_transaction": "14280.00"
+  },
+  {
+   "id": 3,
+   "nickname": "链上摊主",
+   "jointime": "2026-09-25",
+   "first_transaction_time": "2026-10-01",
+   "user_transaction": "42860.00",
+   "month_transaction": "8620.00"
+  },
+  {
+   "id": 4,
+   "nickname": "锦鲤本鲤",
+   "jointime": "2026-10-02",
+   "first_transaction_time": "2026-10-05",
+   "user_transaction": "18640.00",
+   "month_transaction": "4286.00"
+  },
+  {
+   "id": 5,
+   "nickname": "良渚玉迷",
+   "jointime": "2026-10-08",
+   "first_transaction_time": "2026-10-11",
+   "user_transaction": "9280.00",
+   "month_transaction": "1860.00"
+  },
+  {
+   "id": 6,
+   "nickname": "敦煌守夜人",
+   "jointime": "2026-10-12",
+   "first_transaction_time": "2026-10-16",
+   "user_transaction": "6420.00",
+   "month_transaction": "1280.00"
+  }
+ ]
+}

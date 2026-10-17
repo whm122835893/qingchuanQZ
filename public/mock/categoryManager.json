@@ -1,0 +1,38 @@
+{
+ "code": 1,
+ "msg": "操作成功",
+ "data": {
+  "self_series": [
+   {
+    "series_id": 1,
+    "series_name": "青川数字藏品"
+   },
+   {
+    "series_id": 2,
+    "series_name": "青川山水"
+   },
+   {
+    "series_id": 3,
+    "series_name": "赛博系列"
+   }
+  ],
+  "platform_series": [
+   {
+    "series_id": 4,
+    "series_name": "国潮经典"
+   },
+   {
+    "series_id": 5,
+    "series_name": "非遗传承"
+   },
+   {
+    "series_id": 6,
+    "series_name": "生肖限定"
+   },
+   {
+    "series_id": 7,
+    "series_name": "城市地标"
+   }
+  ]
+ }
+}

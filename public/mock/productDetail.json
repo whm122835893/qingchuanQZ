@@ -1,0 +1,82 @@
+{
+ "code": 1,
+ "msg": "操作成功",
+ "time": "1792081000",
+ "data": {
+  "id": 226,
+  "goods_type": 1,
+  "name": "赛博铁牛盲盒",
+  "price": "100.00",
+  "sale_status": 2,
+  "is_shengou": 0,
+  "is_sub": 0,
+  "shengou": {
+   "num": 500,
+   "user_num": 2,
+   "start_time": 1791963500,
+   "end_time": 1792159900
+  },
+  "count_down": 1792159900000,
+  "introduce": "<p>《赛博系列》由青川数字艺术原创出品，共 6 款形态，以赛博铁牛、赛博黑猫、赛博之神等东方赛博符号为母题。</p><p>每一份藏品均由算法生成唯一编号，并写入联盟链确权；持有人可在「我的藏品」中查看编号、链上凭证与流转记录。</p>",
+  "product": {
+   "id": 226,
+   "name": "赛博铁牛盲盒",
+   "goods_type": 1,
+   "listimg": "/uploads/20261014/ea65d8aff9b71747498819acc2c28e74.jpg",
+   "main_image": "/uploads/20261014/ea65d8aff9b71747498819acc2c28e74.jpg",
+   "total_num": 500,
+   "sale_total_num": 137,
+   "flux": 500,
+   "is_like": 0,
+   "is_sub": 0,
+   "collectionlist": [
+    {
+     "id": 5101,
+     "name": "赛博铁牛",
+     "probability": 60.0,
+     "show_total_num": 500,
+     "listimg": "/uploads/20261014/ea65d8aff9b71747498819acc2c28e74.jpg",
+     "rarity_icon": "/uploads/20261014/ea65d8aff9b71747498819acc2c28e74.jpg",
+     "is_out": 0
+    },
+    {
+     "id": 5102,
+     "name": "赛博之神",
+     "probability": 25.0,
+     "show_total_num": 500,
+     "listimg": "/uploads/20261014/803cdb4d235463160e98862bb77cf630.jpg",
+     "rarity_icon": "/uploads/20261014/803cdb4d235463160e98862bb77cf630.jpg",
+     "is_out": 0
+    },
+    {
+     "id": 5103,
+     "name": "赛博黑猫",
+     "probability": 12.0,
+     "show_total_num": 500,
+     "listimg": "/uploads/20261014/14445f260c3d2923e8db81267030e806.jpg",
+     "rarity_icon": "/uploads/20261014/14445f260c3d2923e8db81267030e806.jpg",
+     "is_out": 0
+    },
+    {
+     "id": 5104,
+     "name": "隐藏款 · 天狗",
+     "probability": 3.0,
+     "show_total_num": 500,
+     "listimg": "/uploads/20261010/032c2e9a8d70d4b60dc05126354d6676.jpg",
+     "rarity_icon": "/uploads/20261010/032c2e9a8d70d4b60dc05126354d6676.jpg",
+     "is_out": 0
+    }
+   ],
+   "publisher": {
+    "name": "青川数字艺术",
+    "user": {
+     "nickname": "青川数字艺术"
+    }
+   },
+   "series": {
+    "id": 15,
+    "name": "赛博系列"
+   }
+  }
+ }
+}

@@ -1,0 +1,60 @@
+{
+ "code": 1,
+ "msg": "ok",
+ "data": [
+  {
+   "id": 226,
+   "goods_cover_image": "/uploads/20261014/ea65d8aff9b71747498819acc2c28e74.jpg",
+   "goods_name": "赛博铁牛",
+   "total_price": "128620.00",
+   "num": 1286,
+   "createtime": "2026-10-16 14:22:10",
+   "count": 328
+  },
+  {
+   "id": 225,
+   "goods_cover_image": "/uploads/20261014/14445f260c3d2923e8db81267030e806.jpg",
+   "goods_name": "赛博黑猫",
+   "total_price": "86420.00",
+   "num": 1286,
+   "createtime": "2026-10-16 11:08:41",
+   "count": 286
+  },
+  {
+   "id": 222,
+   "goods_cover_image": "/uploads/20261014/803cdb4d235463160e98862bb77cf630.jpg",
+   "goods_name": "赛博之神",
+   "total_price": "42860.00",
+   "num": 952,
+   "createtime": "2026-10-15 22:41:03",
+   "count": 142
+  },
+  {
+   "id": 218,
+   "goods_cover_image": "/uploads/20261014/863cd0a4f37a0c23f746fdff01bd6bc7.jpg",
+   "goods_name": "机械锦鲤",
+   "total_price": "28640.00",
+   "num": 640,
+   "createtime": "2026-10-15 19:26:18",
+   "count": 98
+  },
+  {
+   "id": 215,
+   "goods_cover_image": "/uploads/20261013/2d46cca956612f79f3df0ab527fecb7b.jpg",
+   "goods_name": "山海异兽·鲲",
+   "total_price": "18640.00",
+   "num": 428,
+   "createtime": "2026-10-15 16:02:55",
+   "count": 76
+  },
+  {
+   "id": 209,
+   "goods_cover_image": "/uploads/20261013/2f31fa297ffe32131904ee666c6a3728.jpg",
+   "goods_name": "青川十二时辰",
+   "total_price": "12840.00",
+   "num": 286,
+   "createtime": "2026-10-14 20:14:39",
+   "count": 42
+  }
+ ]
+}

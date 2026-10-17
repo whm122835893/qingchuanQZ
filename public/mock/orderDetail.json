@@ -1,0 +1,29 @@
+{
+ "code": 1,
+ "msg": "操作成功",
+ "data": {
+  "id": 9001,
+  "order_sn": "QC20261015000123",
+  "order_status": 1,
+  "goods_id": 226,
+  "goods_name": "赛博铁牛",
+  "listimg": "/uploads/20261014/ea65d8aff9b71747498819acc2c28e74.jpg",
+  "collection_code": "QC88231",
+  "user_hash_text": "0x7a3f9c2e5b1d8a4f6c0e2b7d9f1a3c5e",
+  "pay_way": "huifu",
+  "pay_name": "汇付天下",
+  "number": 2,
+  "num": 2,
+  "sale_number": 0,
+  "price": "100.00",
+  "total_price": "200.00",
+  "order_amount": "200.00",
+  "discount_amount": "0",
+  "pay_price": "200.00",
+  "remark": "",
+  "createtime": 1758000000,
+  "updatetime": 1758000000,
+  "card": [],
+  "goods_type": 1
+ }
+}

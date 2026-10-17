@@ -1,0 +1,47 @@
+{
+ "code": 1,
+ "msg": "操作成功",
+ "time": "1792081000",
+ "data": {
+  "id": 77001,
+  "collection_code": "QC88231",
+  "serial_num": 231,
+  "series_total": 500,
+  "user_hash": "0x7a3f9c2b18d4e5a6f0b1c2d3e4f5a6b7c8d9e0f1",
+  "user_hash_text": "0x7a3f...e0f1",
+  "rz_code": "RZ-QC-226-0001",
+  "createtime": 1791903600,
+  "status": 1,
+  "is_lock": 0,
+  "weither_regift": 1,
+  "weither_resale": 1,
+  "can_compose": 1,
+  "price": "100.00",
+  "min_price": "100.00",
+  "today_volume": 6,
+  "product": {
+   "id": 226,
+   "name": "赛博铁牛",
+   "goods_type": 2,
+   "listimg": "/uploads/20261014/ea65d8aff9b71747498819acc2c28e74.jpg",
+   "main_image": "/uploads/20261014/ea65d8aff9b71747498819acc2c28e74.jpg",
+   "total_num": 500,
+   "flux": 500,
+   "sale_total_num": 1,
+   "is_lock": 0,
+   "weither_regift": 1,
+   "weither_resale": 1,
+   "can_compose": 1,
+   "series": {
+    "id": 15,
+    "name": "赛博系列"
+   },
+   "publisher": {
+    "name": "青川数字艺术",
+    "user": {
+     "nickname": "青川数字艺术"
+    }
+   }
+  }
+ }
+}
