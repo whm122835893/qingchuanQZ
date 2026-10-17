@@ -3,3 +3,6 @@ dist/
 *.log
 .DS_Store
 .vite/
+.env
+push_*.sh
+regress.mjs
