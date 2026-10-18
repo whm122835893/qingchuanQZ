@@ -66,6 +66,12 @@ const MOCK_MAP = {
   // 我的 · 地址
   '/user/address/lists': 'addressList.json',
   '/market/trade/flowDoc': 'flowDoc.json',
+  // ── 以下 2 条写接口**故意不登记** ──────────────────────────────
+  // /market/trade/createBegBuyOrder、/market/trade/sell 在源站需人机验证（滑块），
+  // 无成功响应快照可依据。前端 SubmitBegBuy.vue:206 / SellBegBuy.vue:253 只弹 toast
+  // （「原站求购需人机验证」）而**从不调用**这两个接口，故本地模式走到
+  // localRequest 的未命中分支（code:1 + data:[]）无任何可见影响。
+  // 不编造 mock 快照——真实结果由后端写接口提供（已实现，见 server/）。
   // 返利 / 榜单 / 转赠 / 聊天 / 行情
   '/rebate/rebate/index': 'rebate.json',
   '/rebate/rebate/leaderboard': 'rebateLeaderboard.json',

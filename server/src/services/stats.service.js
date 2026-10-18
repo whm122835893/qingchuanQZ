@@ -35,12 +35,24 @@ async function rebateIndex(userId) {
   }
 }
 
-/** 返利榜单（style A）。com_price 用 all_commision 两位小数 */
+/**
+ * 返利榜单（style A）。com_price 用 score 两位小数。
+ *
+ * 【数据源修正】榜单读 rank_snapshots 的 rank_type='rebate'，不再读 rebate_profiles。
+ * 依据：rebate_profiles 只存「当前用户自己的返利档案」（库中仅 1 行 uid=22291），
+ * 而源站 rebateLeaderboard.json 是 10 人榜单；这 10 条已完整灌入 rank_snapshots
+ * （nickname/score 与源站逐条吻合，顺序一致）。旧实现读错表，导致榜单恒返回 1 条。
+ */
 async function rebateLeaderboard() {
-  return await statsRepo.listRebateProfiles(20).map((r, i) => ({
+  const rows = await statsRepo.listRankSnapshots({
+    rankType: 'rebate',
+    orderBy: 'score DESC',
+    limit: 20,
+  })
+  return rows.map((r, i) => ({
     id: i + 1,
     nickname: r.nickname || '',
-    com_price: money2(r.all_commision),
+    com_price: money2(r.score),
   }))
 }
 

@@ -2,7 +2,7 @@
 
 /**
  * 我的藏品域 service：我的盲盒 / 开盒记录。
- * 开盒写接口（openbox / openboxone）本轮不实现，仅返回 TODO 响应。
+ * 开盒写接口（openbox / openboxone）已实现，见 blindbox-write.service.js。
  */
 const env = require('../config/env')
 const collectionRepo = require('../repositories/collection.repository')
@@ -21,10 +21,11 @@ async function myBox(userId) {
   const pool = row.product_id ? await productRepo.listPoolItems(row.product_id) : []
   return {
     id: row.blind_box_id,
-    name: row.p_name,
+    // name/listimg 已在 SQL 层 COALESCE：优先源站直取列，products 值兜底
+    name: row.name,
     num: row.count,
-    listimg: row.p_listimg,
-    main_image: row.p_main_image,
+    listimg: row.listimg,
+    main_image: row.main_image,
     rarity_icon: pool.length ? pool[0].rarity_icon : null,
     product_id: row.product_id,
     user_collection_id: row.id,
@@ -37,16 +38,17 @@ async function openlog(userId, params) {
   const { items } = await collectionRepo.listBlindBoxRecords(userId, page)
   const out = []
   for (const r of items) {
-    const pool = r.product_id ? await productRepo.listPoolItems(r.product_id) : []
     out.push({
       id: r.id,
-      listimg: r.p_listimg,
-      name: r.p_name,
+      listimg: r.listimg,
+      // 新表直接存源站的藏品名；products 关联命中时以关联名为准（同源，仅作保险）
+      name: r.name || r.p_name || '',
       collection_code: r.collection_code,
-      rarity_icon: pool.length ? pool[0].rarity_icon : null,
+      // 源站本快照中 rarity_icon 与 listimg 同值，原样返回不臆造
+      rarity_icon: r.rarity_icon || null,
       createtime: r.createtime,
-      // 库中无「盲盒 → 藏品」归属列，box_name 无从定位——返回 null，不编造
-      box_name: null,
+      // 新表已承载 box_name（源站直取），不再返回 null
+      box_name: r.box_name || null,
     })
   }
   return out

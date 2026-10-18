@@ -2,7 +2,7 @@
 
 /**
  * 用户与账户域 service：用户信息、收货地址、邀请信息与记录。
- * 写接口（login / register）本轮不实现，仅在 controller 返回 TODO 响应。
+ * 写接口（login / register）已实现，见 auth.service.js。
  */
 const env = require('../config/env')
 const userRepo = require('../repositories/user.repository')

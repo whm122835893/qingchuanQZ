@@ -1,6 +1,6 @@
 'use strict'
 
-/** 盲盒 路由。openbox / openboxone 已注册但返回 TODO 响应 */
+/** 盲盒 路由。openbox / openboxone 已实现（开盒扣余量 + 幂等重放） */
 const express = require('express')
 const { wrap } = require('../middleware/wrap')
 const { requireAuth } = require('../middleware/auth')

@@ -47,7 +47,8 @@ SKIP_MOCKS = {
     "drawResult.json": "开奖结果由 draw_codes 派生，不独立建表（§8 #43）",
     "leaderboard.json": "可由 product_market_stats ORDER BY flux 派生（§8 #63）；其字段已并入 products/F1",
     "blindBoxResult.json": "开盒结果列表，字段已由 blindBoxResultOne 覆盖 user_collections（§8 未列）",
-    "blindBoxOpenRecord.json": "开盒记录列表，无独立表承载；id 与 blindBoxResult 冲突（§8 未列）",
+    # blindBoxOpenRecord.json 已移除跳过：补建 B5b user_blind_box_records 表承载开盒流水
+    # （此前「无独立表承载」的理由已不成立，见 mappers_collection.map_user_blind_box_records）
     "invitationInfo.json": "invite_code 与 users.inviter_code 不同源（QC3827 vs E99022291），仅校验不入库（§8 #3）",
 }
 

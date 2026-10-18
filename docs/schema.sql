@@ -270,6 +270,9 @@ CREATE TABLE `user_collections` (
   `product_id` BIGINT UNSIGNED NULL DEFAULT NULL COMMENT '【强 FK】NULL=源站未提供或父记录不在库（灌库层校验后置 NULL）；非 NULL 时保证存在于父表｜源字段 product.id / collection_id / goods_id（三处源字段名不同，同一语义）：所属商品，外键关联 products.id',
   `product_id_raw` VARCHAR(64) NULL COMMENT '设计新增，非源站字段：product_id 源站原值留痕（含 0 哨兵与悬空 ID）；有效值写入 `product_id`，无效值本列为 "0"/原字符串，NULL 表示源站确未提供',
   `user_id` BIGINT UNSIGNED NULL DEFAULT NULL COMMENT '【弱引用·不建 FK】NULL=源站未提供或该用户未被收录（源站仅暴露登录用户与 marketDetail 卖家，实测 users 仅 2 条：4930/22291），ID 不保证存在于 users.id；仅建索引，灌库不做存在性约束｜设计关联，非源站字段：源站列表接口不返回 user_id，按登录态归属',
+  `name` VARCHAR(128) NULL DEFAULT '' COMMENT '源字段 name：藏品名（源站直取）。【补列说明】此前未建此列，导致「我的藏品」列表只能 JOIN products.name 显示（恒为「赛博铁牛盲盒」），而源站 8 条实为「赛博铁牛/青川山水/赛博之神/赛博黑猫/天狗/赛博猫」等不同藏品名。本列存源站原值，展示优先于 products.name',
+  `listimg` VARCHAR(512) NULL DEFAULT '' COMMENT '源字段 listimg：藏品列表图（源站直取，与 products.listimg 可能不同）',
+  `main_image` VARCHAR(512) NULL DEFAULT '' COMMENT '源字段 main_image：藏品主图（源站直取）',
   `collection_code` VARCHAR(64) NULL DEFAULT '' COMMENT '源字段 collection_code：业务编号（实测 QC88231 / QC2026... / QC-2024-0031 / PBCE/...），裁决A 见 DATABASE.md §6.1',
   `collection_code_num` BIGINT NULL COMMENT '源字段 collection_code 的数值形态：承载 387750 类纯数值编号（裁决A 双列），不与 id 建 FK（不同 ID 空间）',
   `serial_num` INT NOT NULL DEFAULT 0 COMMENT '源字段 serial_num：序号（实测 231）',
@@ -303,6 +306,34 @@ KEY `idx_uc_product` (`product_id`, `status`),
 KEY `idx_uc_user_createtime` (`user_id`, `createtime` DESC),
   CONSTRAINT `fk_user_collections_product_id` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE SET NULL ON UPDATE CASCADE -- 商品ID
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='B5 user_collections（用户藏品实例（核心表））';
+
+-- B5b user_blind_box_records：开盒记录流水
+-- 源 API：blindBoxOpenRecord.json（/box/blind_box/openlog）
+-- 【补建说明】该快照此前被 seed.py 以「无独立表承载」为由跳过（SKIP_MOCKS），
+-- 导致开盒记录页只能从 user_collections 里取 blind_box_id 非空的行（库中仅 1 行，
+-- 源站实测 5 条）。开盒记录是**历史流水事件**，与 user_collections（当前持有状态）
+-- 语义不同，不应互相派生，故补建本表。
+DROP TABLE IF EXISTS `user_blind_box_records`;
+CREATE TABLE `user_blind_box_records` (
+  `id` BIGINT UNSIGNED NOT NULL COMMENT '源字段 id：开盒记录 ID（源站实测 1~5，与 user_collections.id 不同域，不冲突）',
+  `user_id` BIGINT UNSIGNED NULL DEFAULT NULL COMMENT '【强 FK】NULL=源站未提供或父记录不在库；非 NULL 时保证存在于父表｜设计关联，非源站字段：源站按当前登录用户返回',
+  `product_id` BIGINT UNSIGNED NULL DEFAULT NULL COMMENT '【弱引用·不建 FK】NULL=源站接口未返回该 ID；仅建索引，灌库不做存在性约束｜设计关联，非源站字段：由藏品名反查 products.name 得到，用于展示图',
+  `product_id_raw` VARCHAR(64) NULL COMMENT '设计新增，非源站字段：product_id 反查失败时留存藏品名原文',
+  `blind_box_id` BIGINT UNSIGNED NULL DEFAULT NULL COMMENT '【弱引用·不建 FK】NULL=源站未提供；仅建索引｜设计关联，非源站字段：由 box_name 反查盲盒产品得到',
+  `listimg` VARCHAR(512) NULL DEFAULT '' COMMENT '源字段 listimg：藏品图',
+  `name` VARCHAR(128) NULL DEFAULT '' COMMENT '源字段 name：产出藏品名（实测「青川·千里江山」等）',
+  `collection_code` VARCHAR(64) NULL DEFAULT '' COMMENT '源字段 collection_code：藏品编号（实测 "QC20261013000137"）',
+  `rarity_icon` VARCHAR(512) NULL DEFAULT '' COMMENT '源字段 rarity_icon：稀有度图标（源站 openlog 快照中为 null）',
+  `box_name` VARCHAR(128) NULL DEFAULT '' COMMENT '源字段 box_name：所属盲盒名（实测「青川·青绿山水盲盒」）',
+  `createtime` BIGINT NULL DEFAULT 0 COMMENT '源字段 createtime：开盒时间 unix 秒（实测 1766500000 等）',
+  `created_at` BIGINT UNSIGNED NULL DEFAULT 0 COMMENT '设计新增，非源站字段：灌库审计用 unix 秒',
+  `updated_at` BIGINT UNSIGNED NULL DEFAULT 0 COMMENT '设计新增，非源站字段：乐观更新用 unix 秒',
+PRIMARY KEY (`id`),
+KEY `idx_ubbr_user` (`user_id`, `createtime` DESC),
+KEY `idx_ubbr_product` (`product_id`),
+KEY `idx_ubbr_box` (`blind_box_id`),
+  CONSTRAINT `fk_user_blind_box_records_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE -- 用户ID
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='B5b user_blind_box_records（开盒记录流水）';
 
 -- B6 collection_flow_records：藏品流转记录
 -- 源 API：flowDoc.json

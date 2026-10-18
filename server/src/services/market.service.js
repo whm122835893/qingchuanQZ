@@ -13,6 +13,18 @@ const { money, money2, bool, jsonArray } = require('../utils/pick')
 const { productBrief } = require('./product-shape')
 
 /** 市场列表（getMarketList，style A 裸数组） */
+/**
+ * 市场列表（style A：裸数组，源站响应无 total/per_page/current_page）。
+ *
+ * 【保留分页——曾误改，已回滚并记因】
+ * 一度因「源站快照是 5 条、前端首页传 list_rows:1 后端只返 1 条」而判定为回归，
+ * 改为不分页。该判断**错误**，依据：三个调用点语义各不相同——
+ *   Index.vue:317  fetchMarketFirst 传 list_rows:1，且只取 list[0]（首页只展示 1 件）
+ *   Market.vue:237 loadGoods        传 list_rows:20（市场页列表）
+ *   Search.vue:120 init             传 {}（走默认 15）
+ * 即 list_rows:1 是前端**有意为之**，分页必须保留。
+ * 源站快照的 5 条只是抓取当时的实参结果，不能反推契约。
+ */
 async function marketList(params) {
   const page = pagination(params, env)
   const { items } = await marketRepo.listMarketItems({
@@ -134,8 +146,11 @@ async function marketDetail(id) {
 
 async function seriesGoodsList(params) {
   const page = pagination(params, env)
-  // endpoint_meta 明确：参数名 id 指「系列 id」而非商品 id（易误读，已在 note 标注）
-  const seriesId = params.id || params.series_id
+  // 【参数语义修正】id 是 product_id，不是 series_id。
+  // 依据：Market.vue:222 实测 URL「id=236&goodsType=2」、Index.vue:275 传 item.product.id；
+  // 且库中 product_id=236 恰 30 条，与源站 marketGoodsList.json 的 30 条吻合。
+  // 旧注「id 指系列 id」是误判，已同步修正 endpoint_meta。
+  const seriesId = params.id || params.product_id || params.series_id
   // type：1=盲盒 2=单品，默认 2（源站页面实参）
   const goodsType = params.type === undefined || params.type === '' ? 2 : Number(params.type)
   const { items, total } = await marketRepo.listListingsBySeries(seriesId, goodsType, page)

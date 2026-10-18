@@ -17,17 +17,36 @@ const asset = (p) => import.meta.env.BASE_URL + p.replace(/^\//, '')
  * @param {string} mockName 本地 mock 文件名
  * @param {Function} pick   从响应中提取数据
  */
+/**
+ * 远程失败/降级计数：只用于可观测性，不影响回落行为。
+ * 挂在 window 上供回归脚本与人工排查读取（window.__QC_FALLBACK__）。
+ */
+const fallbackLog = []
+if (typeof window !== 'undefined') window.__QC_FALLBACK__ = fallbackLog
+
 async function load(call, mockName, pick) {
   if (IS_REMOTE) {
     try {
       const res = await call()
       if (res && res.code === 1) return pick ? pick(res) : res
+      // 后端连通但业务码非 1：同样会回落 mock。
+      // 此前此处完全静默，导致「页面看着正常、其实每个接口都在回落」的假绿，
+      // 真实问题（CORS 缺失、路径 404、参数语义错配）全部被吞掉。
+      noteFallback(mockName, `业务码非 1：code=${res && res.code} msg=${res && res.msg}`)
     } catch (e) {
-      /* 远程失败回落本地 */
+      noteFallback(mockName, `请求异常：${(e && e.message) || e}`)
     }
   }
   const json = await readMock(mockName)
   return pick ? pick(json) : json
+}
+
+/** 记录一次回落。DEV 下打到控制台（可见），生产仅入数组不刷屏 */
+function noteFallback(mockName, reason) {
+  fallbackLog.push({ mockName, reason, at: Date.now() })
+  if (import.meta.env.DEV) {
+    console.warn(`[api] 远程失败已回落本地 mock：${mockName} —— ${reason}`)
+  }
 }
 
 /** 列表类提取：兼容 data 直接是数组 或 data.data 是数组 */

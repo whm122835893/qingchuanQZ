@@ -136,14 +136,17 @@ E['/market/market/seriesGoodsList'] = dict(
     kind='read',
     domain='B 藏品与系列', title='某系列下的商品列表',
     pages='market/MarketGoodsList.vue:202（`{id, type: route.query.goodsType || 2}`）', method='POST', auth=False,
-    params=[('data', 'id', 'integer', True, '系列 id（页面实参 `id` 来自路由/选中系列）'),
+    params=[('data', 'id', 'integer', True, '**商品 id（product_id）**，非系列 id。实测页面 URL `#/pages/market/marketGoodsList?id=236&goodsType=2`，Index.vue:275 传 `item.product.id`'),
             ('data', 'type', 'integer', False, '商品类型：1=盲盒 2=单品，默认 2')],
     style='E', impl='done',
     resp=[('product', 'object', '`{id,name,total_num,flux,is_like,batch_pay,collection_level,listimg,issuer,introduce_image}`'),
           ('total', 'integer', '总数'), ('current_page', 'integer', '当前页'), ('last_page', 'integer', '总页数'),
           ('data', 'array', '`{id,name,collection_code,min_price,status,income_type,createtime,listimg}`；income_type 为数组形态（§6.2）')],
     tables='market_listings, products, product_pool_items', mock='marketGoodsList.json',
-    note='风格 E：product 对象与 data 列表并存。参数名 `id` 指系列 id 而非商品 id，易误读，已按页面实参记录。')
+    note='风格 E：product 对象与 data 列表并存。【语义修正】参数 `id` 是 product_id 而非 series_id。'
+         '证据：库中 product_id=236 恰 30 条，与源站 marketGoodsList.json 的 30 条完全吻合；'
+         '而 market_listings.series_id 有 32/33 行为 NULL（源站响应不含该字段），按系列 id 过滤恒返回 0 条。'
+         '实现主查 product_id，无命中时回退 series_id 以兼容其他调用点。')
 
 E['/product/product/detail'] = dict(
     kind='read',

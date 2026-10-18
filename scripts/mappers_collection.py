@@ -62,6 +62,7 @@ def map_user_collections(m) -> list[dict]:
         "flux": 0, "total_num": 0,
         "zuzhao_info_id": None, "task_id": "",
         "blind_box_id": None,
+        "name": "", "listimg": "", "main_image": "",
         "createtime": 0,
     }
 
@@ -99,6 +100,11 @@ def map_user_collections(m) -> list[dict]:
             **base,
             "id": to_int(r.get("id")),
             "product_id": to_int(r.get("collection_id")),
+            # 藏品名/图源站直取（补列）：源站 8 条为「赛博铁牛/青川山水/赛博之神…」，
+            # 与 products.name（「赛博铁牛盲盒」）不同，必须存原值
+            "name": clean_str(r.get("name"), ""),
+            "listimg": clean_str(r.get("listimg"), ""),
+            "main_image": clean_str(r.get("main_image"), ""),
             "collection_code": code,
             "collection_code_num": num,
             "status": to_int(r.get("status")),
@@ -119,6 +125,9 @@ def map_user_collections(m) -> list[dict]:
             # 该接口无 product_id，源站仅有 name；按名称无法可靠反查发行主体。
             # 写 None（→ NULL）而非 0：0 是源站哨兵值，不能拿来冒充「未提供」
             "product_id": None,
+            "name": clean_str(r.get("name"), ""),
+            "listimg": clean_str(r.get("listimg"), ""),
+            "main_image": clean_str(r.get("main_image"), ""),
             "collection_code": code,
             "collection_code_num": num,
             "count": to_int(r.get("count"), 0),
@@ -168,3 +177,74 @@ def map_user_collections(m) -> list[dict]:
             "collection_code_num": num,
         })
     return rows
+
+
+def map_user_blind_box_records(m) -> list[dict]:
+    """B5b user_blind_box_records ← blindBoxOpenRecord（/box/blind_box/openlog）
+
+    【补建说明】该快照此前在 seed.py 的 SKIP_MOCKS 里被跳过（理由「无独立表承载」），
+    导致开盒记录页恒只能取到 user_collections 中 blind_box_id 非空的 1 行，
+    而源站实测 5 条。开盒记录是历史流水事件，与 user_collections（当前持有状态）
+    语义不同、不可互相派生，故补建表并灌库。
+
+    字段映射全部为源站直取，不做推断：
+      - user_id：源站按当前登录用户返回 → 取 LOGIN_USER_ID
+      - product_id / blind_box_id：源站只给**名字**不给 ID，
+        按 name / box_name 反查 products.name 得到；查不到留 NULL 并存 _raw，
+        不用 0 冒充（0 在源站是合法哨兵值）
+      - rarity_icon：源站本快照中即等于 listimg，原样保留不臆造
+    """
+    rows = []
+    seen = set()
+
+    def put(**kw):
+        key = kw.get("id")
+        if key is None or key in seen:
+            return
+        seen.add(key)
+        rows.append(kw)
+
+    # 名字 → id 的反查表（marketGoodsList 顶层是分页对象，产品名在 product 段，
+    # 由 _product_name_index 单独处理，不在此遍历）
+    name_to_id = _product_name_index(m)
+
+    now = 1792347925
+    for r in rows_of(m, "blindBoxOpenRecord") or []:
+        name = clean_str(r.get("name"), "")
+        box_name = clean_str(r.get("box_name"), "")
+        pid = name_to_id.get(name)
+        put(
+            id=to_int(r.get("id")),
+            user_id=LOGIN_USER_ID,
+            product_id=pid,
+            product_id_raw=None if pid else (name or None),
+            blind_box_id=name_to_id.get(box_name),
+            listimg=clean_str(r.get("listimg"), ""),
+            name=name,
+            collection_code=clean_str(r.get("collection_code"), ""),
+            rarity_icon=clean_str(r.get("rarity_icon"), ""),
+            box_name=box_name,
+            createtime=to_unix(r.get("createtime")),
+            created_at=now,
+            updated_at=now,
+        )
+    return rows
+
+
+def _product_name_index(m) -> dict:
+    """products 的 name → id 反查索引（含盲盒名）。
+
+    遍历所有含产品列表的 mock，收集 {id, name} 对。
+    仅用于「源站只给名字不给 ID」的反向补全，命中不到则留 NULL。
+    """
+    idx = {}
+    for key in ("marketList", "crystalList", "shopList", "activeSelectedList"):
+        for r in rows_of(m, key) or []:
+            rid, rname = to_int(r.get("id")), clean_str(r.get("name"), "")
+            if rid and rname:
+                idx.setdefault(rname, rid)
+    # 系列商品列表的 product 段
+    prod = dig(m, "marketGoodsList", "product", default={}) or {}
+    if prod.get("id") and prod.get("name"):
+        idx.setdefault(clean_str(prod.get("name"), ""), to_int(prod.get("id")))
+    return idx

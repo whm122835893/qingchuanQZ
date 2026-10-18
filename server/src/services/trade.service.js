@@ -145,14 +145,16 @@ async function sellCollectionInfo(userId) {
     rows.map(async (r) => ({
       id: r.product_id === null ? r.id : r.product_id,
       user_collection_id: r.id,
-      name: r.p_name,
+      // 优先 user_collections 上源站直取的 name（SQL 层已 COALESCE），
+      // products.name 仅兜底：源站列表实为「赛博铁牛/青川山水…」而非「赛博铁牛盲盒」
+      name: r.name,
       collection_code: r.collection_code,
       total_num: r.total_num,
       count: r.count,
       price: money2(r.price),
       // user_collections 无支付方式列，取该系列最新挂单的 pay_way；无挂单则为 null
       pay_way: await payWayOf(r.product_id),
-      main_image: r.p_main_image || r.p_listimg,
+      main_image: r.main_image || r.listimg || r.p_main_image || r.p_listimg,
     }))
   )
   return { user_collection_list: items }
@@ -194,9 +196,9 @@ function myCollectionRow(r) {
     id: r.id,
     collection_id: r.product_id,
     collection_code: r.collection_code,
-    name: r.p_name,
-    listimg: r.p_listimg,
-    main_image: r.p_main_image,
+    name: r.name,
+    listimg: r.listimg,
+    main_image: r.main_image,
     status: r.status === null ? 0 : r.status,
     has_sold: r.has_sold === null ? 0 : r.has_sold,
     price: money2(r.price),

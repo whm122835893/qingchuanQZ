@@ -1,6 +1,6 @@
 'use strict'
 
-/** 账户 / 地址 / 邀请 路由。login / register 已注册但返回 TODO 响应 */
+/** 账户 / 地址 / 邀请 路由。login 签发真实 JWT；register 建号并生成唯一邀请码 */
 const express = require('express')
 const { wrap } = require('../middleware/wrap')
 const { requireAuth } = require('../middleware/auth')

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-19 02:25:25",
+  "generated_at": "2026-10-19 03:21:51",
   "independence": {
     "reused_pipeline_modules": [],
     "imports": [
@@ -11,14 +11,14 @@
     ],
     "method": "从 MySQL 原稿独立重解析 FK + 独立 LEFT JOIN 核对孤儿行"
   },
-  "db_rows_total": 341,
+  "db_rows_total": 346,
   "schema_parsed_independently": {
-    "tables": 48,
-    "strong_fks": 17,
-    "indexes": 79
+    "tables": 49,
+    "strong_fks": 18,
+    "indexes": 82
   },
   "orphan_audit": {
-    "fk_count": 17,
+    "fk_count": 18,
     "orphan_rows_total": 0,
     "violated_fks": 0,
     "per_fk": [
@@ -61,6 +61,17 @@
         "ref_table": "products",
         "ref_column": "id",
         "name": "fk_user_collections_product_id",
+        "style": "table",
+        "status": "ok",
+        "orphans": 0,
+        "samples": []
+      },
+      {
+        "table": "user_blind_box_records",
+        "column": "user_id",
+        "ref_table": "users",
+        "ref_column": "id",
+        "name": "fk_user_blind_box_records_user_id",
         "style": "table",
         "status": "ok",
         "orphans": 0,
@@ -216,8 +227,8 @@
     "rows": []
   },
   "structure_audit": {
-    "schema_tables": 48,
-    "db_tables": 48,
+    "schema_tables": 49,
+    "db_tables": 49,
     "missing_tables": [],
     "extra_tables": [],
     "column_differences": {},

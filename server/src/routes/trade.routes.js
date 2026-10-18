@@ -1,6 +1,6 @@
 'use strict'
 
-/** 订单 / 寄售 / 委托求购 / 我的藏品 路由。写接口已注册但返回 TODO 响应 */
+/** 订单 / 寄售 / 委托求购 / 我的藏品 路由。写接口 createBegBuyOrder / sell 已实现（含业务级幂等） */
 const express = require('express')
 const { wrap } = require('../middleware/wrap')
 const { requireAuth } = require('../middleware/auth')

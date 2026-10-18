@@ -1,10 +1,10 @@
 {
-  "started_at": "2026-10-19 02:25:24",
+  "started_at": "2026-10-19 03:35:58",
   "database": "sqlite",
   "db_path": "/workspace/qingchuan-h5/data/qingchuan.db",
   "source_mocks": 78,
-  "skipped_mocks": 13,
-  "seeded_mocks": 65,
+  "skipped_mocks": 12,
+  "seeded_mocks": 66,
   "skipped_detail": [
     {
       "file": "afficheList.json",
@@ -17,10 +17,6 @@
     {
       "file": "blindBoxList.json",
       "reason": "空数组，无数据（§8 #77）"
-    },
-    {
-      "file": "blindBoxOpenRecord.json",
-      "reason": "开盒记录列表，无独立表承载；id 与 blindBoxResult 冲突（§8 未列）"
     },
     {
       "file": "blindBoxResult.json",
@@ -93,7 +89,7 @@
     {
       "table": "user_collections",
       "rows": 13,
-      "columns_filled": 29,
+      "columns_filled": 32,
       "phase": "parent"
     },
     {
@@ -190,6 +186,12 @@
       "table": "user_invitation_assists",
       "rows": 2,
       "columns_filled": 10,
+      "phase": "child"
+    },
+    {
+      "table": "user_blind_box_records",
+      "rows": 5,
+      "columns_filled": 13,
       "phase": "child"
     },
     {
@@ -444,6 +446,9 @@
       "product_id",
       "product_id_raw",
       "user_id",
+      "name",
+      "listimg",
+      "main_image",
       "collection_code",
       "collection_code_num",
       "serial_num",
@@ -658,6 +663,21 @@
       "assist_time",
       "is_new_user",
       "is_real",
+      "created_at",
+      "updated_at"
+    ],
+    "user_blind_box_records": [
+      "id",
+      "user_id",
+      "product_id",
+      "product_id_raw",
+      "blind_box_id",
+      "listimg",
+      "name",
+      "collection_code",
+      "rarity_icon",
+      "box_name",
+      "createtime",
       "created_at",
       "updated_at"
     ],
@@ -1019,8 +1039,8 @@
     ]
   },
   "totals": {
-    "tables_seeded": 48,
-    "rows_inserted": 341
+    "tables_seeded": 49,
+    "rows_inserted": 346
   },
   "orphan_rows": [],
   "schema_pending": [
@@ -1058,7 +1078,7 @@
   "fk_normalization": {
     "strategy": "方案X（DATABASE.md §7.1.4）：有效值落 xxx_id，无效值 xxx_id=NULL + xxx_raw 留痕",
     "constraints_enforced_during_seed": true,
-    "strong_fk_count": 17,
+    "strong_fk_count": 18,
     "normalized_columns": [
       {
         "table": "market_listings",
@@ -1243,7 +1263,9 @@
       }
     ],
     "kept_weak_refs": [],
-    "targets_without_parent": []
+    "targets_without_parent": [
+      "user_blind_box_records.product_id"
+    ]
   },
   "validation": {
     "foreign_keys_enforced": true,
@@ -1267,6 +1289,6 @@
       "reason": "源站无数据（0 行），mapper 无可赋值的行"
     }
   },
-  "finished_at": "2026-10-19 02:25:25",
-  "duration_sec": 0.52
+  "finished_at": "2026-10-19 03:35:59",
+  "duration_sec": 0.38
 }

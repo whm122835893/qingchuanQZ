@@ -162,12 +162,15 @@ CREATE TABLE `product_sale_rules` (
 );
 
 DROP TABLE IF EXISTS `user_collections`;
--- 表 user_collections（29 字段）
+-- 表 user_collections（32 字段）
 CREATE TABLE `user_collections` (
   `id` INTEGER NULL,
   `product_id` INTEGER NULL DEFAULT NULL,
   `product_id_raw` TEXT NULL,
   `user_id` INTEGER NULL DEFAULT NULL,
+  `name` TEXT NULL DEFAULT '',
+  `listimg` TEXT NULL DEFAULT '',
+  `main_image` TEXT NULL DEFAULT '',
   `collection_code` TEXT NULL DEFAULT '',
   `collection_code_num` INTEGER NULL,
   `serial_num` INTEGER NOT NULL DEFAULT 0,
@@ -195,6 +198,26 @@ CREATE TABLE `user_collections` (
   `updated_at` INTEGER NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   CONSTRAINT `fk_user_collections_product_id` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+);
+
+DROP TABLE IF EXISTS `user_blind_box_records`;
+-- 表 user_blind_box_records（13 字段）
+CREATE TABLE `user_blind_box_records` (
+  `id` INTEGER NOT NULL,
+  `user_id` INTEGER NULL DEFAULT NULL,
+  `product_id` INTEGER NULL DEFAULT NULL,
+  `product_id_raw` TEXT NULL,
+  `blind_box_id` INTEGER NULL DEFAULT NULL,
+  `listimg` TEXT NULL DEFAULT '',
+  `name` TEXT NULL DEFAULT '',
+  `collection_code` TEXT NULL DEFAULT '',
+  `rarity_icon` TEXT NULL DEFAULT '',
+  `box_name` TEXT NULL DEFAULT '',
+  `createtime` INTEGER NULL DEFAULT 0,
+  `created_at` INTEGER NULL DEFAULT 0,
+  `updated_at` INTEGER NULL DEFAULT 0,
+  PRIMARY KEY (`id`),
+  CONSTRAINT `fk_user_blind_box_records_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 );
 
 DROP TABLE IF EXISTS `collection_flow_records`;
@@ -904,6 +927,9 @@ CREATE INDEX IF NOT EXISTS `idx_uc_user_product` ON `user_collections` (`user_id
 CREATE INDEX IF NOT EXISTS `idx_uc_status` ON `user_collections` (`status`);
 CREATE INDEX IF NOT EXISTS `idx_uc_product` ON `user_collections` (`product_id`, `status`);
 CREATE INDEX IF NOT EXISTS `idx_uc_user_createtime` ON `user_collections` (`user_id`, `createtime` DESC);
+CREATE INDEX IF NOT EXISTS `idx_ubbr_user` ON `user_blind_box_records` (`user_id`, `createtime` DESC);
+CREATE INDEX IF NOT EXISTS `idx_ubbr_product` ON `user_blind_box_records` (`product_id`);
+CREATE INDEX IF NOT EXISTS `idx_ubbr_box` ON `user_blind_box_records` (`blind_box_id`);
 CREATE INDEX IF NOT EXISTS `idx_cfr_code` ON `collection_flow_records` (`collection_code`);
 CREATE INDEX IF NOT EXISTS `idx_cpt_product` ON `collection_price_ticks` (`product_id`);
 CREATE INDEX IF NOT EXISTS `idx_cpt_product_time` ON `collection_price_ticks` (`product_id`, `tick_time` DESC);

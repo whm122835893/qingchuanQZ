@@ -88,9 +88,28 @@ function findListing(id) {
 }
 
 /** 某系列下的挂单列表（seriesGoodsList） */
-function listListingsBySeries(seriesId, goodsType, page) {
-  const where = ['(m.series_id = ? OR m.series_id_raw = ?)']
-  const params = [seriesId, String(seriesId)]
+/**
+ * 系列商品列表（seriesGoodsList）的挂单查询。
+ *
+ * 【参数语义修正】前端实测传 id=236（Market.vue:222 注释「id=236&goodsType=2」，
+ * Index.vue:275 传 item.product.id）——即 id 是 **product_id**，不是 series_id。
+ * 证据：库中 product_id=236 恰好 30 条，与源站 marketGoodsList.json 的 30 条完全吻合；
+ * 而 market_listings.series_id 有 32/33 行为 NULL（源站响应不含该字段），
+ * 按 series_id 过滤恒返回 0 条，市场详情页必然空白。
+ *
+ * 主查 product_id；仅当 product_id 无命中时才回退 series_id，
+ * 以兼容少数传系列 id 的调用点（不臆造，两者皆无结果就返回空）。
+ */
+function listListingsBySeries(id, goodsType, page) {
+  const byProduct = buildListingQuery('m.product_id = ?', id, goodsType, page)
+  if (byProduct.total > 0) return byProduct
+  return buildListingQuery('(m.series_id = ? OR m.series_id_raw = ?)', id, goodsType, page, true)
+}
+
+/** 构造挂单查询：cond 为过滤条件，dual=true 时参数绑定两次（series_id + series_id_raw） */
+function buildListingQuery(cond, id, goodsType, page, dual = false) {
+  const where = [cond]
+  const params = dual ? [id, String(id)] : [id]
   if (goodsType) {
     where.push('(m.goods_type = ? OR m.goods_type IS NULL)')
     params.push(goodsType)

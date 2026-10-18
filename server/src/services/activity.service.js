@@ -2,7 +2,7 @@
 
 /**
  * 活动与玩法域 service：合成 / 转盘 / 签到 / 抽签 / 精选活动。
- * 合成结果写接口（compound/result）本轮不实现，仅返回 TODO 响应。
+ * 合成结果写接口（compound/result）已实现，见 compound-write.service.js。
  */
 const env = require('../config/env')
 const activityRepo = require('../repositories/activity.repository')

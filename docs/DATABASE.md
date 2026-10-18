@@ -4,7 +4,7 @@
 > **状态：已定稿（2026-10-17），A~E 裁决已确认**（详见 §10）
 > 依据：`public/mock/` 下 78 个 JSON（源站 API 真实响应快照）+ `src/api/index.js` 接口清单 + `src/pages/` 105 个页面源码字段消费实测
 > 铁律：字段严格来自 mock 实测；设计新增字段均显式标注「设计新增」
-> 配套建表脚本：`docs/schema.sql`（MySQL 8.0，48 张表）
+> 配套建表脚本：`docs/schema.sql`（MySQL 8.0，49 张表）
 
 ---
 
@@ -55,7 +55,12 @@
 | **F. 数据统计与分销** | 5 | `leaderboard`、`leaderboardUser`、`marketCapRanking`、`masterRank`、`userBuyRank`、`rebate`、`rebateInviteDetail`、`rebateLeaderboard` |
 | **G. 转赠与配置** | 2 | `regiftRecord`、`getConfig`、`index_getConfig`、`sms_getCapt`(不入库) |
 
-**合计 48 张表（4+7+6+14+10+5+2）。**
+**合计 49 张表（4+8+6+14+10+5+2）。**
+
+> v1.4 变更：藏品系列域补建 `user_blind_box_records`（开盒记录流水，
+> 原 `blindBoxOpenRecord.json` 因「无独立表承载」被跳过，导致开盒记录页恒 1 条
+> 而源站实测 5 条）；`user_collections` 补 `name`/`listimg`/`main_image` 三列
+> （源站直取藏品名，此前只能 JOIN products.name 恒显示「赛博铁牛盲盒」）。
 
 ---
 
@@ -1677,7 +1682,7 @@ v1.0 把「源站可能返回 0 或悬空 ID」的所有关联一律建成硬 `F
 
 补充扫描结果：
 - 单引号总数 1538（偶数，全文件配对）；所有 `COMMENT '...'` 内**不含未转义单引号与反斜杠**
-- COMMENT 内的反引号（`` `product_id` ``）与双引号（`"0"`）在 MySQL 单引号串内均为合法字面量，无需转义，**实测 48 表全部解析通过**
+- COMMENT 内的反引号（`` `product_id` ``）与双引号（`"0"`）在 MySQL 单引号串内均为合法字面量，无需转义，**实测 49 表全部解析通过**
 - 强 FK 17 个，父表全部存在且均先于子表创建
 
 ### 11.3 自证二：SQLite 真实执行（后端转换器路径）

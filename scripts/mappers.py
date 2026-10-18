@@ -71,6 +71,7 @@ def build_rows(mocks: dict) -> dict:
     put("product_pool_items", mcatalog.map_product_pool_items(mocks))
     put("product_sale_rules", mcatalog.map_product_sale_rules(mocks))
     put("user_collections", mc.map_user_collections(mocks))
+    put("user_blind_box_records", mc.map_user_blind_box_records(mocks))
     put("collection_flow_records", mflow.map_collection_flow_records(mocks))
     put("collection_price_ticks", mflow.map_collection_price_ticks(mocks))
     put("product_market_stats", mflow.map_product_market_stats(mocks))
