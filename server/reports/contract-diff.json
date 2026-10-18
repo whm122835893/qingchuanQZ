@@ -1,56 +1,20 @@
 {
-  "generated_at": "2026-10-17T18:21:33.098Z",
-  "base_url": "http://localhost:3100",
+  "generated_at": "2026-10-18T15:03:38.017Z",
+  "base_url": "http://localhost:3103",
   "summary": {
     "total_read_endpoints": 62,
-    "aligned": 54,
+    "aligned": 26,
     "no_baseline": 1,
-    "with_diff": 7,
-    "unavailable": 0,
+    "with_diff": 1,
+    "unavailable": 34,
     "todo_endpoints": 7
   },
   "diff_ranked": [
-    {
-      "path": "/crystal_goods/goodsDetail",
-      "missing": 3,
-      "extra": 6,
-      "type_mismatch": 1
-    },
-    {
-      "path": "/crystal_goods/boxDetail",
-      "missing": 3,
-      "extra": 0,
-      "type_mismatch": 1
-    },
-    {
-      "path": "/crystal_goods/collectionDetail",
-      "missing": 3,
-      "extra": 0,
-      "type_mismatch": 1
-    },
     {
       "path": "/market/market/MarketDetail/ids/{id}",
       "missing": 0,
       "extra": 0,
       "type_mismatch": 2
-    },
-    {
-      "path": "/order/order/myConsignment",
-      "missing": 0,
-      "extra": 0,
-      "type_mismatch": 1
-    },
-    {
-      "path": "/box/blind_box/myBox",
-      "missing": 0,
-      "extra": 0,
-      "type_mismatch": 5
-    },
-    {
-      "path": "/box/blind_box/openlog",
-      "missing": 0,
-      "extra": 0,
-      "type_mismatch": 5
     }
   ],
   "endpoints": [
@@ -281,172 +245,121 @@
       "route": "/user/getUserInfo",
       "style": "D",
       "auth_required": true,
-      "http_code": 1,
-      "msg": "ok",
+      "http_code": 401,
+      "msg": "登录已失效，请重新登录",
       "mock": "user.json",
-      "status": "aligned",
-      "missing": [],
-      "extra": [],
-      "type_mismatch": [],
-      "mock_data_is_empty": false,
-      "api_data_is_empty": false
+      "status": "unavailable",
+      "reason": "code=401 msg=登录已失效，请重新登录"
     },
     {
       "path": "/user/address/lists",
       "route": "/user/address/lists",
       "style": "A",
       "auth_required": true,
-      "http_code": 1,
-      "msg": "ok",
+      "http_code": 401,
+      "msg": "登录已失效，请重新登录",
       "mock": "addressList.json",
-      "status": "aligned",
-      "missing": [],
-      "extra": [],
-      "type_mismatch": [],
-      "mock_data_is_empty": false,
-      "api_data_is_empty": false
+      "status": "unavailable",
+      "reason": "code=401 msg=登录已失效，请重新登录"
     },
     {
       "path": "/order/order/orderList",
       "route": "/order/order/orderList",
       "style": "B",
       "auth_required": true,
-      "http_code": 1,
-      "msg": "ok",
+      "http_code": 401,
+      "msg": "登录已失效，请重新登录",
       "mock": "orderList.json",
-      "status": "aligned",
-      "missing": [],
-      "extra": [],
-      "type_mismatch": [],
-      "mock_data_is_empty": false,
-      "api_data_is_empty": false
+      "status": "unavailable",
+      "reason": "code=401 msg=登录已失效，请重新登录"
     },
     {
       "path": "/order/order/saleMarketOrderDetail",
       "route": "/order/order/saleMarketOrderDetail",
       "style": "D",
       "auth_required": true,
-      "http_code": 1,
-      "msg": "ok",
+      "http_code": 401,
+      "msg": "登录已失效，请重新登录",
       "mock": "orderDetail.json（与 begBuyOrderInfo 共用同一文件）",
-      "status": "aligned",
-      "missing": [],
-      "extra": [],
-      "type_mismatch": [],
-      "mock_data_is_empty": false,
-      "api_data_is_empty": false
+      "status": "unavailable",
+      "reason": "code=401 msg=登录已失效，请重新登录"
     },
     {
       "path": "/order/order/myConsignment",
       "route": "/order/order/myConsignment",
       "style": "C",
       "auth_required": true,
-      "http_code": 1,
-      "msg": "ok",
+      "http_code": 401,
+      "msg": "登录已失效，请重新登录",
       "mock": "myConsignment.json",
-      "status": "diff",
-      "missing": [],
-      "extra": [],
-      "type_mismatch": [
-        {
-          "path": "data[].collection_code",
-          "mock": "string",
-          "api": "null"
-        }
-      ],
-      "mock_data_is_empty": false,
-      "api_data_is_empty": false,
-      "reason": "data[].collection_code：market_listings 33 行中仅 1 行有 collection_id，且其 user_collections(5712041).collection_code 为 NULL，编号无数据来源；mock 的 \"QC88231\" 系样例值。"
+      "status": "unavailable",
+      "reason": "code=401 msg=登录已失效，请重新登录"
     },
     {
       "path": "/market/trade/begBuyOrderList",
       "route": "/market/trade/begBuyOrderList",
       "style": "C",
       "auth_required": true,
-      "http_code": 1,
-      "msg": "ok",
+      "http_code": 401,
+      "msg": "登录已失效，请重新登录",
       "mock": "entrustList.json",
-      "status": "aligned",
-      "missing": [],
-      "extra": [],
-      "type_mismatch": [],
-      "mock_data_is_empty": false,
-      "api_data_is_empty": false
+      "status": "unavailable",
+      "reason": "code=401 msg=登录已失效，请重新登录"
     },
     {
       "path": "/market/trade/begBuyOrderInfo",
       "route": "/market/trade/begBuyOrderInfo",
       "style": "D",
       "auth_required": true,
-      "http_code": 1,
-      "msg": "ok",
+      "http_code": 401,
+      "msg": "登录已失效，请重新登录",
       "mock": "orderDetail.json",
-      "status": "aligned",
-      "missing": [],
-      "extra": [],
-      "type_mismatch": [],
-      "mock_data_is_empty": false,
-      "api_data_is_empty": false
+      "status": "unavailable",
+      "reason": "code=401 msg=登录已失效，请重新登录"
     },
     {
       "path": "/market/trade/getSellCollectionInfo",
       "route": "/market/trade/getSellCollectionInfo",
       "style": "D",
       "auth_required": true,
-      "http_code": 1,
-      "msg": "ok",
+      "http_code": 401,
+      "msg": "登录已失效，请重新登录",
       "mock": "userCollectionList.json",
-      "status": "aligned",
-      "missing": [],
-      "extra": [],
-      "type_mismatch": [],
-      "mock_data_is_empty": false,
-      "api_data_is_empty": false
+      "status": "unavailable",
+      "reason": "code=401 msg=登录已失效，请重新登录"
     },
     {
       "path": "/market/trade/userCollectionList",
       "route": "/market/trade/userCollectionList",
       "style": "C",
       "auth_required": true,
-      "http_code": 1,
-      "msg": "ok",
+      "http_code": 401,
+      "msg": "登录已失效，请重新登录",
       "mock": "myCollectionList.json",
-      "status": "aligned",
-      "missing": [],
-      "extra": [],
-      "type_mismatch": [],
-      "mock_data_is_empty": false,
-      "api_data_is_empty": false
+      "status": "unavailable",
+      "reason": "code=401 msg=登录已失效，请重新登录"
     },
     {
       "path": "/market/trade/collectionInfo",
       "route": "/market/trade/collectionInfo",
       "style": "D",
       "auth_required": true,
-      "http_code": 1,
-      "msg": "ok",
+      "http_code": 401,
+      "msg": "登录已失效，请重新登录",
       "mock": "myCollectionDetail.json",
-      "status": "aligned",
-      "missing": [],
-      "extra": [],
-      "type_mismatch": [],
-      "mock_data_is_empty": false,
-      "api_data_is_empty": false
+      "status": "unavailable",
+      "reason": "code=401 msg=登录已失效，请重新登录"
     },
     {
       "path": "/market/trade/flowDoc",
       "route": "/market/trade/flowDoc",
       "style": "A",
       "auth_required": true,
-      "http_code": 1,
-      "msg": "ok",
+      "http_code": 401,
+      "msg": "登录已失效，请重新登录",
       "mock": "flowDoc.json",
-      "status": "aligned",
-      "missing": [],
-      "extra": [],
-      "type_mismatch": [],
-      "mock_data_is_empty": false,
-      "api_data_is_empty": false
+      "status": "unavailable",
+      "reason": "code=401 msg=登录已失效，请重新登录"
     },
     {
       "path": "/market/trade/collectionDetail",
@@ -483,214 +396,88 @@
       "route": "/crystal_goods/crystalList",
       "style": "D",
       "auth_required": true,
-      "http_code": 1,
-      "msg": "ok",
+      "http_code": 401,
+      "msg": "登录已失效，请重新登录",
       "mock": "shopList.json",
-      "status": "aligned",
-      "missing": [],
-      "extra": [],
-      "type_mismatch": [],
-      "mock_data_is_empty": false,
-      "api_data_is_empty": false
+      "status": "unavailable",
+      "reason": "code=401 msg=登录已失效，请重新登录"
     },
     {
       "path": "/crystal_goods/goodsDetail",
       "route": "/crystal_goods/goodsDetail",
       "style": "D",
       "auth_required": true,
-      "http_code": 1,
-      "msg": "ok",
+      "http_code": 401,
+      "msg": "登录已失效，请重新登录",
       "mock": "shopGoodsDetail.json",
-      "status": "diff",
-      "missing": [
-        "product.publisher.name",
-        "product.publisher.user",
-        "product.publisher.user.nickname"
-      ],
-      "extra": [
-        "product.collectionlist[].id",
-        "product.collectionlist[].name",
-        "product.collectionlist[].probability",
-        "product.collectionlist[].show_total_num",
-        "product.collectionlist[].listimg",
-        "product.collectionlist[].rarity_icon"
-      ],
-      "type_mismatch": [
-        {
-          "path": "product.publisher",
-          "mock": "object",
-          "api": "null"
-        }
-      ],
-      "mock_data_is_empty": false,
-      "api_data_is_empty": false,
-      "reason": "product.publisher：shop_goods 无发行方列，库中也不存在与 shop_goods 同 id 的 products 行，无数据来源；collectionlist 的 6 个 extra 是因为 mock 该商品 collectionlist 为空数组而库中 101 号商品有概率池（product_pool_items / shop_goods.pool_items 实有数据）。"
+      "status": "unavailable",
+      "reason": "code=401 msg=登录已失效，请重新登录"
     },
     {
       "path": "/crystal_goods/boxDetail",
       "route": "/crystal_goods/boxDetail",
       "style": "D",
       "auth_required": true,
-      "http_code": 1,
-      "msg": "ok",
+      "http_code": 401,
+      "msg": "登录已失效，请重新登录",
       "mock": "shopBoxDetail.json",
-      "status": "diff",
-      "missing": [
-        "product.publisher.name",
-        "product.publisher.user",
-        "product.publisher.user.nickname"
-      ],
-      "extra": [],
-      "type_mismatch": [
-        {
-          "path": "product.publisher",
-          "mock": "object",
-          "api": "null"
-        }
-      ],
-      "mock_data_is_empty": false,
-      "api_data_is_empty": false,
-      "reason": "product.publisher：同 goodsDetail，shop_goods 无发行方列，无数据来源。"
+      "status": "unavailable",
+      "reason": "code=401 msg=登录已失效，请重新登录"
     },
     {
       "path": "/crystal_goods/collectionDetail",
       "route": "/crystal_goods/collectionDetail",
       "style": "D",
       "auth_required": true,
-      "http_code": 1,
-      "msg": "ok",
+      "http_code": 401,
+      "msg": "登录已失效，请重新登录",
       "mock": "shopCollectionDetail.json",
-      "status": "diff",
-      "missing": [
-        "product.publisher.name",
-        "product.publisher.user",
-        "product.publisher.user.nickname"
-      ],
-      "extra": [],
-      "type_mismatch": [
-        {
-          "path": "product.publisher",
-          "mock": "object",
-          "api": "null"
-        }
-      ],
-      "mock_data_is_empty": false,
-      "api_data_is_empty": false,
-      "reason": "product.publisher：同 goodsDetail，shop_goods 无发行方列，无数据来源。"
+      "status": "unavailable",
+      "reason": "code=401 msg=登录已失效，请重新登录"
     },
     {
       "path": "/crystal_goods/exchangeRecord",
       "route": "/crystal_goods/exchangeRecord",
       "style": "A",
       "auth_required": true,
-      "http_code": 1,
-      "msg": "ok",
+      "http_code": 401,
+      "msg": "登录已失效，请重新登录",
       "mock": "shopExchangeRecord.json",
-      "status": "aligned",
-      "missing": [],
-      "extra": [],
-      "type_mismatch": [],
-      "mock_data_is_empty": false,
-      "api_data_is_empty": false
+      "status": "unavailable",
+      "reason": "code=401 msg=登录已失效，请重新登录"
     },
     {
       "path": "/crystal_goods/crystalDetail",
       "route": "/crystal_goods/crystalDetail",
       "style": "A",
       "auth_required": true,
-      "http_code": 1,
-      "msg": "ok",
+      "http_code": 401,
+      "msg": "登录已失效，请重新登录",
       "mock": "shopCrystalDetail.json",
-      "status": "aligned",
-      "missing": [],
-      "extra": [],
-      "type_mismatch": [],
-      "mock_data_is_empty": false,
-      "api_data_is_empty": false
+      "status": "unavailable",
+      "reason": "code=401 msg=登录已失效，请重新登录"
     },
     {
       "path": "/box/blind_box/myBox",
       "route": "/box/blind_box/myBox",
       "style": "D",
       "auth_required": true,
-      "http_code": 1,
-      "msg": "ok",
+      "http_code": 401,
+      "msg": "登录已失效，请重新登录",
       "mock": "blindBoxMyBox.json",
-      "status": "diff",
-      "missing": [],
-      "extra": [],
-      "type_mismatch": [
-        {
-          "path": "name",
-          "mock": "string",
-          "api": "null"
-        },
-        {
-          "path": "listimg",
-          "mock": "string",
-          "api": "null"
-        },
-        {
-          "path": "main_image",
-          "mock": "string",
-          "api": "null"
-        },
-        {
-          "path": "rarity_icon",
-          "mock": "string",
-          "api": "null"
-        },
-        {
-          "path": "product_id",
-          "mock": "number",
-          "api": "null"
-        }
-      ],
-      "mock_data_is_empty": false,
-      "api_data_is_empty": false,
-      "reason": "name/listimg/main_image/rarity_icon/product_id：user_collections 中唯一 blind_box_id 非空的行(55012)其 product_id 为 NULL（悬空引用），无从取商品信息；返回部分字段而非崩溃。"
+      "status": "unavailable",
+      "reason": "code=401 msg=登录已失效，请重新登录"
     },
     {
       "path": "/box/blind_box/openlog",
       "route": "/box/blind_box/openlog",
       "style": "A",
       "auth_required": true,
-      "http_code": 1,
-      "msg": "ok",
+      "http_code": 401,
+      "msg": "登录已失效，请重新登录",
       "mock": "blindBoxOpenRecord.json",
-      "status": "diff",
-      "missing": [],
-      "extra": [],
-      "type_mismatch": [
-        {
-          "path": "[].listimg",
-          "mock": "string",
-          "api": "null"
-        },
-        {
-          "path": "[].name",
-          "mock": "string",
-          "api": "null"
-        },
-        {
-          "path": "[].collection_code",
-          "mock": "string",
-          "api": "null"
-        },
-        {
-          "path": "[].rarity_icon",
-          "mock": "string",
-          "api": "null"
-        },
-        {
-          "path": "[].box_name",
-          "mock": "string",
-          "api": "null"
-        }
-      ],
-      "mock_data_is_empty": false,
-      "api_data_is_empty": false,
-      "reason": "同 myBox：开盒记录关联的 user_collections.product_id 为 NULL，商品名/图/编号/稀有度图标无来源。"
+      "status": "unavailable",
+      "reason": "code=401 msg=登录已失效，请重新登录"
     },
     {
       "path": "/compound/compound/list",
@@ -727,15 +514,11 @@
       "route": "/compound/compound/record",
       "style": "A",
       "auth_required": true,
-      "http_code": 1,
-      "msg": "ok",
+      "http_code": 401,
+      "msg": "登录已失效，请重新登录",
       "mock": "compoundRecord.json",
-      "status": "aligned",
-      "missing": [],
-      "extra": [],
-      "type_mismatch": [],
-      "mock_data_is_empty": false,
-      "api_data_is_empty": false
+      "status": "unavailable",
+      "reason": "code=401 msg=登录已失效，请重新登录"
     },
     {
       "path": "/lottery/lottery/info",
@@ -757,15 +540,11 @@
       "route": "/lottery/lottery/record",
       "style": "A",
       "auth_required": true,
-      "http_code": 1,
-      "msg": "ok",
+      "http_code": 401,
+      "msg": "登录已失效，请重新登录",
       "mock": "lotteryRecord.json",
-      "status": "aligned",
-      "missing": [],
-      "extra": [],
-      "type_mismatch": [],
-      "mock_data_is_empty": false,
-      "api_data_is_empty": false
+      "status": "unavailable",
+      "reason": "code=401 msg=登录已失效，请重新登录"
     },
     {
       "path": "/lottery/lottery/rule",
@@ -787,45 +566,33 @@
       "route": "/sign/index/info",
       "style": "D",
       "auth_required": true,
-      "http_code": 1,
-      "msg": "ok",
+      "http_code": 401,
+      "msg": "登录已失效，请重新登录",
       "mock": "signInfo.json",
-      "status": "aligned",
-      "missing": [],
-      "extra": [],
-      "type_mismatch": [],
-      "mock_data_is_empty": false,
-      "api_data_is_empty": false
+      "status": "unavailable",
+      "reason": "code=401 msg=登录已失效，请重新登录"
     },
     {
       "path": "/invitation/invitation/info",
       "route": "/invitation/invitation/info",
       "style": "D",
       "auth_required": true,
-      "http_code": 1,
-      "msg": "ok",
+      "http_code": 401,
+      "msg": "登录已失效，请重新登录",
       "mock": "invitationInfo.json",
-      "status": "aligned",
-      "missing": [],
-      "extra": [],
-      "type_mismatch": [],
-      "mock_data_is_empty": false,
-      "api_data_is_empty": false
+      "status": "unavailable",
+      "reason": "code=401 msg=登录已失效，请重新登录"
     },
     {
       "path": "/invitation/invitation/record",
       "route": "/invitation/invitation/record",
       "style": "C",
       "auth_required": true,
-      "http_code": 1,
-      "msg": "ok",
+      "http_code": 401,
+      "msg": "登录已失效，请重新登录",
       "mock": "invitationRecord.json",
-      "status": "aligned",
-      "missing": [],
-      "extra": [],
-      "type_mismatch": [],
-      "mock_data_is_empty": false,
-      "api_data_is_empty": false
+      "status": "unavailable",
+      "reason": "code=401 msg=登录已失效，请重新登录"
     },
     {
       "path": "/activity/draw/info",
@@ -847,75 +614,55 @@
       "route": "/activity/draw/record",
       "style": "A",
       "auth_required": true,
-      "http_code": 1,
-      "msg": "ok",
+      "http_code": 401,
+      "msg": "登录已失效，请重新登录",
       "mock": "activityRecord.json",
-      "status": "aligned",
-      "missing": [],
-      "extra": [],
-      "type_mismatch": [],
-      "mock_data_is_empty": false,
-      "api_data_is_empty": false
+      "status": "unavailable",
+      "reason": "code=401 msg=登录已失效，请重新登录"
     },
     {
       "path": "/draw/drawResult/result",
       "route": "/draw/drawResult/result",
       "style": "D",
       "auth_required": true,
-      "http_code": 1,
-      "msg": "ok",
+      "http_code": 401,
+      "msg": "登录已失效，请重新登录",
       "mock": "drawResult.json",
-      "status": "aligned",
-      "missing": [],
-      "extra": [],
-      "type_mismatch": [],
-      "mock_data_is_empty": false,
-      "api_data_is_empty": false
+      "status": "unavailable",
+      "reason": "code=401 msg=登录已失效，请重新登录"
     },
     {
       "path": "/draw/Leaderboard/list",
       "route": "/draw/Leaderboard/list",
       "style": "D",
       "auth_required": true,
-      "http_code": 1,
-      "msg": "ok",
+      "http_code": 401,
+      "msg": "登录已失效，请重新登录",
       "mock": "drawLeaderboard.json",
-      "status": "aligned",
-      "missing": [],
-      "extra": [],
-      "type_mismatch": [],
-      "mock_data_is_empty": false,
-      "api_data_is_empty": false
+      "status": "unavailable",
+      "reason": "code=401 msg=登录已失效，请重新登录"
     },
     {
       "path": "/draw/communityShare/info",
       "route": "/draw/communityShare/info",
       "style": "D",
       "auth_required": true,
-      "http_code": 1,
-      "msg": "ok",
+      "http_code": 401,
+      "msg": "登录已失效，请重新登录",
       "mock": "communityShare.json",
-      "status": "aligned",
-      "missing": [],
-      "extra": [],
-      "type_mismatch": [],
-      "mock_data_is_empty": false,
-      "api_data_is_empty": false
+      "status": "unavailable",
+      "reason": "code=401 msg=登录已失效，请重新登录"
     },
     {
       "path": "/draw/InvitationFriendAssist/info",
       "route": "/draw/InvitationFriendAssist/info",
       "style": "D",
       "auth_required": true,
-      "http_code": 1,
-      "msg": "ok",
+      "http_code": 401,
+      "msg": "登录已失效，请重新登录",
       "mock": "invitationAssist.json",
-      "status": "aligned",
-      "missing": [],
-      "extra": [],
-      "type_mismatch": [],
-      "mock_data_is_empty": false,
-      "api_data_is_empty": false
+      "status": "unavailable",
+      "reason": "code=401 msg=登录已失效，请重新登录"
     },
     {
       "path": "/activeSelected/list",
@@ -952,45 +699,33 @@
       "route": "/rebate/rebate/index",
       "style": "D",
       "auth_required": true,
-      "http_code": 1,
-      "msg": "ok",
+      "http_code": 401,
+      "msg": "登录已失效，请重新登录",
       "mock": "rebate.json",
-      "status": "aligned",
-      "missing": [],
-      "extra": [],
-      "type_mismatch": [],
-      "mock_data_is_empty": false,
-      "api_data_is_empty": false
+      "status": "unavailable",
+      "reason": "code=401 msg=登录已失效，请重新登录"
     },
     {
       "path": "/rebate/rebate/leaderboard",
       "route": "/rebate/rebate/leaderboard",
       "style": "A",
       "auth_required": true,
-      "http_code": 1,
-      "msg": "ok",
+      "http_code": 401,
+      "msg": "登录已失效，请重新登录",
       "mock": "rebateLeaderboard.json",
-      "status": "aligned",
-      "missing": [],
-      "extra": [],
-      "type_mismatch": [],
-      "mock_data_is_empty": false,
-      "api_data_is_empty": false
+      "status": "unavailable",
+      "reason": "code=401 msg=登录已失效，请重新登录"
     },
     {
       "path": "/rebate/rebate/inviteDetail",
       "route": "/rebate/rebate/inviteDetail",
       "style": "A",
       "auth_required": true,
-      "http_code": 1,
-      "msg": "ok",
+      "http_code": 401,
+      "msg": "登录已失效，请重新登录",
       "mock": "rebateInviteDetail.json",
-      "status": "aligned",
-      "missing": [],
-      "extra": [],
-      "type_mismatch": [],
-      "mock_data_is_empty": false,
-      "api_data_is_empty": false
+      "status": "unavailable",
+      "reason": "code=401 msg=登录已失效，请重新登录"
     },
     {
       "path": "/rank/masterRank/list",
@@ -1042,15 +777,11 @@
       "route": "/leaderboard/leaderboard/user",
       "style": "D",
       "auth_required": true,
-      "http_code": 1,
-      "msg": "ok",
+      "http_code": 401,
+      "msg": "登录已失效，请重新登录",
       "mock": "leaderboardUser.json",
-      "status": "aligned",
-      "missing": [],
-      "extra": [],
-      "type_mismatch": [],
-      "mock_data_is_empty": false,
-      "api_data_is_empty": false
+      "status": "unavailable",
+      "reason": "code=401 msg=登录已失效，请重新登录"
     },
     {
       "path": "/marketCapRanking/marketCapRanking/list",
@@ -1087,15 +818,11 @@
       "route": "/regift/record/list",
       "style": "A",
       "auth_required": true,
-      "http_code": 1,
-      "msg": "ok",
+      "http_code": 401,
+      "msg": "登录已失效，请重新登录",
       "mock": "regiftRecord.json",
-      "status": "aligned",
-      "missing": [],
-      "extra": [],
-      "type_mismatch": [],
-      "mock_data_is_empty": false,
-      "api_data_is_empty": false
+      "status": "unavailable",
+      "reason": "code=401 msg=登录已失效，请重新登录"
     }
   ],
   "todo_endpoints": [
@@ -1113,33 +840,33 @@
     },
     {
       "path": "/market/trade/createBegBuyOrder",
-      "http_code": 1,
-      "marked_todo": true,
-      "data_shape_ok": true
+      "http_code": 401,
+      "marked_todo": false,
+      "data_shape_ok": false
     },
     {
       "path": "/market/trade/sell",
-      "http_code": 1,
-      "marked_todo": true,
-      "data_shape_ok": true
+      "http_code": 401,
+      "marked_todo": false,
+      "data_shape_ok": false
     },
     {
       "path": "/user_collection/user_collection/openbox",
-      "http_code": 1,
-      "marked_todo": true,
-      "data_shape_ok": true
+      "http_code": 401,
+      "marked_todo": false,
+      "data_shape_ok": false
     },
     {
       "path": "/user_collection/user_collection/openboxone",
-      "http_code": 1,
-      "marked_todo": true,
-      "data_shape_ok": true
+      "http_code": 401,
+      "marked_todo": false,
+      "data_shape_ok": false
     },
     {
       "path": "/compound/compound/result",
-      "http_code": 1,
-      "marked_todo": true,
-      "data_shape_ok": true
+      "http_code": 401,
+      "marked_todo": false,
+      "data_shape_ok": false
     }
   ]
 }

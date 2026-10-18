@@ -28,6 +28,22 @@ STYLE_DESC = {
 DOMAIN_ORDER = ['A 用户与账户', 'B 藏品与系列', 'C 交易与订单', 'D 活动与玩法',
                 'E 内容社区', 'F 统计分销', 'G 转赠与配置']
 
+# 写接口幂等口径（与 server/src/utils/idempotency-window.js、
+# server/src/repositories/idempotency.repository.js 保持一致）。
+# 元组：(幂等键, 终态条件, 时间窗, 重复提交返回)
+IDEMPOTENCY = {
+    '/market/trade/createBegBuyOrder': (
+        'user_id + product_id + price + number', '`order_status = 2` 委托中', '60s', '`code:1` + 已有单'),
+    '/market/trade/sell': (
+        'user_id + collection_id', '挂单 `status = 1` 寄售中', '无', '`code:1` + 已有挂单'),
+    '/user_collection/user_collection/openbox': (
+        'user_id + blind_box_id', '窗口内有产出藏品', '60s', '`code:1` + 已开结果'),
+    '/user_collection/user_collection/openboxone': (
+        'user_id + blind_box_id', '窗口内有产出藏品', '60s', '`code:1` + 已开结果'),
+    '/user/register': (
+        '`mobile`', '手机号唯一', '—', '**409**（真实冲突）'),
+}
+
 
 def read_source():
     """从 src/api/index.js 提取真实路径集合（不依赖元数据，交叉验证用）"""
@@ -57,7 +73,7 @@ def gen_overview(used, mm, fns):
     i = 0
     for _, path, m in rows:
         i += 1
-        w = '写' if m['impl'] == 'todo' else '读'
+        w = '写' if m.get('kind') == 'write' else '读'
         st = '✅ 已设计' if m['impl'] == 'done' else '⚠️ TODO 待实现'
         cs = '活跃' if path in used else '**仅登记**'
         L.append('| %d | `%s` | %s | %s | %s | %s | %s | %s | %s | `%s` |' % (
@@ -70,7 +86,7 @@ def gen_overview(used, mm, fns):
 # ---------------------------------------------------------------- 详情
 def gen_detail(path, m):
     L = []
-    w = '写' if m['impl'] == 'todo' else '读'
+    w = '写' if m.get('kind') == 'write' else '读'
     L.append('### %s `%s`' % (path, path))
     L.append('')
     L.append('- **方法**：`%s`' % m['method'])
@@ -138,8 +154,9 @@ def build_md(used, mm, fns):
     P.append('| 本文档覆盖路径 | **%d** |' % total)
     P.append('| 其中活跃（有 api 函数调用） | %d |' % len([p for p in E if p in used]))
     P.append('| 其中仅 MOCK_MAP 登记（无函数调用） | %d |' % len([p for p in E if p not in used]))
-    P.append('| 读接口 | %d |' % len([p for p, m in E.items() if m['impl'] == 'done']))
-    P.append('| 写接口（本轮 TODO） | %d |' % len([p for p, m in E.items() if m['impl'] == 'todo']))
+    P.append('| 读接口 | %d |' % len([p for p, m in E.items() if m.get('kind') != 'write']))
+    P.append('| 写接口 | %d |' % len([p for p, m in E.items() if m.get('kind') == 'write']))
+    P.append('| 写接口待实现 | %d |' % len([p for p, m in E.items() if m['impl'] == 'todo']))
     P.append('')
     P.append('> **提交口径为 112 个接口，实测为 %d 条**。差异根因与证据见 `ARCHITECTURE.md` §0。'
              % total)
@@ -166,6 +183,31 @@ def build_md(used, mm, fns):
         for p in extra:
             P.append('- `%s`' % p)
         P.append('')
+
+    # 幂等口径：写接口的重复提交防护。放在生成器里而非手写 API.md，避免文档与实现漂移。
+    writes = sorted((p for p, m in E.items() if m.get('kind') == 'write'))
+    if writes:
+        P.append('### 0.3 写接口幂等口径')
+        P.append('')
+        P.append('同一用户 + 同一业务意图 + 同一关键参数，在**未终结状态**下重复提交，'
+                 '返回已有记录而非新建。查重与写入在同一事务内完成。')
+        P.append('')
+        P.append('| 接口 | 幂等键 | 终态条件 | 时间窗 | 重复提交返回 |')
+        P.append('|---|---|---|---|---|')
+        for p in writes:
+            idem = IDEMPOTENCY.get(p)
+            if not idem:
+                continue
+            P.append('| `%s` | `%s` | %s | %s | %s |' % (
+                p, idem[0], idem[1], idem[2], idem[3]))
+        P.append('')
+        P.append('> **不依赖 `order_sn`**：前端从不传该字段（源站契约亦无），'
+                 '早期实现因此完全失效——重复点击产生多笔在途委托单。')
+        P.append('> **时间窗60s**：覆盖客户端退避重试、弱网往返与用户手动重试；'
+                 '改价后 `price` 变化即换键，不受窗口影响。'
+                 '`/user/register` 例外——重复手机号是真实冲突，返回 409 而非已有记录。')
+        P.append('')
+
     P.append('---')
     P.append('')
     P.append('## 1. 接口总览表')

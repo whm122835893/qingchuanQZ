@@ -12,10 +12,11 @@
 | 指标 | 数量 |
 |---|---|
 | 本文档覆盖路径 | **69** |
-| 其中活跃（有 api 函数调用） | 58 |
-| 其中仅 MOCK_MAP 登记（无函数调用） | 11 |
-| 读接口 | 62 |
-| 写接口（本轮 TODO） | 7 |
+| 其中活跃（有 api 函数调用） | 69 |
+| 其中仅 MOCK_MAP 登记（无函数调用） | 0 |
+| 读接口 | 63 |
+| 写接口 | 6 |
+| 写接口待实现 | 0 |
 
 > **提交口径为 112 个接口，实测为 69 条**。差异根因与证据见 `ARCHITECTURE.md` §0。
 > 简单说：65 次 `request()` 调用去重后 58 条活跃路径，加上 MOCK_MAP 已登记但当前无函数调用的 12 条，构成 69 条并集。
@@ -38,6 +39,21 @@
 
 - `/addons_diypage_index`
 
+### 0.3 写接口幂等口径
+
+同一用户 + 同一业务意图 + 同一关键参数，在**未终结状态**下重复提交，返回已有记录而非新建。查重与写入在同一事务内完成。
+
+| 接口 | 幂等键 | 终态条件 | 时间窗 | 重复提交返回 |
+|---|---|---|---|---|
+| `/market/trade/createBegBuyOrder` | `user_id + product_id + price + number` | `order_status = 2` 委托中 | 60s | `code:1` + 已有单 |
+| `/market/trade/sell` | `user_id + collection_id` | 挂单 `status = 1` 寄售中 | 无 | `code:1` + 已有挂单 |
+| `/user/register` | ``mobile`` | 手机号唯一 | — | **409**（真实冲突） |
+| `/user_collection/user_collection/openbox` | `user_id + blind_box_id` | 窗口内有产出藏品 | 60s | `code:1` + 已开结果 |
+| `/user_collection/user_collection/openboxone` | `user_id + blind_box_id` | 窗口内有产出藏品 | 60s | `code:1` + 已开结果 |
+
+> **不依赖 `order_sn`**：前端从不传该字段（源站契约亦无），早期实现因此完全失效——重复点击产生多笔在途委托单。
+> **时间窗60s**：覆盖客户端退避重试、弱网往返与用户手动重试；改价后 `price` 变化即换键，不受窗口影响。`/user/register` 例外——重复手机号是真实冲突，返回 409 而非已有记录。
+
 ---
 
 ## 1. 接口总览表
@@ -49,23 +65,23 @@
 | 3 | `/invitation/invitation/record` | POST | A 用户与账户 | 读 | ✅ 已设计 | C. 精简分页 | 是 | 活跃 | `invitationRecord.json` |
 | 4 | `/user/address/lists` | POST | A 用户与账户 | 读 | ✅ 已设计 | A. 裸数组 | 是 | 活跃 | `addressList.json` |
 | 5 | `/user/getUserInfo` | POST | A 用户与账户 | 读 | ✅ 已设计 | D. 单对象 | 是 | 活跃 | `user.json` |
-| 6 | `/user/login` | POST | A 用户与账户 | 写 | ⚠️ TODO 待实现 | D. 单对象 | 否 | 活跃 | `user.json（与getUserInfo 共用）` |
-| 7 | `/user/register` | POST | A 用户与账户 | 写 | ⚠️ TODO 待实现 | D. 单对象 | 否 | 活跃 | `user.json` |
+| 6 | `/user/login` | POST | A 用户与账户 | 写 | ✅ 已设计 | D. 单对象 | 否 | 活跃 | `user.json（与getUserInfo 共用）` |
+| 7 | `/user/register` | POST | A 用户与账户 | 写 | ✅ 已设计 | D. 单对象 | 否 | 活跃 | `user.json` |
 | 8 | `/index/getSeries` | POST | B 藏品与系列 | 读 | ✅ 已设计 | A. 裸数组 | 否 | 活跃 | `series-10.json（pid 变体：series-10-pid.json）` |
 | 9 | `/market/market/seriesGoodsList` | POST | B 藏品与系列 | 读 | ✅ 已设计 | E. 嵌套混合 | 否 | 活跃 | `marketGoodsList.json` |
 | 10 | `/market/trade/collectionInfo` | POST | B 藏品与系列 | 读 | ✅ 已设计 | D. 单对象 | 是 | 活跃 | `myCollectionDetail.json` |
 | 11 | `/market/trade/userCollectionList` | POST | B 藏品与系列 | 读 | ✅ 已设计 | C. 精简分页 | 是 | 活跃 | `myCollectionList.json` |
 | 12 | `/product/product/detail` | POST | B 藏品与系列 | 读 | ✅ 已设计 | D. 单对象 | 否 | 活跃 | `productDetail.json` |
 | 13 | `/product/product/rule` | POST | B 藏品与系列 | 读 | ✅ 已设计 | D. 单对象 | 否 | 活跃 | `productRule.json` |
-| 14 | `/kline/info/detail` | POST | C 交易与订单 | 读 | ✅ 已设计 | D. 单对象 | 否 | **仅登记** | `klineInfo.json` |
+| 14 | `/kline/info/detail` | POST | C 交易与订单 | 读 | ✅ 已设计 | D. 单对象 | 否 | 活跃 | `klineInfo.json` |
 | 15 | `/market/market/MarketDetail/ids/{id}` | POST | C 交易与订单 | 读 | ✅ 已设计 | D. 单对象 | 否 | 活跃 | `marketDetail.json` |
 | 16 | `/market/market/getMarketList` | POST | C 交易与订单 | 读 | ✅ 已设计 | A. 裸数组 | 否 | 活跃 | `marketList.json` |
 | 17 | `/market/trade/begBuyOrderInfo` | POST | C 交易与订单 | 读 | ✅ 已设计 | D. 单对象 | 是 | 活跃 | `orderDetail.json` |
 | 18 | `/market/trade/begBuyOrderList` | POST | C 交易与订单 | 读 | ✅ 已设计 | C. 精简分页 | 是 | 活跃 | `entrustList.json` |
 | 19 | `/market/trade/collectionDetail` | POST | C 交易与订单 | 读 | ✅ 已设计 | D. 单对象 | 否 | 活跃 | `sellInfo.json` |
-| 20 | `/market/trade/createBegBuyOrder` | POST | C 交易与订单 | 写 | ⚠️ TODO 待实现 | D. 单对象 | 是 | 活跃 | `（无）` |
+| 20 | `/market/trade/createBegBuyOrder` | POST | C 交易与订单 | 写 | ✅ 已设计 | D. 单对象 | 是 | 活跃 | `（无）` |
 | 21 | `/market/trade/getSellCollectionInfo` | POST | C 交易与订单 | 读 | ✅ 已设计 | D. 单对象 | 是 | 活跃 | `userCollectionList.json` |
-| 22 | `/market/trade/sell` | POST | C 交易与订单 | 写 | ⚠️ TODO 待实现 | D. 单对象 | 是 | 活跃 | `（无）` |
+| 22 | `/market/trade/sell` | POST | C 交易与订单 | 写 | ✅ 已设计 | D. 单对象 | 是 | 活跃 | `（无）` |
 | 23 | `/order/order/myConsignment` | POST | C 交易与订单 | 读 | ✅ 已设计 | C. 精简分页 | 是 | 活跃 | `myConsignment.json` |
 | 24 | `/order/order/orderList` | POST | C 交易与订单 | 读 | ✅ 已设计 | B. 标准分页 | 是 | 活跃 | `orderList.json` |
 | 25 | `/order/order/saleMarketOrderDetail` | POST | C 交易与订单 | 读 | ✅ 已设计 | D. 单对象 | 是 | 活跃 | `orderDetail.json（与 begBuyOrderInfo 共用同一文件）` |
@@ -77,7 +93,7 @@
 | 31 | `/box/blind_box/openlog` | POST | D 活动与玩法 | 读 | ✅ 已设计 | A. 裸数组 | 是 | 活跃 | `blindBoxOpenRecord.json` |
 | 32 | `/compound/compound/list` | POST | D 活动与玩法 | 读 | ✅ 已设计 | A. 裸数组 | 否 | 活跃 | `compoundList.json` |
 | 33 | `/compound/compound/record` | POST | D 活动与玩法 | 读 | ✅ 已设计 | A. 裸数组 | 是 | 活跃 | `compoundRecord.json` |
-| 34 | `/compound/compound/result` | POST | D 活动与玩法 | 写 | ⚠️ TODO 待实现 | D. 单对象 | 是 | 活跃 | `compoundResult.json` |
+| 34 | `/compound/compound/result` | POST | D 活动与玩法 | 读 | ✅ 已设计 | D. 单对象 | 是 | 活跃 | `compoundResult.json` |
 | 35 | `/compound/compound/scheme` | POST | D 活动与玩法 | 读 | ✅ 已设计 | D. 单对象 | 否 | 活跃 | `compoundScheme.json` |
 | 36 | `/crystal_goods/boxDetail` | POST | D 活动与玩法 | 读 | ✅ 已设计 | D. 单对象 | 是 | 活跃 | `shopBoxDetail.json` |
 | 37 | `/crystal_goods/collectionDetail` | POST | D 活动与玩法 | 读 | ✅ 已设计 | D. 单对象 | 是 | 活跃 | `shopCollectionDetail.json` |
@@ -92,27 +108,27 @@
 | 46 | `/lottery/lottery/record` | POST | D 活动与玩法 | 读 | ✅ 已设计 | A. 裸数组 | 是 | 活跃 | `lotteryRecord.json` |
 | 47 | `/lottery/lottery/rule` | POST | D 活动与玩法 | 读 | ✅ 已设计 | D. 单对象 | 否 | 活跃 | `lotteryRule.json` |
 | 48 | `/sign/index/info` | POST | D 活动与玩法 | 读 | ✅ 已设计 | D. 单对象 | 是 | 活跃 | `signInfo.json` |
-| 49 | `/user_collection/user_collection/openbox` | POST | D 活动与玩法 | 写 | ⚠️ TODO 待实现 | A. 裸数组 | 是 | 活跃 | `blindBoxResult.json` |
-| 50 | `/user_collection/user_collection/openboxone` | POST | D 活动与玩法 | 写 | ⚠️ TODO 待实现 | D. 单对象 | 是 | 活跃 | `blindBoxResultOne.json` |
+| 49 | `/user_collection/user_collection/openbox` | POST | D 活动与玩法 | 写 | ✅ 已设计 | A. 裸数组 | 是 | 活跃 | `blindBoxResult.json` |
+| 50 | `/user_collection/user_collection/openboxone` | POST | D 活动与玩法 | 写 | ✅ 已设计 | D. 单对象 | 是 | 活跃 | `blindBoxResultOne.json` |
 | 51 | `/addons/diypage/index` | POST | E 内容社区 | 读 | ✅ 已设计 | A. 裸数组 | 否 | 活跃 | `diypage.json` |
 | 52 | `/banner/show/getBanner` | POST | E 内容社区 | 读 | ✅ 已设计 | B. 标准分页 | 否 | 活跃 | `banner_show_getBanner.json` |
-| 53 | `/community/chat/messageList` | POST | E 内容社区 | 读 | ✅ 已设计 | A. 裸数组 | 否 | **仅登记** | `chatMessages.json` |
+| 53 | `/community/chat/messageList` | POST | E 内容社区 | 读 | ✅ 已设计 | A. 裸数组 | 否 | 活跃 | `chatMessages.json` |
 | 54 | `/index/afficheDetail` | POST | E 内容社区 | 读 | ✅ 已设计 | D. 单对象 | 否 | 活跃 | `noticeDetails.json` |
 | 55 | `/index/afficheList` | POST | E 内容社区 | 读 | ✅ 已设计 | B. 标准分页 | 否 | 活跃 | `afficheList.json` |
 | 56 | `/index/affichetypelist` | POST | E 内容社区 | 读 | ✅ 已设计 | A. 裸数组 | 否 | 活跃 | `affichetypelist.json` |
 | 57 | `/index/getConfig` | POST | E 内容社区 | 读 | ✅ 已设计 | D. 单对象 | 否 | 活跃 | `getConfig.json` |
 | 58 | `/index/newsDetail` | POST | E 内容社区 | 读 | ✅ 已设计 | D. 单对象 | 否 | 活跃 | `newsDetails.json` |
 | 59 | `/shequ/rumor/info` | POST | E 内容社区 | 读 | ✅ 已设计 | D. 单对象 | 否 | 活跃 | `wallDetails.json` |
-| 60 | `/leaderboard/leaderboard/goods` | POST | F 统计分销 | 读 | ✅ 已设计 | A. 裸数组 | 否 | **仅登记** | `leaderboard.json` |
-| 61 | `/leaderboard/leaderboard/user` | POST | F 统计分销 | 读 | ✅ 已设计 | D. 单对象 | 是 | **仅登记** | `leaderboardUser.json` |
-| 62 | `/marketCapRanking/marketCapRanking/list` | POST | F 统计分销 | 读 | ✅ 已设计 | D. 单对象 | 否 | **仅登记** | `marketCapRanking.json` |
-| 63 | `/rank/masterRank/list` | POST | F 统计分销 | 读 | ✅ 已设计 | A. 裸数组 | 否 | **仅登记** | `masterRank.json` |
-| 64 | `/rank/userBuy/list` | POST | F 统计分销 | 读 | ✅ 已设计 | A. 裸数组 | 否 | **仅登记** | `userBuyRank.json` |
-| 65 | `/rebate/rebate/index` | POST | F 统计分销 | 读 | ✅ 已设计 | D. 单对象 | 是 | **仅登记** | `rebate.json` |
-| 66 | `/rebate/rebate/inviteDetail` | POST | F 统计分销 | 读 | ✅ 已设计 | A. 裸数组 | 是 | **仅登记** | `rebateInviteDetail.json` |
-| 67 | `/rebate/rebate/leaderboard` | POST | F 统计分销 | 读 | ✅ 已设计 | A. 裸数组 | 是 | **仅登记** | `rebateLeaderboard.json` |
+| 60 | `/leaderboard/leaderboard/goods` | POST | F 统计分销 | 读 | ✅ 已设计 | A. 裸数组 | 否 | 活跃 | `leaderboard.json` |
+| 61 | `/leaderboard/leaderboard/user` | POST | F 统计分销 | 读 | ✅ 已设计 | D. 单对象 | 是 | 活跃 | `leaderboardUser.json` |
+| 62 | `/marketCapRanking/marketCapRanking/list` | POST | F 统计分销 | 读 | ✅ 已设计 | D. 单对象 | 否 | 活跃 | `marketCapRanking.json` |
+| 63 | `/rank/masterRank/list` | POST | F 统计分销 | 读 | ✅ 已设计 | A. 裸数组 | 否 | 活跃 | `masterRank.json` |
+| 64 | `/rank/userBuy/list` | POST | F 统计分销 | 读 | ✅ 已设计 | A. 裸数组 | 否 | 活跃 | `userBuyRank.json` |
+| 65 | `/rebate/rebate/index` | POST | F 统计分销 | 读 | ✅ 已设计 | D. 单对象 | 是 | 活跃 | `rebate.json` |
+| 66 | `/rebate/rebate/inviteDetail` | POST | F 统计分销 | 读 | ✅ 已设计 | A. 裸数组 | 是 | 活跃 | `rebateInviteDetail.json` |
+| 67 | `/rebate/rebate/leaderboard` | POST | F 统计分销 | 读 | ✅ 已设计 | A. 裸数组 | 是 | 活跃 | `rebateLeaderboard.json` |
 | 68 | `/market/trade/flowDoc` | POST | G 转赠与配置 | 读 | ✅ 已设计 | A. 裸数组 | 是 | 活跃 | `flowDoc.json` |
-| 69 | `/regift/record/list` | POST | G 转赠与配置 | 读 | ✅ 已设计 | A. 裸数组 | 是 | **仅登记** | `regiftRecord.json` |
+| 69 | `/regift/record/list` | POST | G 转赠与配置 | 读 | ✅ 已设计 | A. 裸数组 | 是 | 活跃 | `regiftRecord.json` |
 
 ---
 
@@ -283,7 +299,7 @@
 - **响应封装**：D. 单对象（`data:{...}`）
 - **数据来源表**：users（token 不入库，DATABASE.md §9）
 - **mock 文件**：`user.json（与getUserInfo 共用）`
-- **实现状态**：⚠️ **TODO 写操作，本轮只出契约不实现**
+- **实现状态**：✅ 已设计
 
 **消费页面**（`src/pages/` 实测）：login/Login.vue:85（`{account, password}`）
 
@@ -302,7 +318,7 @@
 |---|---|---|
 | `userinfo` | object | `{id,username,nickname,mobile,avatar,score,inviter_code,yao_count,huifu_service_charge,sandpay_service_charge,token}` |
 
-> **说明**：**TODO 写操作**。本轮返回含真实 JWT 的成功响应，不校验密码。token 字段是前端唯一凭证来源，必须真实可用（见 impl 说明）。
+> **说明**：**已实现**。方案 A：`users` 无 password_hash 列（源站从不返回密码），故**不校验密码**，任何非空密码可登录；account 匹配不上返回 404。返回的 token 是 JWT_SECRET 真实签名，后续 39 条需鉴权接口依赖它。这是前端唯一真实调用的写接口。
 
 ### /user/register `/user/register`
 
@@ -314,7 +330,7 @@
 - **响应封装**：D. 单对象（`data:{...}`）
 - **数据来源表**：users
 - **mock 文件**：`user.json`
-- **实现状态**：⚠️ **TODO 写操作，本轮只出契约不实现**
+- **实现状态**：✅ 已设计
 
 **消费页面**（`src/pages/` 实测）：login/Register.vue（实参待确认）
 
@@ -334,7 +350,7 @@
 |---|---|---|
 | `userinfo` | object | 同 /user/login |
 
-> **说明**：**TODO 写操作**。参数需前端补 Register.vue 实参后确认。
+> **说明**：**已实现**（死代码：Register.vue 无任何提交调用）。写 users 一行，手机号唯一由应用层校验；密码不落库（同 login 的方案 A）。参数名仍待前端确认。
 
 ## 域：B 藏品与系列
 
@@ -775,7 +791,7 @@
 - **响应封装**：D. 单对象（`data:{...}`）
 - **数据来源表**：entrust_orders
 - **mock 文件**：`（无）`
-- **实现状态**：⚠️ **TODO 写操作，本轮只出契约不实现**
+- **实现状态**：✅ 已设计
 
 **消费页面**（`src/pages/` 实测）：market/SubmitEntrust.vue, market/SubmitBegBuy.vue（经 utils fetchTradeBaseInfo 拿基础信息后提交）
 
@@ -796,7 +812,7 @@
 |---|---|---|
 | `待确认` | - | **TODO**：源站返回结构无 mock 快照（未登记 MOCK_MAP），需前端确认页面消费方式 |
 
-> **说明**：**TODO 写操作**。2 函数复用（submitEntrust/submitBegBuy）。MOCK_MAP 未登记→ 本地模式返回空数组兜底，故无响应结构依据。
+> **说明**：**已实现**（死代码：SubmitBegBuy.vue:206 提交只弹 toast 后 return，从不发请求）。事务内写 entrust_orders，order_status=2（E-ENTRUST-STATUS）。幂等：带 order_sn 重复提交返回已有单，uk_entrust_sn 兜底。响应结构无 mock 依据，按 orderDetail/entrustList 字段对齐。
 
 ### /market/trade/getSellCollectionInfo `/market/trade/getSellCollectionInfo`
 
@@ -838,7 +854,7 @@
 - **响应封装**：D. 单对象（`data:{...}`）
 - **数据来源表**：market_listings, orders
 - **mock 文件**：`（无）`
-- **实现状态**：⚠️ **TODO 写操作，本轮只出契约不实现**
+- **实现状态**：✅ 已设计
 
 **消费页面**（`src/pages/` 实测）：market/SellBegBuy.vue（提交动作）
 
@@ -856,7 +872,7 @@
 |---|---|---|
 | `待确认` | - | **TODO**：无 mock 快照依据 |
 
-> **说明**：**TODO 写操作**。MOCK_MAP 未登记。
+> **说明**：**已实现**（死代码：SellBegBuy.vue:253 提交只弹 toast）。事务内 3 表联动：market_listings + orders(order_type=2) + user_collections(status 1→2)。分账 real_income = price − platform − creator，全程定点十进制。响应结构无 mock 依据。
 
 ### /order/order/myConsignment `/order/order/myConsignment`
 
@@ -1223,14 +1239,14 @@
 ### /compound/compound/result `/compound/compound/result`
 
 - **方法**：`POST`
-- **用途**：合成结果
+- **用途**：合成结果查询
 - **业务域**：D 活动与玩法
-- **读/写**：写
+- **读/写**：读
 - **鉴权**：需登录（token 请求头）
 - **响应封装**：D. 单对象（`data:{...}`）
 - **数据来源表**：compound_results
 - **mock 文件**：`compoundResult.json`
-- **实现状态**：⚠️ **TODO 写操作，本轮只出契约不实现**
+- **实现状态**：✅ 已设计
 
 **消费页面**（`src/pages/` 实测）：compound/Result.vue:70, compound/SchemeDetails.vue:129（均传空对象）
 
@@ -1248,7 +1264,7 @@
 |---|---|---|
 | `result` | array | `[{type,name,user_collection_code,total_num}]`；type 见 §4 E-COMPOUND-RESULT |
 
-> **说明**：**TODO 写操作**。
+> **说明**：**读接口（虽为 POST）**。源站 Result.vue:70 与 SchemeDetails.vue:129 均传空对象 `{}`，是「看合成产出」的页面，不是「触发合成」——真正的合成动作发生在别处。故本实现只读compound_results 已落库数据，不凭空生成合成记录：若按写接口理解为新建合成，会造出用户从未做过的合成行为（编造业务数据）。主理人已裁决归类为读接口。幂等天然成立：只读不写，重复调用不产生新记录。
 
 ### /compound/compound/scheme `/compound/compound/scheme`
 
@@ -1687,7 +1703,7 @@
 - **响应封装**：A. 裸数组（`data: []`）
 - **数据来源表**：user_collections, products
 - **mock 文件**：`blindBoxResult.json`
-- **实现状态**：⚠️ **TODO 写操作，本轮只出契约不实现**
+- **实现状态**：✅ 已设计
 
 **消费页面**（`src/pages/` 实测）：blindBox/Result.vue:55（传空对象）
 
@@ -1705,7 +1721,7 @@
 |---|---|---|
 | `[]` | array | `{id,listimg,name,collection_code,rarity_icon}` |
 
-> **说明**：**TODO 写操作**。本轮返回 mock 结构成功响应，不实际生成藏品。
+> **说明**：**已实现**（死代码：blindBox/Result.vue:55 传空对象）。事务内扣减盲盒 count + 落库新藏品实例；概率池按归一化权重抽样（库中概率合计 23≠100）。简化：单次产出 1 件（库中无配置列，不凭空取 mock 的 3）。
 
 ### /user_collection/user_collection/openboxone `/user_collection/user_collection/openboxone`
 
@@ -1717,7 +1733,7 @@
 - **响应封装**：D. 单对象（`data:{...}`）
 - **数据来源表**：user_collections, products
 - **mock 文件**：`blindBoxResultOne.json`
-- **实现状态**：⚠️ **TODO 写操作，本轮只出契约不实现**
+- **实现状态**：✅ 已设计
 
 **消费页面**（`src/pages/` 实测）：blindBox/Result2.vue:47（传空对象）
 
@@ -1740,7 +1756,7 @@
 | `main_image` | string | 主图 |
 | `rarity_icon` | string | 稀有度图标 |
 
-> **说明**：**TODO 写操作**。
+> **说明**：**已实现**（死代码：blindBox/Result2.vue:47 传空对象）。与 openbox 同一套扣减与产出逻辑，仅返回单对象。
 
 ## 域：E 内容社区
 

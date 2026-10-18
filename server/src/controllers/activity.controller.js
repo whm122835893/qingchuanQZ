@@ -4,9 +4,9 @@
  * 活动与玩法 controller：合成 / 转盘 / 签到 / 抽签 / 精选活动。
  */
 const service = require('../services/activity.service')
+const compoundWrite = require('../services/compound-write.service')
 const responder = require('../middleware/respond')
 const { currentUid } = require('../middleware/auth')
-const { TODO_MSG, todoShape } = require('./todo')
 const { NotFoundError } = require('../errors')
 
 async function compoundList(req, res) {
@@ -23,8 +23,8 @@ async function compoundRecord(req, res) {
   responder.bareList(res, await service.compoundRecord(currentUid(req), req.input))
 }
 
-function compoundResult(req, res) {
-  responder.single(res, todoShape('compoundResult'), TODO_MSG)
+async function compoundResult(req, res) {
+  responder.single(res, await compoundWrite.compoundResult(currentUid(req), req.input))
 }
 
 async function lotteryInfo(req, res) {

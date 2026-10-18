@@ -418,7 +418,7 @@ paths:
               schema: { $ref: "#/components/schemas/Envelope" }
   "/compound/compound/result":
     post:
-      summary: "合成结果"
+      summary: "合成结果查询"
       tags: ["D"]
       parameters:
         - $ref: "#/components/parameters/Token"

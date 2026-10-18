@@ -202,10 +202,13 @@ def main() -> int:
         print("=" * W)
         return 1
     print("校验结果: 0 差异 —— 放行")
-    print("覆盖 %d/%d 条事实源路径，%d 条读接口 + %d 条写接口(TODO)"
+    # 读写口径：按 kind 字段统计，不得用 impl 反推
+    # （「是否实现」与「是读是写」正交——compound/result 已实现但是读接口）
+    meta = _meta()
+    print("覆盖 %d/%d 条事实源路径，%d 条读接口 + %d 条写接口（按 kind 字段统计）"
           % (len(md), len(src_all),
-             sum(1 for m in _meta().values() if m['impl'] == 'done'),
-             sum(1 for m in _meta().values() if m['impl'] == 'todo')))
+             sum(1 for m in meta.values() if m.get('kind') != 'write'),
+             sum(1 for m in meta.values() if m.get('kind') == 'write')))
     print("=" * W)
     return 0
 

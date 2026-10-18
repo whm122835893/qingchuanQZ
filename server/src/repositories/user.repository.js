@@ -30,6 +30,52 @@ function firstUser() {
   return db.queryOne(`SELECT ${USER_COLS} FROM users ORDER BY id ASC LIMIT 1`)
 }
 
+/** 手机号是否已存在（注册唯一性校验。库内无唯一索引，只能应用层查） */
+function existsMobile(mobile) {
+  if (!mobile) return null
+  return db.queryOne('SELECT id FROM users WHERE mobile = ? LIMIT 1', [mobile])
+}
+
+/**
+ * inviter_code 是否已被占用。
+ *
+ * 该列有唯一索引 uk_users_inviter_code，而**空串也算占用**——
+ * 库里 user 4930 的 inviter_code 就是 ''。故注册时若写入 ''，
+ * 第一个新用户能建成、第二个必然撞唯一约束（已实测复现）。
+ * 生成邀请码前必须查重，不能靠"库里只有 2 个用户"这种假设。
+ */
+function existsInviterCode(code) {
+  if (!code) return null
+  return db.queryOne('SELECT id FROM users WHERE inviter_code = ? LIMIT 1', [code])
+}
+
+/**
+ * 新增用户（注册）。
+ * created_at / updated_at 为灌库审计列，写接口统一补 unix 秒，与seed 保持一致。
+ */
+function insertUser(data) {
+  const now = Math.floor(Date.now() / 1000)
+  const row = {
+    username: data.username,
+    nickname: data.nickname,
+    mobile: data.mobile,
+    avatar: data.avatar,
+    score: data.score === undefined ? 0 : data.score,
+    inviter_code: data.inviter_code === undefined ? '' : data.inviter_code,
+    yao_count: data.yao_count === undefined ? 0 : data.yao_count,
+    huifu_service_charge: data.huifu_service_charge === undefined ? 0 : data.huifu_service_charge,
+    sandpay_service_charge: data.sandpay_service_charge === undefined ? 0 : data.sandpay_service_charge,
+    created_at: now,
+    updated_at: now,
+  }
+  const cols = Object.keys(row)
+  const info = db.run(
+    `INSERT INTO users (${cols.join(', ')}) VALUES (${db.dialect.inPlaceholders(cols.length)})`,
+    cols.map((c) => row[c])
+  )
+  return { id: db.dialect.insertAndGetId(info), changes: info.changes }
+}
+
 const userAddresses = baseRepository('user_addresses', [
   'id',
   'user_id',
@@ -133,6 +179,9 @@ module.exports = {
   findUser,
   findUserByAccount,
   firstUser,
+  existsMobile,
+  existsInviterCode,
+  insertUser,
   listAddresses,
   findSignStatus,
   crystalNumber,

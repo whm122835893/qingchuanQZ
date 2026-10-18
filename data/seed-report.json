@@ -1,5 +1,5 @@
 {
-  "started_at": "2026-10-18 02:42:12",
+  "started_at": "2026-10-18 23:43:10",
   "database": "sqlite",
   "db_path": "/workspace/qingchuan-h5/data/qingchuan.db",
   "source_mocks": 78,
@@ -1267,6 +1267,6 @@
       "reason": "源站无数据（0 行），mapper 无可赋值的行"
     }
   },
-  "finished_at": "2026-10-18 02:42:19",
-  "duration_sec": 6.78
+  "finished_at": "2026-10-18 23:43:13",
+  "duration_sec": 3.29
 }

@@ -2,14 +2,14 @@
 
 /**
  * 交易 controller：买单 / 寄售 / 委托求购 / 我的藏品 / 流转。
- * 写接口（createBegBuyOrder / sell）本轮不实现，返回契约形状的 TODO 响应。
+ * 写接口（createBegBuyOrder / sell）已实现，见 services/trade-write.service.js。
  */
 const service = require('../services/trade.service')
+const writeService = require('../services/trade-write.service')
 const responder = require('../middleware/respond')
 const { currentUid } = require('../middleware/auth')
 const { requireId, routeId } = require('../utils/validate')
 const { NotFoundError, ForbiddenError } = require('../errors')
-const { TODO_MSG, todoShape } = require('./todo')
 
 async function orderList(req, res) {
   responder.standardPagination(res, await service.orderList(currentUid(req), req.input))
@@ -35,12 +35,12 @@ async function begBuyOrderInfo(req, res) {
   responder.single(res, data)
 }
 
-function createBegBuyOrder(req, res) {
-  responder.single(res, todoShape('createBegBuyOrder'), TODO_MSG)
+async function createBegBuyOrder(req, res) {
+  responder.single(res, await writeService.createBegBuyOrder(currentUid(req), req.input))
 }
 
-function sell(req, res) {
-  responder.single(res, todoShape('sell'), TODO_MSG)
+async function sell(req, res) {
+  responder.single(res, await writeService.sell(currentUid(req), req.input))
 }
 
 async function getSellCollectionInfo(req, res) {

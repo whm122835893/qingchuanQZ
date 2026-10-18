@@ -10,10 +10,14 @@ const { pagination, pageMeta } = require('../utils/validate')
 
 /**
  * 当前登录用户信息（getUserInfo，style D）。
- * token 回填：源站登录响应内联 token；此处回填入参 token（签发登录本轮未实现）。
+ *
+ * 身份来源是 token 里的 uid（req.auth.uid），不是「库中第一个用户」。
+ * 此前实现取 firstUser()，导致登录 22291 后拿到的是 4930 的资料——
+ * 属沉默逻辑错误（不报错、数据却张冠李戴），已修正。
+ * token 回填：源站登录响应内联 token，此处回填入参 token。
  */
-async function userInfo(token) {
-  const user = await userRepo.firstUser()
+async function userInfo(uid, token) {
+  const user = uid ? await userRepo.findUser(uid) : await userRepo.firstUser()
   if (!user) return null
   return {
     userinfo: {

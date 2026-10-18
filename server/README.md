@@ -111,15 +111,19 @@ python3 docs/backend/verify_paths.py   # 期望 0 差异
 | 积分商城 | 6 | crystalList / goodsDetail / boxDetail / collectionDetail / exchangeRecord / crystalDetail |
 | 统计分销 | 9 | rebate 三接口 / masterRank / userBuyRank / leaderboard 两接口 / regiftRecord |
 
-### 写接口 7 条 — 已注册路由，返回 TODO 响应
+### 写接口 6 条 — 已注册路由，真实实现
 
 `/user/login`、`/user/register`、`/market/trade/createBegBuyOrder`、`/market/trade/sell`、
-`/user_collection/user_collection/openbox`、`/user_collection/user_collection/openboxone`、
-`/compound/compound/result`
+`/user_collection/user_collection/openbox`、`/user_collection/user_collection/openboxone`
 
-响应 `code=1`、`msg="TODO: 未实现"`，`data` 为与源站同构的空壳（字段名逐字对齐，值为 null/[]）。
-选`code=1` 而非错误码，是因为前端 `utils/api.js` 遇非 1 会静默回落本地 mock——那正好是我们想要的行为：
-页面用 mock 数据正常渲染，后端不返回 404 让它崩页。形状声明在 `controllers/todo.js`。
+均为真实业务实现（非 TODO 空壳），详见下文「写接口实现状态」。
+
+> `/compound/compound/result` 虽为 POST，但语义是**读接口**（查询某次合成的产出），
+> 已按主理人裁决归入读接口，不计入写接口。
+
+读写归属由 `endpoint_meta.py` 的 **`kind` 字段**决定（独立字段，与 `impl` 解耦——
+「是否实现」与「是读是写」是两个正交维度），并由 `docs/backend/verify_kind.py` 机械校验
+其与 `server/src/routes` 的一致性。**不可用 `impl == 'todo'` 反推读写**（那是本轮修复的错误耦合）。
 
 ---
 
@@ -176,13 +180,172 @@ python3 docs/backend/verify_paths.py   # 期望 0 差异
 
 ---
 
+## 写接口实现状态（6 个写接口，本轮全部落地）
+
+| 接口 | 实现 | 前端是否真调用 | 核实证据 |
+|---|---|---|---|
+| `/user/login` | 真实实现 | **是（唯一）** | `src/pages/login/Login.vue:85` 调`api.login({account,password})`，成功后写 localStorage |
+| `/user/register` | 真实实现 | 否（死代码） | `Register.vue` 无任何提交调用，仅 `api/index.js:184` 定义 |
+| `/market/trade/createBegBuyOrder` | 真实实现 | 否（死代码） | `SubmitBegBuy.vue:206` `onSubmitTap` 末行只弹 toast 后 `return`，从不发请求 |
+| `/market/trade/sell` | 真实实现 | 否（死代码） | `SellBegBuy.vue:253` 同上，只弹 toast |
+| `/user_collection/user_collection/openbox` | 真实实现 | 否（死代码） | `blindBox/Result.vue:55` 调 `fetchBlindBoxResult()`，**传空对象** |
+| `/user_collection/user_collection/openboxone` | 真实实现 | 否（死代码） | `blindBox/Result2.vue:47` 同上，传空对象 |
+| `/compound/compound/result` | 真实实现（**读接口**） | 否（死代码） | `compound/Result.vue:70`、`SchemeDetails.vue:129` 均传空对象 |
+
+> **7 个接口里 6 个是死代码**：api 层定义了函数、路由也注册了，但页面提交动作从不触发。
+> 本轮按契约实现了真实业务逻辑，但**没有为它们编造前端调用路径**。
+
+## 业务级幂等（重复提交防护）
+
+**核心原则**：同一用户 + 同一业务意图 + 同一关键参数，在「未终结状态」下重复提交，
+返回已有记录而非新建。
+
+| 接口 | 幂等键 | 终态条件 | 时间窗 | 重复提交返回 |
+|---|---|---|---|---|
+| `createBegBuyOrder` | `user_id + product_id + price + number` | `order_status = 2` 委托中 | 60s | `code:1` + 已有单 |
+| `sell` | `user_id + collection_id` | 挂单 `status = 1` 寄售中 | 无 | `code:1` + 已有挂单 |
+| `openbox` / `openboxone` | `user_id + blind_box_id` | 窗口内有产出藏品 | 60s | `code:1` + 已开结果 |
+| `compound/result` | — | 只读接口，天然幂等 | — | 同一结果，不新增记录 |
+| `register` | `mobile` | 手机号唯一 | — | **409**（真实冲突） |
+
+实现要点（详见 `src/utils/idempotency-window.js` 与 `src/repositories/idempotency.repository.js`）：
+
+- **不依赖 `order_sn`**。前端从不传该字段（源站契约亦无），早期实现因此完全失效——
+  重复点击产生多笔在途委托单（实测 `entrust_orders` 3→5）。现改为业务键查重。
+- **查重与插入同事务**。事务外查重存在「查完到插入」的并发窗口。
+  `better-sqlite3` 的 transaction 回调是同步的，故事务内不做 `await`。
+- **sell 的查重早于状态校验**：首次请求已把藏品置为寄售中，重试若先查状态会误报 409，
+  客户端便无法安全重试。
+- **openbox 的查重早于 count 校验**：count=1 的盒首次开盒后即为 0，
+  先校验会返回 409 而非无感返回。
+- **register 的检查在事务内**，否则并发下两个请求都能通过存在性检查。
+
+> **时间窗取值 60s**：`sell` 不用时间窗（挂单终结后键自然失效，加窗口反而会漏）。
+> 60s 覆盖客户端退避重试（累计约 15s）、弱网跨境单请求往返（5~10s）、
+> 用户看清报错后手动重试（> 5s）并留一倍余量。改价后 `price` 变化即换键，不受窗口影响。
+
+### 登录方案：A（不校验密码）
+
+`users` 表**无 `password_hash` 列**——源站从不返回密码，无从获得。加列属schema 设计变更，
+需先审批；且库中不存在任何真实密码，任何"校验"实现都是假的。故采用方案 A：
+
+- 校验 `account`（手机号或用户名）匹配 `users`，**匹配不上返回 404**（不新建用户行）
+- `password` 仅做非空校验，**任何非空密码都能登录**
+- 返回的 `token` 是**真实 JWT**（`JWT_SECRET` 签名，`uid` + `nickname`），后续 39 条需鉴权接口依赖它
+
+> ⚠️ **这是「演示环境不做鉴权」，不是「密码已校验」。** 生产部署前必须完成下方
+> 「上生产前的必做项」清单。
+
+### 其余 6 个的实现要点与简化
+
+- **register**：事务内校验手机号唯一并写 `users` 一行（库内 `mobile` 无唯一索引，
+  唯一性完全依赖应用层 + 事务）。`inviter_code` 由 `crypto.randomInt` 生成唯一值——
+  该列有唯一索引 `uk_users_inviter_code` 而**空串也算占用**（库中 user 4930 已占位），
+  写死 `''` 会导致「第二个新用户注册必 500」（已实测复现 UNIQUE constraint failed）。
+- **createBegBuyOrder**：事务内写 `entrust_orders`；`order_status=2`（E-ENTRUST-STATUS 委托中）；
+  金额 = price × number，全程定点十进制。幂等见上表。
+- **sell**：事务内 3 表联动 —— `market_listings`（新挂单，含分账四字段）+ `orders`（`order_type=2`）
+  + `user_collections`（藏品 `status` 1→2 寄售中）。任一失败全部回滚。
+  业务校验：归属（非本人 403）、状态（已寄售 409）、锁定（422）、`count<=0`（422）。
+  分账：`platform_service_price = price × 0.05`（2 位half-up），`real_income = price − platform − creator`。
+- **openbox / openboxone**：事务内「扣减盲盒 `count` + 落库新藏品实例」。概率池按**归一化权重**抽样
+  （库中概率合计 23 ≠ 100，当百分比用会让 77% 抽签落空）；用 `crypto.randomInt` 而非 `Math.random`。
+  **简化**：单次开盒产出 **1 件**（源站 mock 恒 3 条，但库中无该配置列，不凭空取 3）。
+  **已知局限**：产出行只落盲盒产品 id（池内变体共用），故幂等重放返回产品级名称，
+  而首次开盒返回池级名称，二者可能不同。彻底解决需给 `user_collections` 加池条目 id 列。
+- **compound/result**：**读接口（虽为 POST）**。源站此接口语义是「查询某次合成的产出」而非「触发合成」，
+  故读取 `compound_results` 已落库数据；若按"写"理解为新建合成，会凭空造出用户没做过的合成行为。
+  未传 `record_id` / `play_id` 时取当前用户最近一次合成记录（对应前端传空对象的场景）。
+
+---
+
+## 上生产前的必做项（当前为演示环境，上线前逐项完成）
+
+以下每项在当前演示环境**均未完成**。方案 A（登录不校验密码）在演示环境是正确选择，
+但**绝不能带到生产**。
+
+### 1. `users` 表增加 `password_hash` 列
+
+- **算法**：bcrypt（cost ≥ 12）或 argon2id。**禁止 MD5/SHA1 裸哈希**——无盐、可被彩虹表秒破。
+- **盐值策略**：bcrypt/argon2 **自带随机盐**，存于哈希串本身（`$2b$12$<salt><hash>`），
+  不要另建 `salt` 列。若用 PBKDF2 则盐须独立存储且每用户唯一。
+- **迁移**：新增可空列，允许 NULL（NULL = 未设密码的老账号），
+  首次登录时按「忘记密码」流程引导设置，**不要预置默认密码**。
+
+### 2. 登录改为校验密码
+
+- `auth.service.js` 的 `login` 从「仅非空校验」改为 `bcrypt.compare(明文, user.password_hash)`。
+- **密码错误返回什么**：沿用现有「账号不存在返 404」的防御式口径，
+  但两者须**返回完全相同的文案**，否则可枚举已注册手机号。
+- **失败限流**：登录接口必须加限流（建议每 IP+账号每分钟 ≤ 10 次）防撞库。当前无任何登录限流。
+- NULL 哈希的账号：拒绝登录并要求走密码重置，**不得放行**。
+
+### 3. 注册写入密码哈希
+
+- `register` 收到的 `password` 经 `bcrypt.hash(pw, 12)` 后落 `password_hash`，
+  **明文密码绝不进日志、不进 `remark` 类字段**。
+- 补密码强度校验（长度 ≥ 8，且不与手机号 `username` 相同）。
+- 补手机号格式校验（当前仅校验非空与长度 ≤ 32）。
+
+### 4. `JWT_SECRET` 强制从环境变量注入且无默认值
+
+- **当前状态**：已是 fail-fast（`config/env.js` 中为空则 `process.exit(1)` 拒绝启动），
+  **此行为保留，绝不要改成「缺省给默认值」**。默认密钥 = 任何人都能伪造任意 uid 的 token。
+- 生产需补充：
+  - 从密钥管理服务注入（KMS / Vault / 云厂商 Secrets Manager），不落 `.env` 文件；
+  - 定期轮转（建议 ≤ 90 天），轮转需支持双密钥并存以免瞬时全量失效；
+  - `JWT_EXPIRES_IN` 从当前 `7d` **收紧到 ≤ 2h**（access token 不应长期有效）；
+  - 增加 refresh token 与主动吊销（当前无吊销手段，token 签发后在有效期内一直可用）。
+
+### 5. 强制 HTTPS
+
+- 明文 HTTP 下密码与 token 可被链路上的任何人截获，HTTPS 不是可选项。
+- 服务端启用 HSTS（`Strict-Transport-Security`）；
+  反向代理层强制 301 跳转 HTTPS 并拒绝明文端口；
+  正确配置 `CORS_ORIGINS` 为正式域名（当前默认回落 `http://localhost:5173`）；
+  若后续改用 Cookie 承载 token，`Secure` + `HttpOnly` + `SameSite` 三项都要设。
+- 上线前用 `curl -I http://<域名>` 验证确实跳转。
+
+### 6. 其他随生产必须关闭的演示假设
+
+- **限流**：`login` / `register` / 写接口（求购、寄售、开盒）目前**均无速率限制**。
+- **错误日志**：`500` 固定返回「服务异常」已正确（不泄露表名列名），保持。
+- **数据基线**：`data/qingchuan.db` 是 48 表 / 341 行的**演示数据**，
+  生产必须换真实数据源，且演示账号（`17587881293` 等）必须删除。
+- **`/health/meta`** 会返回各表行数，对外暴露前需加鉴权或限流。
+
 ## 已知未实现 / 降级项
 
-- **7 个写接口**未实现（登录、注册、下单、寄售、取消、卖出、求购）。登录未实现意味着
-  **线上没有任何签发 token 的入口**，需鉴权的 39 个接口目前只能用 `npm run token` 生成的调试 token 访问。
+- **登录不校验密码**（见上「登录方案 A」），这是本轮最大的语义简化。
+- **`/order/order/myConsignment` 的 `cancelConsignment`（取消寄售）仍是读语义**：
+  4 个 api 函数复用同一路径，按设计稿本轮按读实现，取消动作未实现（写接口清单外的遗留项）。
 - **`/box/blind_box/list` 无字段基准**：源站 mock 是空数组，无法比对字段形状。
 - **`regift_records.collection_id`、`orders.collection_code` 等列在库中大面积为 NULL**，
   相关字段统一返回 null。若后续补数据，无需改代码。
+- **SQLite 的 DECIMAL 列以 NUMERIC 存储**，写入的十进制串会被转为 double 读回
+  （全库既有行为，非本轮引入）。**运算侧已全部走定点十进制**（`utils/decimal.js`，
+  BigInt 缩放整数域，无浮点），但极端金额（如 15 位有效数字以上）的存储保真有赖于换MySQL。
+
+## 自测
+
+```bash
+# 写接口正确性（事务回滚 / 幂等 / 金额精度 / 业务规则），19 项断言
+# 必须在独立库副本上跑，服务进程需先持有该副本连接
+cp data/qingchuan.db /tmp/wt/check.db
+SQLITE_PATH=/tmp/wt/check.db PORT=3102 node src/index.js &
+node scripts/write_checks.mjs
+```
+
+> ⚠️ 端口被占用时新进程会静默失败并打到**旧进程**（它持有已删除库的 inode），
+> 表现为计数全部对不上。改端口或先 `kill` 占用进程，确认 `/health` 的 `uptime` 是新值。
+
+幂等用例**刻意不传 `order_sn`**（`createBegBuyOrder` / `sell` / `openboxone` 的请求体
+均只有前端真实会传的字段），复现「重复点击」的真实场景——
+传 `order_sn` 的旧用例无法发现本轮修复的缺陷。
+
+`utils/decimal.js` 是自实现的定点十进制（项目依赖锁定 3 个，不引decimal.js）：
+`d.subtractAll('15','0.75','0.00').toFixed()` → `'14.2500'`；
+`d.of('1.005').round(2)` → `1.01`（float 会给 1.00）。
 
 ## 待前端确认的问题（未擅自改动 `src/`）
 
