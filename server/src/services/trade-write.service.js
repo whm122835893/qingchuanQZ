@@ -14,6 +14,7 @@
 
 const db = require('../db')
 const writeRepo = require('../repositories/trade-write.repository')
+const collectionRepo = require('../repositories/collection.repository')
 const idemRepo = require('../repositories/idempotency.repository')
 const productRepo = require('../repositories/product.repository')
 const decimal = require('../utils/decimal')
@@ -227,6 +228,44 @@ async function sell(userId, params) {
   return sellShape(listing, collection, entrustSn)
 }
 
+/**
+ * 一键下架（batchchangeMarketGoods，popDetails 弹窗「一键下架」按钮）。
+ *
+ * 源站契约（pages-my-my.0e9b7c94.js 实测）：
+ *   onBatchOff(a){ a && (uni.showLoading({title:"处理中"}),
+ *     (0,o.batchchangeMarketGoods)({collection_id:this.id})
+ *       .then(()=>{uni.showToast({title:"下架成功"}), t.getDetailsRefresh()})
+ *       .catch(()=>{}) ...) }
+ *   - 入参只有 collection_id（弹窗上的藏品分组 id，与 getDetail 同锚点语义）
+ *   - 响应体不被消费：成功即弹「下架成功」并刷新弹窗实例列表，
+ *     故出参只需表达成功与否，附受影响挂单数供日志/调试。
+ *
+ * 业务语义（与 sell() 对称的逆操作）：
+ *   1) 该用户在此藏品（product_id）下的在售挂单全部置已取消（E-LISTING-STATUS 3）
+ *   2) 对应寄售中（status=2）的持有实例回到持有中（status=1）——
+ *      弹窗 statusText 随即从「寄售中」变为「未寄售/可合成」，与源站刷新后一致
+ * 两步同事务：只下挂单不回退藏品，会出现「无挂单却寄售中」的僵尸态。
+ * 幂等：重复下架 changes=0，仍返成功（源站同样 then 成功，用户无感）。
+ */
+async function batchOffCollections(userId, params) {
+  const collectionId = params && params.collection_id !== undefined && params.collection_id !== null && params.collection_id !== ''
+    ? Number(params.collection_id)
+    : null
+  if (!collectionId || !Number.isFinite(collectionId)) {
+    throw new ValidationError('参数 collection_id 缺失或非法')
+  }
+  const anchor = await collectionRepo.findCollectionAnchor(userId, collectionId)
+  if (!anchor) throw new NotFoundError('藏品不存在')
+  const productId = anchor.product_id === null ? null : Number(anchor.product_id)
+
+  const downed = inTransaction(() => {
+    const listings = writeRepo.downSelfListingsByProduct(userId, productId)
+    writeRepo.restoreListedCollectionsByProduct(userId, productId)
+    return listings
+  })
+  return { collection_id: collectionId, down: downed }
+}
+
 function optionalSn(v) {
   if (v === undefined || v === null || String(v).trim() === '') return null
   return String(v).trim().slice(0, 64)
@@ -287,4 +326,4 @@ function requireNumber(value, name) {
   return n
 }
 
-module.exports = { createBegBuyOrder, sell, PLATFORM_RATE }
+module.exports = { createBegBuyOrder, sell, batchOffCollections, PLATFORM_RATE }

@@ -167,6 +167,45 @@ export const fetchMyCollectionList = async (data = {}) => {
 export const fetchCollectionInfo = (data = {}) =>
   load(() => api.collectionInfo(data), 'myCollectionDetail.json', (j) => j.data || {})
 
+/* ===== 我的页藏品聚合（antMycollection / getDetail） ===== */
+
+/**
+ * 我的页藏品聚合列表。
+ * types 语义（源站 pages-my-my.0e9b7c94.js 实测）：
+ *   藏品=2 / 盲盒=1 / 已售=3（我的藏品页另有 已赠送=4）；
+ *   绘画/卡牌/建模/卡券/元素 5 个 tab types=null，源站**永不发请求**，
+ *   故这些 tab 由页面直接走空态，不经过本函数。
+ * 响应：{total,per_page,current_page,last_page,data:[{collection,num,min_price,
+ *        floor_price,price,market_fluctuate_new}], current_count,current_consignment}
+ * （current_count/current_consignment 仅 types=1/2 有）
+ */
+export const fetchAntMyCollection = (data = {}) =>
+  load(() => api.antMycollection(data), 'antMycollection.json', (j) =>
+    j.data || { total: 0, per_page: 15, current_page: 1, last_page: 0, data: [] }
+  )
+
+/**
+ * 持有详情弹窗（getDetail）：点击聚合列表项后按 collection_id + types 拉实例明细。
+ * 响应：{list:{total,per_page:1000,current_page,last_page,data:[实例],current_count,
+ *          current_consignment}, collection:{...}}
+ * 实例字段：id/collection_code/status/is_lock/can_compose/price/blind_box_id/createtime。
+ * 源站实测 per_page 固定 1000（一次拉全量），page 参数仅为兼容保留。
+ */
+export const fetchCollectionDetail = (data = {}) =>
+  load(() => api.collectionGetDetail(data), 'getDetail.json', (j) => j.data || null)
+
+/** 一键开启（openBoxs）：popDetails 弹窗按钮，入参 openid，响应为开盒结果数组 */
+export const fetchOpenBoxs = (data = {}) =>
+  load(() => api.openBoxs(data), 'blindBoxResult.json', listOf)
+
+/** 逐个拆开（openBox）：popDetails 弹窗按钮，入参 openid，响应为单个开盒结果对象 */
+export const fetchOpenBox = (data = {}) =>
+  load(() => api.openBox(data), 'blindBoxResultOne.json', objOf)
+
+/** 一键下架（batchchangeMarketGoods）：popDetails 弹窗按钮，入参 collection_id */
+export const fetchBatchOff = (data = {}) =>
+  load(() => api.batchchangeMarketGoods(data), 'batchOff.json', (j) => j.data || null)
+
 /* ===== 商品 / 系列 ===== */
 
 /** 某系列下的商品列表（含系列信息与成交统计） */
@@ -262,9 +301,11 @@ export const fetchBlindBoxMyBox = () =>
 export const fetchBlindBoxOpenRecord = (data = {}) =>
   load(() => api.blindBoxOpenRecord(data), 'blindBoxOpenRecord.json', listOf)
 
+/** 开盒结果（多格）：源站 blindBox/result ← openBoxs(openid)，响应 data 为数组 */
 export const fetchBlindBoxResult = (data = {}) =>
   load(() => api.blindBoxOpenResult(data), 'blindBoxResult.json', listOf)
 
+/** 开盒结果（单格）：源站 blindBox/result2 ← openBox(openid)，响应 data 为单对象 */
 export const fetchBlindBoxResultOne = (data = {}) =>
   load(() => api.blindBoxOpenResultOne(data), 'blindBoxResultOne.json', objOf)
 

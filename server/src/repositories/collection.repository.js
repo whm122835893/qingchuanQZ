@@ -109,6 +109,167 @@ function listBlindBoxRecords(userId, page) {
   return { items, total }
 }
 
+/**
+ * 我的页藏品聚合列表（antMycollection）。
+ *
+ * 源站契约（pages-my-my.0e9b7c94.js 实测）：
+ *   - tab 与 types 映射：藏品=2 / 盲盒=1 / 已售=3（我的藏品页另有 已赠送=4）；
+ *     绘画/卡牌/建模/卡券/元素 5 个 tab types=null，源站永不发请求。
+ *   - 响应 data[] 每项 = {collection:{id,name,listimg,main_image}, num, min_price,
+ *     floor_price, price, change_rate, market_fluctuate_new}，即**按藏品分组**的持有汇总；
+ *     点击项进 getDetail 看单实例明细（collection.id 作为 collection_id 传参）。 *   - types=1/2 额外带 current_count（当前持有总数）/ current_consignment（寄售中数）。
+ *
+ * 类型过滤语义（源站账号已清空无从实测，按 E-COLLECTION-STATUS 与本项目
+ * 既有 MyCollection.vue 口径裁决并在此锁定）：
+ *   - types=2 藏品：status IN (1,2) 且 has_sold=0 且 count>0 —— 当前仍持有
+ *     （含寄售中；源站弹窗 statusText 对 types=2 的实例会显示「寄售中/未寄售」，
+ *     证明寄售中藏品属于藏品 tab）
+ *   - types=1 盲盒：blind_box_id 非空（盲盒开出）且 count>0
+ *   - types=3 已售：has_sold = 1（myCollectionList 独有字段）
+ *   - types=4 已赠送：has_sold = 2
+ *   count>0 与 name 非空两个条件同时兜底：灌库时 marketDetail/blindBoxMyBox 等
+ *   快照会产生 count=0、name='' 的关联行（如 55012/5712041），不能当持有展示。
+ *
+ * 【has_sold 裁决】has_sold 是服务端过滤键（前端 bundle 零引用），观测值
+ * 0/1/2 且仅 6003(青川山水)=1、6006(天狗)=2 两行非零。「已售数量」的读法
+ * 在 6006 上自爆（count=1 却已售 2），故按枚举裁决：1=已售出 / 2=已赠送，
+ * 分别对应 myCollection 页的 已售出(types=3) / 已赠送(types=4) 两个 tab。
+ * 由此 types=2 排除 has_sold≠0：已售出/已赠送的藏品不再是「当前持有」，
+ * 且四个 tab 互斥不双计（青川山水在藏品 tab 只计 6008 的 2 个，已售 tab
+ * 计 6003 的 8 个）。源站服务端过滤 SQL 不可见，此裁决已登记
+ * docs/decisions/OPEN-DECISIONS.md。
+ *
+ * 分组键用 name 而非 product_id：源站 myCollectionList 的 collection_id 才是
+ * product_id，且 products 缺 210（青川山水/天狗所属发行体）导致 3 行 product_id
+ * 为 NULL——按 product_id 分组会把同一藏品拆散。name 是源站直取列，最贴近
+ * 「一个藏品」的展示语义。
+ */
+function listMyCollectionGroups(userId, { types, keyword = null, page }) {
+  const where = ['c.user_id = ?']
+  const params = [userId]
+  if (types === 2) {
+    // 藏品 = 当前仍持有（含寄售中）；E-COLLECTION-STATUS 1=持有中 2=寄售中；
+    // has_sold≠0（已售出/已赠送）不再是持有，排除以保证 tab 互斥不双计
+    where.push('c.status IN (1, 2)', 'c.has_sold = 0')
+  } else if (types === 1) {
+    where.push('c.blind_box_id IS NOT NULL')
+  } else if (types === 3) {
+    where.push('c.has_sold = 1')
+  } else if (types === 4) {
+    where.push('c.has_sold = 2')
+  } else {
+    // 未识别 types：返回空而非全量（源站 null types 的 tab 根本不发请求）
+    where.push('1 = 0')
+  }
+  // 持有汇总只统计真实持有：count>0 且藏品名非空
+  where.push('c.count > 0')
+  where.push("COALESCE(c.name, '') <> ''")
+  if (keyword) {
+    where.push('(c.name LIKE ? OR c.collection_code LIKE ?)')
+    params.push(`%${keyword}%`, `%${keyword}%`)
+  }
+  const w = ` WHERE ${where.join(' AND ')}`
+
+  // 先分组计数（分页作用于分组），再取组内汇总。
+  // 注意：pms 按 product_id 可能有多日快照行，直接左连会把 user_collections
+  // 行**扇出**（SUM(count) 翻倍）——故 pms 先按 product_id 聚合成派生表再连。
+  const total = db.count(
+    `SELECT COUNT(*) AS c FROM (SELECT 1 FROM user_collections c${w} GROUP BY c.name)`,
+    params
+  )
+  const items = db.query(
+    `SELECT
+       c.name AS name,
+       MAX(c.listimg) AS listimg,
+       MAX(c.main_image) AS main_image,
+       SUM(c.count) AS num,
+       MAX(c.price) AS price,
+       NULLIF(MAX(c.min_price), 0) AS min_price,
+       COALESCE(MAX(c.product_id), MAX(c.id)) AS collection_id,
+       MAX(pms.min_price) AS floor_price,
+       MAX(pms.market_fluctuate) AS change_rate,
+       MAX(pms.market_fluctuate_new) AS market_fluctuate_new
+     FROM user_collections c
+     LEFT JOIN (
+       SELECT product_id, MAX(min_price) AS min_price, MAX(market_fluctuate) AS market_fluctuate,
+              MAX(market_fluctuate_new) AS market_fluctuate_new
+       FROM product_market_stats GROUP BY product_id
+     ) pms ON pms.product_id = c.product_id${w}
+     GROUP BY c.name
+     ORDER BY MIN(c.id) ASC` + db.dialect.limit(page.pageSize, page.offset),
+    params
+  )
+  return { items, total }
+}
+
+/**
+ * 当前持有总数 / 寄售中数（antMycollection 的 current_count / current_consignment）。
+ *
+ * 口径与 listMyCollectionGroups 的 types=2 对齐（E-COLLECTION-STATUS）：
+ *   current_count = status IN (1,2) 且 has_sold=0 的 SUM(count)（持有中 + 寄售中）
+ *   current_consignment = status = 2 且 has_sold=0 的 SUM(count)（寄售中）
+ * count>0 兜底与列表一致，排除灌库 count=0 的行。
+ */
+function countHoldings(userId) {
+  const row = db.queryOne(
+    `SELECT
+       COALESCE(SUM(CASE WHEN c.status IN (1, 2) AND c.has_sold = 0 THEN c.count ELSE 0 END), 0) AS current_count,
+       COALESCE(SUM(CASE WHEN c.status = 2 AND c.has_sold = 0 THEN c.count ELSE 0 END), 0) AS current_consignment
+     FROM user_collections c WHERE c.user_id = ? AND c.count > 0`,
+    [userId]
+  )
+  return {
+    current_count: Number(row && row.current_count) || 0,
+    current_consignment: Number(row && row.current_consignment) || 0,
+  }
+}
+
+/**
+ * 持有详情弹窗（getDetail）的锚点解析。
+ *
+ * collection_id 语义有二（源站同理）：my 页列表项传的是**藏品分组 id**
+ * （= product_id，如 226），而盲盒/无 product 的行只能退到 user_collections.id。
+ * 故先按 product_id 查，miss 再按 c.id 查；两条都 miss 返回 null（不编造）。
+ */
+function findCollectionAnchor(userId, collectionId) {
+  if (!collectionId) return null
+  return (
+    db.queryOne(
+      `${UC_WITH_PRODUCT} WHERE c.user_id = ? AND c.product_id = ? ORDER BY c.id ASC LIMIT 1`,
+      [userId, collectionId]
+    ) ||
+    db.queryOne(`${UC_WITH_PRODUCT} WHERE c.user_id = ? AND c.id = ?`, [userId, collectionId]) ||
+    null
+  )
+}
+
+/**
+ * 持有明细实例列表（getDetail 的 list）。
+ * 与外层分组同口径：按 name 归属同组 + types 过滤 + count>0。
+ * per_page 源站固定 1000（实测 getDetail 响应），此处沿用调用方传入的 pageSize。
+ */
+function listCollectionInstances(userId, anchor, { types, page }) {
+  if (!anchor) return { items: [], total: 0 }
+  const where = ['c.user_id = ?', 'c.name = ?']
+  const params = [userId, anchor.name || '']
+  // 与外层分组同口径：types=2 含寄售中、排除已售出/已赠送；types=3 已售用 has_sold=1
+  if (types === 2) where.push('c.status IN (1, 2)', 'c.has_sold = 0')
+  else if (types === 1) where.push('c.blind_box_id IS NOT NULL')
+  else if (types === 3) where.push('c.has_sold = 1')
+  else if (types === 4) where.push('c.has_sold = 2')
+  where.push('c.count > 0')
+  const w = ` WHERE ${where.join(' AND ')}`
+  const total = db.count(`SELECT COUNT(*) AS c FROM user_collections c${w}`, params)
+  const items = db.query(
+    `SELECT c.id, c.collection_code, c.status, c.is_lock, c.can_compose, c.price,
+            c.blind_box_id, c.createtime, ${UC_NAME_COLS} p.name AS p_name
+     FROM user_collections c LEFT JOIN products p ON p.id = c.product_id${w}
+     ORDER BY c.id ASC` + db.dialect.limit(page.pageSize, page.offset),
+    params
+  )
+  return { items, total }
+}
+
 /** 藏品流转记录 */
 function listFlowRecords(userId, page) {
   const w = ' WHERE user_id = ?'
@@ -174,6 +335,10 @@ module.exports = {
   listSellableCollections,
   findMyBlindBox,
   listBlindBoxRecords,
+  listMyCollectionGroups,
+  countHoldings,
+  findCollectionAnchor,
+  listCollectionInstances,
   listFlowRecords,
   listPriceTicks,
   todayQuote,

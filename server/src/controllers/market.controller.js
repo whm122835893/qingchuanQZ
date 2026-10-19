@@ -4,8 +4,10 @@
  * 市场与行情 controller。
  */
 const service = require('../services/market.service')
+const tradeWrite = require('../services/trade-write.service')
 const responder = require('../middleware/respond')
 const { requireId, optionalId, routeId } = require('../utils/validate')
+const { currentUid } = require('../middleware/auth')
 const { NotFoundError } = require('../errors')
 
 async function getMarketList(req, res) {
@@ -37,4 +39,19 @@ async function klineInfo(req, res) {
   responder.single(res, data)
 }
 
-module.exports = { getMarketList, marketDetail, seriesGoodsList, collectionDetail, klineInfo }
+/**
+ * 一键下架（batchchangeMarketGoods）。popDetails 弹窗按钮，
+ * 入参 collection_id；响应体源站不消费，出参附受影响挂单数。
+ */
+async function batchOffCollections(req, res) {
+  responder.single(res, await tradeWrite.batchOffCollections(currentUid(req), req.input), '下架成功')
+}
+
+module.exports = {
+  getMarketList,
+  marketDetail,
+  seriesGoodsList,
+  collectionDetail,
+  klineInfo,
+  batchOffCollections,
+}

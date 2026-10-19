@@ -92,10 +92,22 @@ const MOCK_MAP = {
   '/crystal_goods/exchangeRecord': 'shopExchangeRecord.json',
   '/crystal_goods/crystalDetail': 'shopCrystalDetail.json',
   // 盲盒（我的盲盒 / 开盒记录 / 开盒结果）
+  // 源站契约（模块 9bd5 实证）：
+  //   openBox(openid)  → /user_collection/user_collection/openbox  响应 data 为【单对象】（result2 / popDetails.takeApart）
+  //   openBoxs(openid) → /user_collection/user_collection/openBoxs 响应 data 为【数组】（result / popDetails.openAll）
+  // 源站无 openboxone 端点；早期映射已按此修正。
   '/box/blind_box/myBox': 'blindBoxMyBox.json',
   '/box/blind_box/openlog': 'blindBoxOpenRecord.json',
-  '/user_collection/user_collection/openbox': 'blindBoxResult.json',
-  '/user_collection/user_collection/openboxone': 'blindBoxResultOne.json',
+  '/user_collection/user_collection/openbox': 'blindBoxResultOne.json',
+  '/user_collection/user_collection/openBoxs': 'blindBoxResult.json',
+  // 我的页藏品聚合 / 持有详情弹窗 / 一键开启 / 一键下架
+  // antMycollection.json 与 getDetail.json 为源站真实抓包快照（账号空态），
+  // openBoxs 与 openbox 同形状（data 为开盒结果数组），batchOff 无源站快照（写接口），
+  // 本地回落仅为形状占位，真实结果由后端写接口提供（已实现，见 server/）。
+  '/user_collection/user_collection/antMycollection': 'antMycollection.json',
+  '/user_collection/user_collection/getDetail': 'getDetail.json',
+  '/user_collection/user_collection/openBoxs': 'blindBoxResult.json',
+  '/market/market/batchchangeMarketGoods': 'batchOff.json',
   // 藏品合成
   '/compound/compound/list': 'compoundList.json',
   '/compound/compound/record': 'compoundRecord.json',
@@ -240,8 +252,16 @@ export const api = {
   // 盲盒
   blindBoxMyBox: (data) => request('/box/blind_box/myBox', { data }),
   blindBoxOpenRecord: (data) => request('/box/blind_box/openlog', { data }),
-  blindBoxOpenResult: (data) => request('/user_collection/user_collection/openbox', { data }),
-  blindBoxOpenResultOne: (data) => request('/user_collection/user_collection/openboxone', { data }),
+  // 开盒结果：多格走 openBoxs（数组）；单格走 openbox（单对象）——源站 9bd5 契约
+  blindBoxOpenResult: (data) => request('/user_collection/user_collection/openBoxs', { data }),
+  blindBoxOpenResultOne: (data) => request('/user_collection/user_collection/openbox', { data }),
+  // 我的页藏品聚合（tab：藏品 types=2 / 盲盒 types=1 / 已售 types=3；
+  // 源站 openBox/openBoxs 契约入参名均为 openid，响应分别为单对象/数组）
+  antMycollection: (data) => request('/user_collection/user_collection/antMycollection', { data }),
+  collectionGetDetail: (data) => request('/user_collection/user_collection/getDetail', { data }),
+  openBoxs: (data) => request('/user_collection/user_collection/openBoxs', { data }),
+  openBox: (data) => request('/user_collection/user_collection/openbox', { data }),
+  batchchangeMarketGoods: (data) => request('/market/market/batchchangeMarketGoods', { data }),
   // 合成
   compoundList: (data) => request('/compound/compound/list', { data }),
   compoundRecord: (data) => request('/compound/compound/record', { data }),

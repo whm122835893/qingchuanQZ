@@ -32,6 +32,8 @@ async function userInfo(uid, token) {
       huifu_service_charge: user.huifu_service_charge === null ? 0 : user.huifu_service_charge,
       sandpay_service_charge: user.sandpay_service_charge === null ? 0 : user.sandpay_service_charge,
       token: token || '',
+      // 我的页「资产/收益」块数据源；派生口径见 repository.userStatistics 注释
+      statistics: userRepo.userStatistics(user.id),
     },
   }
 }

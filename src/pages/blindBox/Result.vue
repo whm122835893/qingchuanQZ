@@ -39,19 +39,37 @@
 /**
  * 原站 blindBox/result —— 盲盒结果（多格）
  * 结构：导航 + 结果列表（缩略图 + 名称 + 藏品编号 + 稀有度图标）+ 提示 + 底部双按钮。
+ * 数据来源照抄源站：index 页开盒后 setStorageSync('blindBoxResultList') 再 redirect 到本页；
+ * 直接访问本页（无 storage）时按路由 query.openid 调 openBoxs 拉取。
  */
 import { onMounted, ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import PageNavbar from '@/components/PageNavbar.vue'
-import { fetchBlindBoxResult } from '@/utils/api'
+import { fetchBlindBoxResult, fetchOpenBoxs } from '@/utils/api'
 import { ossImg } from '@/api'
 
 defineOptions({ name: 'BlindBoxResult' })
 
 const router = useRouter()
+const route = useRoute()
 const list = ref([])
 
 onMounted(async () => {
+  const raw = localStorage.getItem('blindBoxResultList')
+  if (raw) {
+    try {
+      list.value = JSON.parse(raw) || []
+    } catch (e) {
+      list.value = []
+    }
+    if (list.value.length) return
+  }
+  const openid = route.query.openid
+  if (openid) {
+    const res = await fetchOpenBoxs({ openid })
+    list.value = (res && res.data) || []
+    return
+  }
   list.value = await fetchBlindBoxResult()
 })
 

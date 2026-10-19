@@ -186,6 +186,22 @@ function findBoxForUpdate(id) {
 }
 
 /**
+ * 按 blind_box_id 归属查盲盒行（openBoxs 的 openid 契约）。
+ *
+ * 源站实证（pages-my-my popDetails.blindOpenId）：
+ *   list.find(a => a.blind_box_id)?.blind_box_id || collection.blind_box_id || collection.id
+ * 即 openid 传的是 blind_box_id（如 101），不是 user_collections.id（如 55012）。
+ * 不要求 count>0：已耗尽的盒也要能定位，由上层 listOpenableBoxes 决定「有没有可开的」。
+ */
+function findBoxByBlindBoxId(userId, blindBoxId) {
+  return db.queryOne(
+    'SELECT id, product_id, user_id, collection_code, status, count, is_lock, price, blind_box_id ' +
+      'FROM user_collections WHERE user_id = ? AND blind_box_id = ? ORDER BY id ASC LIMIT 1',
+    [userId, blindBoxId]
+  )
+}
+
+/**
  * 开盒：扣减盲盒余量并置为已开盒状态。
  * count > 0 是写入前提，保证不会把余量开成负数。
  */
@@ -193,6 +209,49 @@ function consumeBlindBox(boxRowId) {
   return db.run(
     'UPDATE user_collections SET count = count - 1, updated_at = ? WHERE id = ? AND count > 0',
     [now(), boxRowId]
+  ).changes
+}
+
+/**
+ * 同类型待开盲盒（openBoxs 批量开盒）。
+ * 同胞盒按 blind_box_id 归并；count>0 才是还能开的；
+ * limit 即源站弹窗提示的「一次最多打开10个盲盒」。
+ */
+function listOpenableBoxes(userId, blindBoxId, limit) {
+  return db.query(
+    'SELECT id, product_id, user_id, collection_code, status, count, is_lock, price, blind_box_id ' +
+      'FROM user_collections WHERE user_id = ? AND blind_box_id = ? AND count > 0 ' +
+      'ORDER BY id ASC' + db.dialect.limit(limit, 0),
+    [userId, blindBoxId]
+  )
+}
+
+/**
+ * 一键下架（batchchangeMarketGoods）：把该用户在某藏品下的在售挂单
+ * 全部置为已取消（E-LISTING-STATUS 3）。返回受影响行数。
+ * 藏品无 product_id（如青川山水，products 缺 210）时无挂单可匹配，返回 0。
+ */
+function downSelfListingsByProduct(userId, productId) {
+  if (!productId) return 0
+  return db.run(
+    'UPDATE market_listings SET status = 3, update_time = ? WHERE sale_user_id = ? AND product_id = ? AND status = 1',
+    [now(), userId, productId]
+  ).changes
+}
+
+/**
+ * 一键下架的藏品侧回退：寄售中（status=2）的持有实例回到持有中（status=1）。
+ *
+ * 与 sell() 的 updateCollectionStatus(1→2) 互为逆操作：下架后弹窗
+ * statusText 对这些实例显示「未寄售/可合成」而非「寄售中」，
+ * 与源站 getDetailsRefresh 后的展示一致。
+ * product_id 为空（如青川山水）时无挂单可下，也就无可回退实例，返回 0。
+ */
+function restoreListedCollectionsByProduct(userId, productId) {
+  if (!productId) return 0
+  return db.run(
+    'UPDATE user_collections SET status = 1, updated_at = ? WHERE user_id = ? AND product_id = ? AND status = 2',
+    [now(), userId, productId]
   ).changes
 }
 
@@ -286,7 +345,11 @@ module.exports = {
   updateCollectionStatus,
   findCollectionForUpdate,
   findBoxForUpdate,
+  findBoxByBlindBoxId,
   consumeBlindBox,
+  listOpenableBoxes,
+  downSelfListingsByProduct,
+  restoreListedCollectionsByProduct,
   insertCollection,
   existsCollectionCode,
   insertCompoundResult,

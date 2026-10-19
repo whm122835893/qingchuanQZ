@@ -37,12 +37,15 @@
 /**
  * 原站 blindBox/index —— 我的盲盒
  * 结构：导航 + 中部盲盒图/数量/一键开启 + 底部「立即寄售 / 逐个拆开」。
- * 开盒结果沿用原站 blindBox/result 的多格列表样式，内嵌为弹层。
+ * 开盒接线照抄源站（pages-blindBox-index 模块 dba4）：
+ *   一键开启 → openBoxs(openid) → 存 blindBoxResultList → redirect result（多格）
+ *   逐个拆开 → openBox(openid)  → 存 blindBoxResult    → redirect result2（单格）
+ * openid 取 myBox 响应的 user_collection_id（源站 storage blindBoxInfo.blindBoxId 的等价字段）。
  */
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import PageNavbar from '@/components/PageNavbar.vue'
-import { fetchBlindBoxMyBox } from '@/utils/api'
+import { fetchBlindBoxMyBox, fetchOpenBox, fetchOpenBoxs } from '@/utils/api'
 import { ossImg } from '@/api'
 
 defineOptions({ name: 'BlindBoxIndex' })
@@ -54,14 +57,40 @@ onMounted(async () => {
   info.value = await fetchBlindBoxMyBox()
 })
 
-function openAll() {
+/** 源站 open()：$u.throttle 之外先判 num，openBoxs 后存 storage 跳多格结果页 */
+async function openAll() {
   if (!info.value.num) return
-  router.push('/pages/blindBox/result')
+  const openid = info.value.user_collection_id || info.value.blindBoxId
+  if (!openid) return
+  uni.showLoading({ title: '请求中...' })
+  try {
+    const res = await fetchOpenBoxs({ openid })
+    localStorage.setItem('blindBoxResultList', JSON.stringify((res && res.data) || []))
+    router.push('/pages/blindBox/result')
+  } catch (e) {
+    /* 源站 catch 为空 */
+  } finally {
+    uni.hideLoading()
+  }
 }
-function takeApart() {
+
+/** 源站 takeApart()：openBox 后存 storage 跳单格结果页 */
+async function takeApart() {
   if (!info.value.num) return
-  router.push('/pages/blindBox/result')
+  const openid = info.value.user_collection_id || info.value.blindBoxId
+  if (!openid) return
+  uni.showLoading({ title: '请求中...' })
+  try {
+    const res = await fetchOpenBox({ openid })
+    localStorage.setItem('blindBoxResult', JSON.stringify((res && res.data) || {}))
+    router.push('/pages/blindBox/result2')
+  } catch (e) {
+    /* 源站 catch 为空 */
+  } finally {
+    uni.hideLoading()
+  }
 }
+
 function goConsign() {
   router.push({ path: '/pages/consignments/consignments', query: { id: info.value.id, pageType: 1 } })
 }

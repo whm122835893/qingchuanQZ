@@ -33,6 +33,9 @@ const { NotFoundError, ForbiddenError, ConflictError, BusinessError } = require(
  */
 const BATCH_PER_OPEN = 1
 
+/** 一键开启单次最多开盒数（源站弹窗提示「一次最多打开10个盲盒」） */
+const BOX_BATCH_LIMIT = 10
+
 /** 开盒（批量，响应裸数组） */
 async function openbox(userId, blindBoxId) {
   const box = await resolveBox(userId, blindBoxId)
@@ -96,6 +99,10 @@ function replayShape(row) {
  * 定位待开盲盒。
  * 显式传 id 时校验归属（他人盲盒 403）；未传时取该用户唯一一条待开盲盒。
  *
+ * 显式 id 的双语义（源站同理）：openBoxs 的 openid 传的是 **blind_box_id**
+ * （popDetails.blindOpenId 实测），openbox 历史路径可能传 user_collections.id。
+ * 故先按 blind_box_id 归属查，miss 再按行 id 兜底。
+ *
  * 注意：此处**不**校验 count —— count 已耗尽的盲盒必须先经replayOpen 判定
  * 是否为重复提交（幂等重放要早于「已开完」报错，见 replayOpen 注释）；
  * 真正的新开盒请求由 openOnce 内consumeBlindBox 的 count > 0 条件兜住，
@@ -103,7 +110,9 @@ function replayShape(row) {
  */
 async function resolveBox(userId, blindBoxId) {
   if (blindBoxId) {
-    const row = await writeRepo.findBoxForUpdate(blindBoxId)
+    const row =
+      (await writeRepo.findBoxByBlindBoxId(userId, blindBoxId)) ||
+      (await writeRepo.findBoxForUpdate(blindBoxId))
     if (!row || row.blind_box_id === null) throw new NotFoundError('盲盒不存在')
     if (row.user_id !== userId) throw new ForbiddenError('无权操作该盲盒')
     return row
@@ -209,4 +218,28 @@ async function toResponse(row) {
   }
 }
 
-module.exports = { openbox, openboxone, BATCH_PER_OPEN }
+/**
+ * 一键开启（openBoxs，popDetails 弹窗的「一键开启」按钮）。
+ *
+ * 源站语义（pages-my-my popDetails.openAll）：一次最多打开 10 个盲盒，
+ * 入参 openid 定位盲盒（同胞盒按 blind_box_id 归并），响应为结果数组。
+ * 逐个开盒各自走幂等窗口（60s），重复点击返回上次结果而非重复扣减。
+ */
+async function openBoxs(userId, openid) {
+  const anchor = await resolveBox(userId, openid)
+  const boxes = await writeRepo.listOpenableBoxes(userId, anchor.blind_box_id, BOX_BATCH_LIMIT)
+  if (!boxes.length) throw new BusinessError('暂无可开启盲盒')
+  const out = []
+  for (const box of boxes) {
+    const replay = replayOpen(box)
+    if (replay && replay.length) {
+      out.push(...replay.map(replayShape))
+      continue
+    }
+    const created = await openOnce(userId, box)
+    out.push(...(await Promise.all(created.map(toResponse))))
+  }
+  return out
+}
+
+module.exports = { openbox, openboxone, openBoxs, BATCH_PER_OPEN }

@@ -1,0 +1,14 @@
+{
+  "code": 1,
+  "msg": "获取成功",
+  "time": "1792417432",
+  "data": {
+    "total": 0,
+    "per_page": 15,
+    "current_page": 1,
+    "last_page": 0,
+    "data": [],
+    "current_count": 0,
+    "current_consignment": 0
+  }
+}

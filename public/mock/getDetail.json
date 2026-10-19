@@ -1,0 +1,30 @@
+{
+ "code": 1,
+ "msg": "获取成功",
+ "time": "1792418268",
+ "data": {
+  "list": {
+   "total": 0,
+   "per_page": 1000,
+   "current_page": 1,
+   "last_page": 0,
+   "data": [],
+   "current_count": 0,
+   "current_consignment": 0
+  },
+  "collection": {
+   "id": 226,
+   "name": "赛博铁牛",
+   "main_image": "/uploads/20261014/ea65d8aff9b71747498819acc2c28e74.jpg",
+   "listimg": "/uploads/20261014/ea65d8aff9b71747498819acc2c28e74.jpg",
+   "total_num": 500,
+   "total_num_show": 0,
+   "is_img_diff": 0,
+   "unfreeze_collection_id": 0,
+   "freeze_time": 0,
+   "avg_price": 0,
+   "num": "",
+   "batch_up": 0
+  }
+ }
+}

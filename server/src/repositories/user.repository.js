@@ -145,6 +145,50 @@ function countInvitations(userId) {
   return userInvitations.countBy('user_id = ?', [userId])
 }
 
+/**
+ * 我的页「资产/收益」统计块（getUserInfo 的 userinfo.statistics）。
+ *
+ * 源站契约（getUserInfo_full 实测）：
+ *   statistics:{invited_count, buy_count, sale_count, join_day, total_assets}
+ * 源站账号已清空（实测全 0），无口径可抄；以下按本项目数据**诚实派生**，
+ * 每一项的推导依据逐条注释，不拿业务值冒充：
+ *   - invited_count：user_invitations 行数（我邀请的好友记录）
+ *   - buy_count：orders 中 order_type=1（买入单）行数
+ *   - sale_count：market_listings 中 status=2（E-LISTING-STATUS 已成交）行数
+ *   - join_day：(now - users.created_at) 向下取整天
+ *   - total_assets：当前持有（status IN (1,2) 且 has_sold=0 且 count>0）的
+ *     Σ(count × price)——与我的页藏品 tab 同口径，UI 标签即「总资产预估」。
+ *     注意这是买入价口径的估值，非源站服务端算法（不可见），已在 README 标注。
+ */
+function userStatistics(userId) {
+  const invited = userInvitations.countBy('user_id = ?', [userId])
+  const buy = db.queryOne(
+    "SELECT COUNT(*) AS c FROM orders WHERE user_id = ? AND order_type = 1",
+    [userId]
+  )
+  const sale = db.queryOne(
+    'SELECT COUNT(*) AS c FROM market_listings WHERE sale_user_id = ? AND status = 2',
+    [userId]
+  )
+  const asset = db.queryOne(
+    "SELECT COALESCE(SUM(c.count * c.price), 0) AS s FROM user_collections c " +
+      'WHERE c.user_id = ? AND c.status IN (1, 2) AND c.has_sold = 0 AND c.count > 0',
+    [userId]
+  )
+  const user = db.queryOne('SELECT created_at FROM users WHERE id = ?', [userId])
+  const createdAt = user && user.created_at ? Number(user.created_at) : null
+  const joinDay = createdAt
+    ? Math.max(0, Math.floor((Math.floor(Date.now() / 1000) - createdAt) / 86400))
+    : 0
+  return {
+    invited_count: invited,
+    buy_count: Number(buy && buy.c) || 0,
+    sale_count: Number(sale && sale.c) || 0,
+    join_day: joinDay,
+    total_assets: Number(asset && asset.s) || 0,
+  }
+}
+
 /** 助力记录 */
 const userInvitationAssists = baseRepository('user_invitation_assists', [
   'id',
@@ -188,5 +232,6 @@ module.exports = {
   listSignRewards,
   listInvitations,
   countInvitations,
+  userStatistics,
   listAssists,
 }

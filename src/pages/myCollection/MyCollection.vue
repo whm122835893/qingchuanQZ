@@ -43,21 +43,11 @@
     </view>
 
     <CollectionDetailPopup
-      :show="showPop"
-      :collection="activeCollection"
-      :list="activeCodes"
-      :selected-ids="selectedIds"
-      :show-check="showCheck"
-      :batch-up="true"
-      :confirm-off-model="confirmOff"
-      @update:show="showPop = $event"
-      @update:confirm-off-model="confirmOff = $event"
-      @enter-batch="showCheck = true"
-      @clear-batch="resetCheck"
-      @toggle-check="toggleCheck"
-      @item-click="goDetail"
-      @to-resale="toResale"
-      @batch-off="batchOff"
+      v-model:show="showPop"
+      :id="activeId"
+      :types="types"
+      :summary="activeSummary"
+      @opened="init"
     />
   </view>
 </template>
@@ -71,10 +61,11 @@ import CollectionDetailPopup from '@/components/CollectionDetailPopup.vue'
 import CollectionOverview from '@/components/CollectionOverview.vue'
 
 // tab 文案与顺序严格对齐源站：藏品 / 盲盒 / 已售出 / 已赠送
-// types 取值沿用原接口枚举：1=藏品 2=盲盒 3=已售出 4=已赠送
+// types 枚举对齐源站 myCollection 页实证：藏品=2 / 盲盒=1 / 已售出=3 / 已赠送=4
+// （与 my 页 antMycollection 同枚举；早期文件误作 藏品=1/盲盒=2，已修正）
 const TABS = [
-  { name: '藏品', types: 1 },
-  { name: '盲盒', types: 2 },
+  { name: '藏品', types: 2 },
+  { name: '盲盒', types: 1 },
   { name: '已售出', types: 3 },
   { name: '已赠送', types: 4 },
 ]
@@ -82,20 +73,18 @@ const TABS = [
 const router = useRouter()
 const all = ref([])
 const loading = ref(true)
-const types = ref(1)
+const types = ref(2)
 const keywords = ref('')
 const showPop = ref(false)
-const showCheck = ref(false)
-const selectedIds = ref([])
-const confirmOff = ref(false)
-const active = ref(null)
+const activeId = ref('')
+const activeSummary = ref({})
 
 const showPrice = computed(() => types.value !== 3 && types.value !== 4)
 
 const list = computed(() => {
   const kw = keywords.value.trim()
   return all.value.filter((x) => {
-    if (types.value === 2 && x.status !== 2) return false
+    if (types.value === 1 && !x.blind_box_id) return false
     if (types.value === 3 && x.has_sold !== 1) return false
     if (types.value === 4 && x.has_sold !== 2) return false
     if (kw && !(x.name || '').includes(kw)) return false
@@ -119,19 +108,6 @@ const floorText = computed(() => {
   return Math.min(...all.value.map((x) => Number(x.price) || 0)).toFixed(2)
 })
 
-const activeCollection = computed(() => active.value || {})
-const activeCodes = computed(() =>
-  all.value
-    .filter((x) => x.collection_id === (active.value || {}).collection_id)
-    .map((x) => ({
-      id: x.id,
-      collection_code: x.collection_code,
-      status: x.status,
-      price: x.price,
-      createtime: x.createtime,
-    }))
-)
-
 const cutName = (n) => (n && n.length > 10 ? n.slice(0, 10) + '...' : n || '')
 
 function changeTab(t) {
@@ -140,38 +116,14 @@ function changeTab(t) {
 }
 
 function openPop(item) {
-  active.value = item
+  activeId.value = item.collection_id || item.id
+  activeSummary.value = item
   showPop.value = true
-}
-
-function resetCheck() {
-  showCheck.value = false
-  selectedIds.value = []
-}
-
-function toggleCheck(id) {
-  const i = selectedIds.value.indexOf(id)
-  if (i > -1) selectedIds.value.splice(i, 1)
-  else selectedIds.value.push(id)
-}
-
-function goDetail(id) {
-  router.push(`/pages/myCollection/collectionDetails?id=${id}`)
 }
 
 function goBack() {
   if (window.history.length > 1) router.back()
   else router.push('/pages/my/my')
-}
-
-function toResale() {
-  uni.showToast({ title: '已发起寄售' })
-}
-
-function batchOff() {
-  confirmOff.value = false
-  uni.showToast({ title: '已一键下架' })
-  resetCheck()
 }
 
 async function init() {
