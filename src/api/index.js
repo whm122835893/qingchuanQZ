@@ -138,13 +138,23 @@ async function remoteRequest(url, { method, data, param }) {
   if (keys.length) fullUrl += '?' + keys.map((k) => `${k}=${param[k]}`).join('&')
   const headers = { 'Content-Type': 'application/json', version: '1.0.1' }
   const token = getToken()
-  if (token) headers[TOKEN_KEY] = token
+  // 三个通道同时发：
+  //   body.token      —— 发布环境唯一可靠（网关会覆盖 Authorization、剥离自定义头）
+  //   Authorization   —— 直连/本地可用
+  //   token 头        —— 源站约定
+  // 实测依据：线上部署后仅靠头传递时，Authorization 被网关替换成平台令牌
+  // （iss=cloudstudio.net），token 头被剥离，导致「登录成功但之后全部 401」。
+  const body = method === 'GET' ? undefined : JSON.stringify(token ? { ...data, token } : data)
+  if (token) {
+    headers.Authorization = 'Bearer ' + token
+    headers[TOKEN_KEY] = token
+  }
+  // GET 无 body，改走查询串携带 token（同样绕开被网关处理的请求头）
+  const finalUrl = token && method === 'GET'
+    ? fullUrl + (fullUrl.includes('?') ? '&' : '?') + 'token=' + encodeURIComponent(token)
+    : fullUrl
 
-  const res = await fetch(fullUrl, {
-    method,
-    headers,
-    body: method === 'GET' ? undefined : JSON.stringify(data),
-  })
+  const res = await fetch(finalUrl, { method, headers, body })
   const json = await res.json()
   if (json.code === 401) setToken('')
   return json

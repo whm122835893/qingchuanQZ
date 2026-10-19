@@ -78,19 +78,51 @@ function attach(req, _res, next) {
     (req.headers['x-forwarded-for'] || '').toString().split(',')[0].trim() ||
     req.socket.remoteAddress ||
     ''
-  const token = req.headers.token
+  const token = readToken(req)
+  // 取出后立即剔除，避免 body 里的 token 混进业务参数（service 只看业务字段）
+  if (req.input && req.input.token !== undefined) delete req.input.token
   if (token) {
     try {
       const payload = verify(String(token))
       req.auth = { uid: payload.uid, nickname: payload.nickname || '' }
-    } catch {
+    } catch (e) {
       req.auth = null
       req.authInvalid = true
+      // 诊断留痕：verify 失败曾长期被静默吞掉，导致线上「token 有效却全 401」
+      // 无从定位。只记错误名不含 token 内容。
+      req.authError = e && e.name ? String(e.name) : 'VerifyError'
     }
   } else {
     req.auth = null
   }
   next()
+}
+
+/**
+ * 取 token，三种来源按可靠性排序：
+ *
+ *   1) 请求体/查询串里的 `token` —— **发布环境唯一可靠的通路**
+ *   2) `Authorization: Bearer <jwt>` —— 直连/本地可用
+ *   3) `token` 头 —— 源站约定，前端历史用法
+ *
+ * 【为什么 body 优先】
+ * 单端口部署上线后，全部需鉴权接口返 401，而同一 token 用同一 .env 的
+ * secret 可正常 verify、iat/exp 均正常。用诊断端点抓到实证：
+ *   - 客户端发的 `Authorization` 被网关**覆盖**成平台令牌
+ *     （decode 后 iss=cloudstudio.net、user_nickname=体验用户、长度 379）
+ *   - 客户端发的自定义 `token` 头被网关**剥离**（has_token_header=false）
+ * 即 HTTP 头在该链路上不可作为凭据通道，只有 body 能原样到达。
+ * 头方式保留给本地/直连调试，不影响既有调用方。
+ */
+function readToken(req) {
+  const fromInput = req.input && req.input.token
+  if (fromInput) return fromInput
+  const auth = req.headers.authorization
+  if (auth) {
+    const m = /^Bearer\s+(.+)$/i.exec(String(auth).trim())
+    if (m) return m[1]
+  }
+  return req.headers.token || null
 }
 
 /** 强制鉴权：39 条需登录接口使用 */
