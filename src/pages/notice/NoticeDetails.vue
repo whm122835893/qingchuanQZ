@@ -52,11 +52,12 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { fetchAfficheDetail, asset } from '@/utils/api'
 import { ossImg } from '@/api'
 
 const router = useRouter()
+const route = useRoute()
 
 const info = ref({})
 
@@ -74,7 +75,8 @@ function goMarket(c) {
 }
 
 onMounted(async () => {
-  info.value = await fetchAfficheDetail({})
+  // 源站 noticeDetails 以 route.query.id 为参数（公告 id，如 429）
+  info.value = await fetchAfficheDetail({ id: route.query.id })
 })
 </script>
 

@@ -92,7 +92,7 @@
  * 原站 blindBox/blindBoxDetails —— 盲盒详情
  * 结构：顶部藏品卡（主图 + 名称 + 限量）+ 藏池概率卡 + 藏品信息卡 + 购买须知卡 + 底部「立即转赠 / 立即寄售」。
  */
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { asset, fetchShopBoxDetail } from '@/utils/api'
 import { ossImg } from '@/api'
@@ -104,6 +104,9 @@ const info = ref({})
 const product = ref({})
 const isShengou = ref(false)
 const confirmPop = ref(false)
+
+/** 概率池：源站 shopBoxDetail 响应在 product.collectionlist（含 id/name/probability/show_total_num/listimg） */
+const pool = computed(() => (product.value && product.value.collectionlist) || [])
 
 onMounted(async () => {
   const data = await fetchShopBoxDetail()
