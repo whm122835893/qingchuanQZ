@@ -221,6 +221,16 @@ async function collectionInfo(id, uid) {
   }
   const product = row.product_id ? await productRepo.findProduct(row.product_id) : null
   const series = product && product.series_id ? await productRepo.findSeries(product.series_id) : null
+  // 概率池（盲盒详情 w-product-box 的 collectionlist）：仅盲盒商品(goods_type=1)有池数据，
+  // 非盲盒按空数组返回，前端 v-show collectionlist.length 自然隐藏该盒。
+  const poolItems =
+    product && product.goods_type === 1 ? await productRepo.listPoolItems(product.id) : []
+  // 源站 getUserCollectionDetails 的 tech 第三行「认证时间」取 product.createtime；
+  // 本地 products 表无该源列（仅 created_at 灌库审计列），按实例登记时间取别名，
+  // 保持前端字段路径 product.createtime 与源站 render 一致。
+  const createtime = row.createtime === null || row.createtime === undefined ? 0 : row.createtime
+  // 取消寄售（changeMarketGoods）入参为 market_goods.id：寄售中(2)的实例必有在售挂单
+  const listing = row.status === 2 ? await marketRepo.findListingByCollection(row.id) : null
   return {
     id: row.id,
     collection_code: row.collection_code,
@@ -229,7 +239,7 @@ async function collectionInfo(id, uid) {
     user_hash: row.user_hash || '',
     user_hash_text: row.user_hash_text || '',
     rz_code: row.rz_code === null ? '' : String(row.rz_code),
-    createtime: row.createtime,
+    createtime,
     status: row.status,
     is_lock: row.is_lock === null ? 0 : row.is_lock,
     weither_regift: row.weither_regift === null ? 0 : row.weither_regift,
@@ -238,6 +248,14 @@ async function collectionInfo(id, uid) {
     price: money2(row.price),
     min_price: money2(row.min_price),
     today_volume: row.today_volume === null ? 0 : row.today_volume,
+    market_goods: listing
+      ? {
+          id: listing.id,
+          price: money2(listing.price),
+          status: listing.status,
+          order_sn: listing.order_sn || '',
+        }
+      : null,
     product: product
       ? {
           id: product.id,
@@ -252,6 +270,18 @@ async function collectionInfo(id, uid) {
           weither_regift: product.weither_regift === null ? 0 : product.weither_regift,
           weither_resale: product.weither_resale === null ? 0 : product.weither_resale,
           can_compose: product.can_compose === null ? 0 : product.can_compose,
+          createtime,
+          // 源站 render 读 product.introduce_image（u-parse 富文本）；本地 products 表该列全空，
+          // 真实 HTML 落在 introduce 列——按 createtime 同款别名模式暴露，保持前端字段路径一致。
+          introduce_image: product.introduce || '',
+          collectionlist: poolItems.map((p) => ({
+            id: p.id,
+            name: p.name,
+            probability: p.probability,
+            show_total_num: p.show_total_num === null ? 0 : p.show_total_num,
+            listimg: p.listimg,
+            rarity_icon: p.rarity_icon,
+          })),
           series: series ? { id: series.id, name: series.name } : null,
           publisher: publisherBrief(product),
         }

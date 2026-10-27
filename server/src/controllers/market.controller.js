@@ -47,6 +47,14 @@ async function batchOffCollections(req, res) {
   responder.single(res, await tradeWrite.batchOffCollections(currentUid(req), req.input), '下架成功')
 }
 
+/**
+ * 单条取消寄售（changeMarketGoods）。藏品详情页「取消寄售」按钮，
+ * 入参 id=market_goods.id（挂单 ID）；下架后前端 refresh getDetails。
+ */
+async function cancelListing(req, res) {
+  responder.single(res, await tradeWrite.cancelListing(currentUid(req), req.input), '已取消寄售')
+}
+
 module.exports = {
   getMarketList,
   marketDetail,
@@ -54,4 +62,5 @@ module.exports = {
   collectionDetail,
   klineInfo,
   batchOffCollections,
+  cancelListing,
 }

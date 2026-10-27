@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-10-18T15:03:38.017Z",
-  "base_url": "http://localhost:3103",
+  "generated_at": "2026-10-22T04:57:26.261Z",
+  "base_url": "http://localhost:3100",
   "summary": {
-    "total_read_endpoints": 62,
+    "total_read_endpoints": 69,
     "aligned": 26,
     "no_baseline": 1,
     "with_diff": 1,
-    "unavailable": 34,
+    "unavailable": 41,
     "todo_endpoints": 7
   },
   "diff_ranked": [
@@ -241,6 +241,28 @@
       "mock_data_is_empty": true
     },
     {
+      "path": "/user/login",
+      "route": "/user/login",
+      "style": "D",
+      "auth_required": false,
+      "http_code": 400,
+      "msg": "参数 account 缺失",
+      "mock": "user.json（与getUserInfo 共用）",
+      "status": "unavailable",
+      "reason": "code=400 msg=参数 account 缺失"
+    },
+    {
+      "path": "/user/register",
+      "route": "/user/register",
+      "style": "D",
+      "auth_required": false,
+      "http_code": 400,
+      "msg": "参数 mobile 缺失",
+      "mock": "user.json",
+      "status": "unavailable",
+      "reason": "code=400 msg=参数 mobile 缺失"
+    },
+    {
       "path": "/user/getUserInfo",
       "route": "/user/getUserInfo",
       "style": "D",
@@ -314,6 +336,28 @@
       "http_code": 401,
       "msg": "登录已失效，请重新登录",
       "mock": "orderDetail.json",
+      "status": "unavailable",
+      "reason": "code=401 msg=登录已失效，请重新登录"
+    },
+    {
+      "path": "/market/trade/createBegBuyOrder",
+      "route": "/market/trade/createBegBuyOrder",
+      "style": "D",
+      "auth_required": true,
+      "http_code": 401,
+      "msg": "登录已失效，请重新登录",
+      "mock": "（无）",
+      "status": "unavailable",
+      "reason": "code=401 msg=登录已失效，请重新登录"
+    },
+    {
+      "path": "/market/trade/sell",
+      "route": "/market/trade/sell",
+      "style": "D",
+      "auth_required": true,
+      "http_code": 401,
+      "msg": "登录已失效，请重新登录",
+      "mock": "（无）",
       "status": "unavailable",
       "reason": "code=401 msg=登录已失效，请重新登录"
     },
@@ -480,6 +524,28 @@
       "reason": "code=401 msg=登录已失效，请重新登录"
     },
     {
+      "path": "/user_collection/user_collection/openbox",
+      "route": "/user_collection/user_collection/openbox",
+      "style": "A",
+      "auth_required": true,
+      "http_code": 401,
+      "msg": "登录已失效，请重新登录",
+      "mock": "blindBoxResult.json",
+      "status": "unavailable",
+      "reason": "code=401 msg=登录已失效，请重新登录"
+    },
+    {
+      "path": "/user_collection/user_collection/openboxone",
+      "route": "/user_collection/user_collection/openboxone",
+      "style": "D",
+      "auth_required": true,
+      "http_code": 401,
+      "msg": "登录已失效，请重新登录",
+      "mock": "blindBoxResultOne.json",
+      "status": "unavailable",
+      "reason": "code=401 msg=登录已失效，请重新登录"
+    },
+    {
       "path": "/compound/compound/list",
       "route": "/compound/compound/list",
       "style": "A",
@@ -517,6 +583,17 @@
       "http_code": 401,
       "msg": "登录已失效，请重新登录",
       "mock": "compoundRecord.json",
+      "status": "unavailable",
+      "reason": "code=401 msg=登录已失效，请重新登录"
+    },
+    {
+      "path": "/compound/compound/result",
+      "route": "/compound/compound/result",
+      "style": "D",
+      "auth_required": true,
+      "http_code": 401,
+      "msg": "登录已失效，请重新登录",
+      "mock": "compoundResult.json",
       "status": "unavailable",
       "reason": "code=401 msg=登录已失效，请重新登录"
     },
@@ -828,15 +905,15 @@
   "todo_endpoints": [
     {
       "path": "/user/login",
-      "http_code": 1,
-      "marked_todo": true,
-      "data_shape_ok": true
+      "http_code": 400,
+      "marked_todo": false,
+      "data_shape_ok": false
     },
     {
       "path": "/user/register",
-      "http_code": 1,
-      "marked_todo": true,
-      "data_shape_ok": true
+      "http_code": 400,
+      "marked_todo": false,
+      "data_shape_ok": false
     },
     {
       "path": "/market/trade/createBegBuyOrder",

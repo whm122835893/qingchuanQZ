@@ -344,6 +344,9 @@ onMounted(getInfo)
   align-items: center;
   justify-content: center;
   position: relative;
+  /* 源站 w-navbar scoped CSS 将 uView 全局默认蓝 #9acafc 覆盖为透明
+     （live DOM 实测 u-navbar__content bg rgba(0,0,0,0)），此处同步覆盖 */
+  background-color: transparent;
 }
 .u-navbar__left {
   padding: 0 26rpx;

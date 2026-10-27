@@ -1641,6 +1641,95 @@ paths:
           content:
             application/json:
               schema: { $ref: "#/components/schemas/Envelope" }
+  "/market/market/changeMarketGoods":
+    post:
+      summary: "单条取消寄售（藏品详情页「取消寄售」按钮）"
+      tags: ["C"]
+      parameters:
+        - $ref: "#/components/parameters/Token"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: ["id"]
+              properties:
+                "id":
+                  type: integer
+                  description: "挂单 id（market_goods.id，即 market_listings.id）"
+      responses:
+        "200":
+          description: "取消成功；data={id,down}（down=受影响挂单数）。前端成功后 refresh getDetails"
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          "id": { type: integer, description: "被取消的挂单 id" }
+                          "down": { type: integer, description: "受影响挂单行数（0=幂等重复取消）" }
+        "401":
+          description: "未登录或 token 失效（前端将清除 token）"
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Envelope" }
+        "403":
+          description: "挂单不属于当前用户"
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Envelope" }
+        "404":
+          description: "挂单不存在"
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Envelope" }
+        "409":
+          description: "挂单不在寄售中（已成交/已取消）"
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Envelope" }
+  "/market/market/batchchangeMarketGoods":
+    post:
+      summary: "一键下架（「我的」页持有弹窗，按藏品批量下在售挂单）"
+      tags: ["C"]
+      parameters:
+        - $ref: "#/components/parameters/Token"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: ["collection_id"]
+              properties:
+                "collection_id":
+                  type: integer
+                  description: "藏品实例 id（user_collections.id）；其 product 下该用户的在售挂单全部置为已取消"
+      responses:
+        "200":
+          description: "下架成功；data={collection_id,down}"
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          "collection_id": { type: integer }
+                          "down": { type: integer, description: "受影响挂单行数" }
+        "401":
+          description: "未登录或 token 失效（前端将清除 token）"
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Envelope" }
   "/market/trade/begBuyOrderInfo":
     post:
       summary: "委托 / 求购订单详情"

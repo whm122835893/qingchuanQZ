@@ -262,6 +262,8 @@ export const api = {
   openBoxs: (data) => request('/user_collection/user_collection/openBoxs', { data }),
   openBox: (data) => request('/user_collection/user_collection/openbox', { data }),
   batchchangeMarketGoods: (data) => request('/market/market/batchchangeMarketGoods', { data }),
+  // 单条取消寄售（藏品详情页「取消寄售」；源站无滑块验证，直调）
+  changeMarketGoods: (data) => request('/market/market/changeMarketGoods', { data }),
   // 合成
   compoundList: (data) => request('/compound/compound/list', { data }),
   compoundRecord: (data) => request('/compound/compound/record', { data }),

@@ -255,6 +255,30 @@ function restoreListedCollectionsByProduct(userId, productId) {
   ).changes
 }
 
+/**
+ * 单条取消寄售（changeMarketGoods）：把指定挂单置为已取消（E-LISTING-STATUS 3）。
+ * 归属条件 sale_user_id + status=1 双约束：他人挂单或非在售态都不受影响，返回 0。
+ */
+function downListingById(userId, listingId) {
+  if (!listingId) return 0
+  return db.run(
+    'UPDATE market_listings SET status = 3, update_time = ? WHERE id = ? AND sale_user_id = ? AND status = 1',
+    [now(), listingId, userId]
+  ).changes
+}
+
+/**
+ * 单条取消寄售的藏品侧回退：该持有实例从寄售中（status=2）回到持有中（status=1）。
+ * 与 downListingById 同事务执行，保证挂单与实例状态一致（源站取消后 refresh getDetails）。
+ */
+function restoreCollectionById(userId, collectionId) {
+  if (!collectionId) return 0
+  return db.run(
+    'UPDATE user_collections SET status = 1, updated_at = ? WHERE id = ? AND user_id = ? AND status = 2',
+    [now(), collectionId, userId]
+  ).changes
+}
+
 /** 开盒产出的藏品实例落库 */
 function insertCollection(data) {
   const ts = now()
@@ -350,6 +374,8 @@ module.exports = {
   listOpenableBoxes,
   downSelfListingsByProduct,
   restoreListedCollectionsByProduct,
+  downListingById,
+  restoreCollectionById,
   insertCollection,
   existsCollectionCode,
   insertCompoundResult,

@@ -15,6 +15,7 @@
 const db = require('../db')
 const writeRepo = require('../repositories/trade-write.repository')
 const collectionRepo = require('../repositories/collection.repository')
+const marketRepo = require('../repositories/market.repository')
 const idemRepo = require('../repositories/idempotency.repository')
 const productRepo = require('../repositories/product.repository')
 const decimal = require('../utils/decimal')
@@ -266,6 +267,43 @@ async function batchOffCollections(userId, params) {
   return { collection_id: collectionId, down: downed }
 }
 
+/**
+ * 单条取消寄售（changeMarketGoods）。
+ *
+ * 源站契约（pages-myCollection-collectionDetails bundle 实证）：
+ * collection-detail-button 的取消寄售弹层确认后调用
+ * changeMarketGoods({id: info.market_goods.id})，成功后 $emit('refresh')
+ * 重新拉 getDetails——即下架后藏品实例状态回到持有中，按钮组随之刷新。
+ * 该写操作源站**无人机验证**（直接调用，区别于 sell/createBegBuyOrder）。
+ *
+ * 归属校验：挂单必须存在、sale_user_id 为当前用户、status=寄售中(1)，
+ * 否则按 404/403 处理，不下架他人或在途态外的挂单。
+ * 事务内先下架挂单（status→3）再回退实例（user_collections.status 2→1），
+ * 与 batchOffCollections 的 down+restore 两步同构，保证两实体状态一致。
+ */
+async function cancelListing(userId, params) {
+  const listingId = params && params.id !== undefined && params.id !== null && params.id !== ''
+    ? Number(params.id)
+    : null
+  if (!listingId || !Number.isFinite(listingId)) {
+    throw new ValidationError('参数 id 缺失或非法')
+  }
+  const listing = await marketRepo.findListing(listingId)
+  if (!listing) throw new NotFoundError('寄售单不存在')
+  if (listing.sale_user_id !== null && listing.sale_user_id !== undefined && Number(listing.sale_user_id) !== Number(userId)) {
+    throw new ForbiddenError('无权取消该寄售')
+  }
+  if (Number(listing.status) !== 1) {
+    throw new ConflictError('该寄售单不在寄售中，无法取消')
+  }
+  const downed = inTransaction(() => {
+    const down = writeRepo.downListingById(userId, listingId)
+    writeRepo.restoreCollectionById(userId, listing.collection_id)
+    return down
+  })
+  return { id: listingId, down: downed }
+}
+
 function optionalSn(v) {
   if (v === undefined || v === null || String(v).trim() === '') return null
   return String(v).trim().slice(0, 64)
@@ -326,4 +364,4 @@ function requireNumber(value, name) {
   return n
 }
 
-module.exports = { createBegBuyOrder, sell, batchOffCollections, PLATFORM_RATE }
+module.exports = { createBegBuyOrder, sell, batchOffCollections, cancelListing, PLATFORM_RATE }

@@ -155,12 +155,28 @@ function floorPrice(productId) {
   return row && row.floor !== null ? row.floor : null
 }
 
+/**
+ * 按藏品实例查在售挂单（collectionInfo 的 market_goods 段）。
+ * collection_id 唯一绑定一个实例，status=1（寄售中）即当前挂单；
+ * 源站取消寄售以 market_goods.id 为入参，故详情页只需在售态这一条。
+ * 注意：此处为单表查询，列名不能带 m./uc. 前缀（LISTING_COLS 是连表专用）。
+ */
+function findListingByCollection(collectionId) {
+  if (!collectionId) return null
+  return db.queryOne(
+    'SELECT id, product_id, collection_id, sale_user_id, name, price, status, order_sn ' +
+      'FROM market_listings WHERE collection_id = ? AND status = 1 LIMIT 1',
+    [collectionId]
+  )
+}
+
 module.exports = {
   LISTING_COLS,
   listMarketItems,
   findMarketStat,
   listMarketRank,
   findListing,
+  findListingByCollection,
   listListingsBySeries,
   listListingsByUser,
   latestListingPrice,
