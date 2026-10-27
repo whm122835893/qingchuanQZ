@@ -160,6 +160,14 @@
     />
 
     <AppTabBar :value="4" />
+
+    <!-- 源站 MenuSlider 侧边抽屉（more_left 三条杠打开） -->
+    <MenuSlider
+      v-model:show="drawerShow"
+      :is-login="isLogin"
+      :user-info="userInfo"
+      @need-login="router.push('/pages/login/login')"
+    />
   </view>
 </template>
 
@@ -168,6 +176,7 @@ import { onActivated, onBeforeUnmount, onMounted, ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import AppTabBar from '@/components/AppTabBar.vue'
 import CollectionDetailPopup from '@/components/CollectionDetailPopup.vue'
+import MenuSlider from '@/components/MenuSlider.vue'
 import { fetchAntMyCollection, fetchUserInfo, asset } from '@/utils/api'
 import { ossImg } from '@/api'
 
@@ -274,8 +283,11 @@ function toEmpty() {
   router.push('/pages/index/empty')
 }
 
+const drawerShow = ref(false)
+
+/** 源站 openDrawer → $refs.menuSlider.openMenu()：本地等价 = 开抽屉 */
 function openDrawer() {
-  /* 源站侧边抽屉 MenuSlider 未复刻 */
+  drawerShow.value = true
 }
 
 async function initInfo() {
